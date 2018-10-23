@@ -1,0 +1,23 @@
+﻿@{
+    ViewData["Title"] = "RDF profile explorer";
+}
+
+@section Scripts
+{
+  <script src="~/lib/solid/rdflib.min.js"></script>
+}
+
+<p>
+<label for="profile">Profile:</label>
+<input id="profile">
+<button id="view">View</button>
+</p>
+
+  <dl id="viewer">
+    <dt>Full name</dt>
+    <dd id="fullName"></dd>
+      <dt>Friends</dt>
+    <dd>
+      <ul id="friends"></ul>
+    </dd>
+  </dl>
