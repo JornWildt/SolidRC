@@ -16,39 +16,7 @@
 </head>
 
 <body>
-  <nav class="navbar navbar-inverse navbar-fixed-top">
-    <div class="container">
-      <div class="navbar-header">
-        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-          <span class="sr-only">Toggle navigation</span>
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-        </button>
-        <a asp-area="" asp-controller="Home" asp-action="Index" class="navbar-brand">SolidRC</a>
-      </div>
-      <div class="navbar-collapse collapse">
-        <ul class="nav navbar-nav navbar-right">
-          <li id="login-container">
-            <a id="login-button" href="#"><span class="glyphicon glyphicon-log-in"></span> Log in</a>
-          </li>
-          <li id="logout-container">
-            <p class="navbar-text">
-              <span id="user-badge" class="glyphicon glyphicon-user" data-toggle="tooltip" data-placement="bottom"></span>
-              &nbsp;
-              <a id="logout-button" href="#"><span class="glyphicon glyphicon-log-out"></span> Log out</a>
-            </p>
-          </li>
-        </ul>
-        <ul class="nav navbar-nav">
-          <li><a asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
-          <li><a asp-area="" asp-controller="Home" asp-action="About">About</a></li>
-          <li><a asp-area="" asp-controller="Home" asp-action="Contact">Contact</a></li>
-        </ul>
-      </div>
-    </div>
-  </nav>
-
+  <partial name="_Navigation" />
   <partial name="_CookieConsentPartial" />
 
   <div class="container body-content">
