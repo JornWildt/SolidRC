@@ -1,21 +1,79 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Logbook";
 }
 
-<h1>Aircrafts</h1>
+@section Styles
+{
+  <link rel="stylesheet" href="~/lib/bootstrap-datepicker/dist/css/bootstrap-datepicker3.min.css" />
+}
 
-<input id="name-input"/>
-<button id="add-command">Add</button>
+<h1>Logbook</h1>
+
+<div id="logbook">
+  <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addEntryDialog">Add new entry</button>
+
+  <table id="logentries" class="table">
+    <thead>
+      <tr>
+        <th></th>
+        <th>Date</th>
+        <th>Model</th>
+        <th>Location</th>
+        <th>Duration</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr v-for="entry in logEntries" v-bind:entry="entry" v-bind:key="entry.id">
+        <td><img width="16" height="16"></td>
+        <td>{{entry.date}}</td>
+        <td>{{entry.model}}</td>
+        <td>{{entry.location}}</td>
+        <td>{{entry.duration}}</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="modal fade" id="addEntryDialog" tabindex="-1" role="dialog" aria-labelledby="addEntryDialog" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="addEntryDialogLabel">Add new log entry</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+
+        <div class="modal-body">
+          <form>
+            <div class="form-group">
+              <label for="selectedDate">Date</label>
+              <input v-model="selectedDate" class="date-input" id="selectedDate">
+            </div>
+            <div class="form-group">
+              <label for="selectedModel">Model</label>
+              <select v-model="selectedModel" id="selectedModel">
+                <option>None</option>
+                <option>Model A</option>
+              </select>
+            </div>
+          </form>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+          <button type="button" class="btn btn-primary" v-on:click="addNewEntry">Add</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
 
 @section Scripts
 {
-  <script src="~/lib/solid/rdflib.min.js"></script>
-  <script src="~/js/rdf.js"></script>
-  
-<script>
-    $('#add-command').click(function()
-    {
-        //window.alert("AA");
-    });
-</script>
+  <script src="~/lib/rdflib/dist/rdflib.min.js"></script>
+  <script src="~/lib/moment/min/moment.min.js"></script>
+  <script src="~/lib/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js"></script>
+  <script src="~/lib/vue/dist/vue.min.js"></script>
+  <script src="~/js/logbook.js"></script>
 }

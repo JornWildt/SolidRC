@@ -17,3 +17,5 @@ ConnectionStrings.config
 SciTE.session
 TinyVirtuoso/
 Languages/
+lib/
+/yarn-error.log

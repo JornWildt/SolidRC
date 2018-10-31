@@ -1,6 +1,6 @@
 $('#logout').hide();
 
-const popupUri = '/lib/solid/popup.html';
+const popupUri = '/lib/solid-auth-client/dist-popup/popup.html';
 $('#login-button').click(() => solid.auth.popupLogin({ popupUri }));
 
 
