@@ -62,10 +62,11 @@ class LogbookRepository extends GenericRepository
     entryMap[NS_DCTERM('location')] = 'location';
     entryMap[NS_SOLIDRC('duration')] = 'duration';
 
-    // Copy object values from all the statements into a simple javascript
+    // Copy object values from all the statements into a simple javascript object.
+    // - Use base GenericRepository utility function for this.
     let result = this.copyPredicatesIntoObject(values, entryMap);
 
-    // Assign ID to the result
+    // Assign ID to the result (since it is not the object in any of the statements)
     result.id = url;
 
     return result;
