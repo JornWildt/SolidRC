@@ -17,7 +17,7 @@ $(async function()
     mounted() {
       $("#selectedDate").datepicker({
         format: 'yyyy-mm-dd',
-        startDate: '',
+        startDate: '0d',
         autoclose: true
       }).on("changeDate", () => {this.selectedDate = $('#selectedDate').val()})
     },
