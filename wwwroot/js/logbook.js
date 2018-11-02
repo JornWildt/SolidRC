@@ -25,10 +25,17 @@ $(async function()
     {
       addNewEntry : function()
       {
-        logRepo.addEntry(this.selectedDate, this.selectedModel, this.selectedLocation);
+        logRepo.addEntry(this.selectedDate, this.selectedModel, this.selectedLocation, this.selectedDuration);
 
-        this.logEntries.push({ id:2, date: this.selectedDate, model: this.selectedModel, location: this.selectedLocation, duration: '3:22' });
+        this.refresh();
+        //this.logEntries.push({ id:2, date: this.selectedDate, model: this.selectedModel, location: this.selectedLocation, duration: '3:22' });
         $('#addEntryDialog').modal('hide');
+      },
+
+      refresh : function()
+      {
+        let entries = logRepo.getEntries();
+        this.logEntries = entries;
       }
     }
   });

@@ -1,7 +1,14 @@
-class LogbookRepository
+/** Logbook repository with CRUD methods for logbook entries.
+ */
+class LogbookRepository extends GenericRepository
 {
   constructor()
   {
+    super();
+
+    // This is supposed to be used from a single page application, so initialize a
+    // store, fetcher and updater once and for all for this page instance.
+    // All repository operations work with these RDF objects.
     this.store = $rdf.graph();
     this.fetcher = new $rdf.Fetcher(this.store);
     this.updater = new $rdf.UpdateManager(this.store);
@@ -10,50 +17,89 @@ class LogbookRepository
   
   async initialize()
   {
-    // Load the logbook into the store
+    // Load *all* the logbook entries into the store
     try
     {
-      //await this.fetcher.load(LogbookRepository.logBookUrl + 'entry-*');
+      await this.fetcher.load(LogbookRepository.EntriesUrl);
     }
     catch (err)
     {
+      // FIXME: improved error handling should be applied here!
       console.log(err);
     }
   }
 
 
+  /**
+   * Get a list of all logbook entries as simple javascript objects.
+   */
   getEntries()
   {    
-    //let entries = this.store.each($rdf.sym(LogbookRepository.logBookUrl), 'knows');
+    // Find the subjects of all logbook entries (from statements with type 'logentry')
+    let entries = this.store.match(null, NS_RDF('type'), NS_SOLIDRC('logentry'));
 
-    let result =
-    [
-      { id:0, date: '2018-10-29', model: 'Mosquito B.IV 1:10', location: 'RC Parken', duration: '6:05' },
-      { id:1, date: '2018-10-20', model: 'Chipmunk', location: 'Kildedal', duration: '4:05' },
-      { id:2, date: '2018-08-17', model: 'Chipmunk', location: 'Kildedal', duration: '5:22' }
-    ];
+    // Build a list of all logbook entries by fetching the logbook entry data from the entry URL (subject)
+    let result = entries.map(q => this.readEntryFromUrl(q.subject));
 
     return result; 
   }
 
 
-  addEntry(date, model, location)
+  /**
+   * Read a single logbook entry from its URL, assuming it has already been loaded into the store.
+   */
+  readEntryFromUrl(url)
   {
-    let store = $rdf.graph();
-    let fetcher = new $rdf.Fetcher(store);
+    console.debug("Read entry from : " + url);
 
+    // Find all statements having  the logbook URL as the subject.
+    let values = this.store.match(url, null, null);
+
+    // Map statement predicate/objects into simple javascript key/values.
+    const entryMap = {};
+    entryMap[NS_DCTERM('date')] = 'date';
+    entryMap[NS_SOLIDRC('model')] = 'model';
+    entryMap[NS_DCTERM('location')] = 'location';
+    entryMap[NS_SOLIDRC('duration')] = 'duration';
+
+    // Copy object values from all the statements into a simple javascript
+    let result = this.copyPredicatesIntoObject(values, entryMap);
+
+    // Assign ID to the result
+    result.id = url;
+
+    return result;
+  }
+
+
+  /**
+   * Add a new logbook entry
+   * 
+   * @param {date} date Date of flight.
+   * @param {URL} model Reference to associated model.
+   * @param {URL} location Reference to associated location.
+   * @param {timespan} duration Duration of flight.
+   */
+  addEntry(date, model, location, duration)
+  {
+    // Generate a unique URL name (path element) for the entry
     let entryName = generateEntryName(date);
-    let entryUrl = store.sym(LogbookRepository.logBookUrl + entryName);
 
-    store.add(entryUrl, NS_RDF('type'), NS_SOLIDRC('logentry'), entryUrl);
-    store.add(entryUrl, NS_DCTERM('created'), date, entryUrl);
+    // Combine entryName with base URL to get complete URL for new entry
+    let entryUrl = this.store.sym(LogbookRepository.LogBookUrl + entryName);
+
+    // Add statements to the local store for each relevant value of the entry
+    this.store.add(entryUrl, NS_RDF('type'), NS_SOLIDRC('logentry'), entryUrl);
+    this.store.add(entryUrl, NS_DCTERM('created'), date, entryUrl);
     // FIXME: read from current login
-    store.add(entryUrl, NS_DCTERM('creator'), store.sym('https://elfisk.solid.community/profile/card#me'), entryUrl);
-    store.add(entryUrl, NS_DCTERM('date'), date, entryUrl);
-    store.add(entryUrl, NS_SOLIDRC('model'), model, entryUrl);
-    store.add(entryUrl, NS_DCTERM('location'), location, entryUrl);
+    this.store.add(entryUrl, NS_DCTERM('creator'), this.store.sym('https://elfisk.solid.community/profile/card#me'), entryUrl);
+    this.store.add(entryUrl, NS_DCTERM('date'), date, entryUrl);
+    this.store.add(entryUrl, NS_SOLIDRC('model'), model, entryUrl);
+    this.store.add(entryUrl, NS_DCTERM('location'), location, entryUrl);
+    this.store.add(entryUrl, NS_SOLIDRC('duration'), duration, entryUrl);
 
-    fetcher.putBack(entryUrl);
+    // Put the new statements onto the web
+    this.fetcher.putBack(entryUrl);
   }
 }
 
@@ -65,4 +111,5 @@ function generateEntryName(date)
 }
 
 
-LogbookRepository.logBookUrl = 'https://elfisk.solid.community/public/solidrc/logbook/';
+LogbookRepository.LogBookUrl = 'https://elfisk.solid.community/public/solidrc/logbook/';
+LogbookRepository.EntriesUrl = 'https://elfisk.solid.community/public/solidrc/logbook/entry-*';
