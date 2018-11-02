@@ -1,27 +1,44 @@
-$(function()
+$(async function()
 {
+  let logRepo = new LogbookRepository();
+  await logRepo.initialize();
+
+  let logEntries = logRepo.getEntries();
+
   var logbookViewModel = new Vue({
     el: '#logbook',
     data: {
       selectedModel: null,
       selectedDate: null,
-      logEntries:
-      [
-        { id:0, date: '2018-10-29', model: 'Mosquito B.IV 1:10', location: 'RC Parken', duration: '6:05' },
-        { id:1, date: '2018-10-20', model: 'Chipmunk', location: 'Kildedal', duration: '4:05' },
-        { id:2, date: '2018-08-17', model: 'Chipmunk', location: 'Kildedal', duration: '5:22' }
-      ]
+      selectedLocation: null,
+      selectedDuration: null,
+      logEntries: logEntries
+    },
+    mounted() {
+      $("#selectedDate").datepicker({
+        format: 'yyyy-mm-dd',
+        startDate: '',
+        autoclose: true
+      }).on("changeDate", () => {this.selectedDate = $('#selectedDate').val()})
     },
     methods:
     {
       addNewEntry : function()
       {
-        this.logEntries.push({ id:2, date: this.selectedDate, model: this.selectedModel, location: 'Kildedal', duration: '3:22' });
+        logRepo.addEntry(this.selectedDate, this.selectedModel, this.selectedLocation);
+
+        this.logEntries.push({ id:2, date: this.selectedDate, model: this.selectedModel, location: this.selectedLocation, duration: '3:22' });
         $('#addEntryDialog').modal('hide');
       }
     }
   });
 
-  $('.date-input').datepicker();
+  $('.date-input').datepicker(
+    {
+      format: 'yyyy-mm-dd',
+      xxxstartDate: '',
+      autoclose: true
+    }
+  );
 
 });
