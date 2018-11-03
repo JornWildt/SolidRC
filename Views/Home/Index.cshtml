@@ -29,6 +29,7 @@
         <td>{{entry.model}}</td>
         <td>{{entry.location}}</td>
         <td>{{entry.duration}}</td>
+        <td><a href="#" v-on:click="deleteEntry(entry)"><img src="~/open-iconic/svg/circle-x.svg" alt="Remove" class="grid-action"></a></td>
       </tr>
     </tbody>
   </table>
@@ -52,7 +53,6 @@
             <div class="form-group">
               <label for="selectedModel">Model</label>
               <select v-model="selectedModel" id="selectedModel">
-                <option value="">None</option>
                 <option value="http://blah.blah/mosquito">Mosquito</option>
                 <option value="http://blah.blah/chipmunk">Chipmunk</option>
               </select>
@@ -60,9 +60,8 @@
             <div class="form-group">
               <label for="selectedLocation">Location</label>
               <select v-model="selectedLocation" id="selectedLocation">
-                <option>None</option>
-                <option>Kildedal</option>
-                <option>Værløse</option>
+                <option value="http://blah.blah/kildedal">Kildedal</option>
+                <option value="http://blah.blah/varlose">Værløse</option>
               </select>
             </div>
             <div class="form-group">

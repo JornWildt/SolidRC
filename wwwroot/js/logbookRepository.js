@@ -5,18 +5,19 @@ class LogbookRepository extends GenericRepository
   constructor()
   {
     super();
-
-    // This is supposed to be used from a single page application, so initialize a
-    // store, fetcher and updater once and for all for this page instance.
-    // All repository operations work with these RDF objects.
-    this.store = $rdf.graph();
-    this.fetcher = new $rdf.Fetcher(this.store);
-    this.updater = new $rdf.UpdateManager(this.store);
   }
 
   
   async initialize()
   {
+    // Map statement predicate/objects into simple javascript key/values.
+    const entryMap = {};
+    entryMap[NS_DCTERM('date').value] = 'date';
+    entryMap[NS_SOLIDRC('model').value] = 'model';
+    entryMap[NS_DCTERM('location').value] = 'location';
+    entryMap[NS_SOLIDRC('duration').value] = 'duration';
+    this.initializeMappings(entryMap);
+
     // Load *all* the logbook entries into the store
     try
     {
@@ -55,16 +56,9 @@ class LogbookRepository extends GenericRepository
     // Find all statements having  the logbook URL as the subject.
     let values = this.store.match(url, null, null);
 
-    // Map statement predicate/objects into simple javascript key/values.
-    const entryMap = {};
-    entryMap[NS_DCTERM('date')] = 'date';
-    entryMap[NS_SOLIDRC('model')] = 'model';
-    entryMap[NS_DCTERM('location')] = 'location';
-    entryMap[NS_SOLIDRC('duration')] = 'duration';
-
     // Copy object values from all the statements into a simple javascript object.
     // - Use base GenericRepository utility function for this.
-    let result = this.copyPredicatesIntoObject(values, entryMap);
+    let result = this.copyPredicatesIntoObject(values);
 
     // Assign ID to the result (since it is not the object in any of the statements)
     result.id = url;
@@ -81,26 +75,40 @@ class LogbookRepository extends GenericRepository
    * @param {URL} location Reference to associated location.
    * @param {timespan} duration Duration of flight.
    */
-  addEntry(date, model, location, duration)
+  addEntry(entry)
   {
     // Generate a unique URL name (path element) for the entry
-    let entryName = generateEntryName(date);
+    let entryName = generateEntryName(entry.date);
 
     // Combine entryName with base URL to get complete URL for new entry
     let entryUrl = this.store.sym(LogbookRepository.LogBookUrl + entryName);
 
     // Add statements to the local store for each relevant value of the entry
     this.store.add(entryUrl, NS_RDF('type'), NS_SOLIDRC('logentry'), entryUrl);
-    this.store.add(entryUrl, NS_DCTERM('created'), date, entryUrl);
+    this.store.add(entryUrl, NS_DCTERM('created'), new Date(), entryUrl);
     // FIXME: read from current login
     this.store.add(entryUrl, NS_DCTERM('creator'), this.store.sym('https://elfisk.solid.community/profile/card#me'), entryUrl);
-    this.store.add(entryUrl, NS_DCTERM('date'), date, entryUrl);
-    this.store.add(entryUrl, NS_SOLIDRC('model'), model, entryUrl);
-    this.store.add(entryUrl, NS_DCTERM('location'), location, entryUrl);
-    this.store.add(entryUrl, NS_SOLIDRC('duration'), duration, entryUrl);
+
+    // Modify string baseduser input from browser to strong types and RDF links
+    entry.location = this.store.sym(entry.location);
+    entry.model = this.store.sym(entry.model);
+    entry.date = new moment(entry.date, 'YYYY-MM-DD').toDate();
+
+    // Use supplied mapping to copy the remaining properties
+    this.copyPropertiesIntoStatements(entryUrl, entry);
 
     // Put the new statements onto the web
     this.fetcher.putBack(entryUrl);
+  }
+
+
+  deleteEntry(entry)
+  {
+    // FIXME: error handling
+
+    let doc
+    this.fetcher.delete(entry.id);
+    this.store.removeDocument(this.store.sym(entry.id));
   }
 }
 
