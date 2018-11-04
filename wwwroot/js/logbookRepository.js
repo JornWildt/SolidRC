@@ -10,13 +10,16 @@ class LogbookRepository extends GenericRepository
   
   async initialize()
   {
+    // Assign RDF type for objects managed by this repository
+    this.setObjectType(NS_SOLIDRC('logentry'));
+
     // Map statement predicate/objects into simple javascript key/values.
-    const entryMap = {};
-    entryMap[NS_DCTERM('date').value] = 'date';
-    entryMap[NS_SOLIDRC('model').value] = 'model';
-    entryMap[NS_DCTERM('location').value] = 'location';
-    entryMap[NS_SOLIDRC('duration').value] = 'duration';
-    this.initializeMappings(entryMap);
+    this.addMapping(NS_DCTERM('created'), 'created');
+    this.addMapping(NS_DCTERM('creator'), 'creator', PropertyType.Uri);
+    this.addMapping(NS_DCTERM('date'), 'date');
+    this.addMapping(NS_SOLIDRC('model'), 'model', PropertyType.Uri);
+    this.addMapping(NS_DCTERM('location'), 'location', PropertyType.Uri);
+    this.addMapping(NS_SOLIDRC('duration'), 'duration');
 
     // Load *all* the logbook entries into the store
     try
@@ -36,7 +39,7 @@ class LogbookRepository extends GenericRepository
    */
   getEntries()
   {    
-    // Find the subjects of all logbook entries (from statements with type 'logentry')
+    // Find the subjects of all logbook entries (from statements having type = 'logentry')
     let entries = this.store.match(null, NS_RDF('type'), NS_SOLIDRC('logentry'));
 
     // Build a list of all logbook entries by fetching the logbook entry data from the entry URL (subject)
@@ -51,72 +54,49 @@ class LogbookRepository extends GenericRepository
    */
   readEntryFromUrl(url)
   {
-    console.debug("Read entry from : " + url);
-
-    // Find all statements having  the logbook URL as the subject.
-    let values = this.store.match(url, null, null);
-
-    // Copy object values from all the statements into a simple javascript object.
-    // - Use base GenericRepository utility function for this.
-    let result = this.copyPredicatesIntoObject(values);
-
-    // Assign ID to the result (since it is not the object in any of the statements)
-    result.id = url;
-
-    return result;
+    var entry = this.readObject(url);
+    return entry;
   }
 
 
   /**
    * Add a new logbook entry
    * 
-   * @param {date} date Date of flight.
-   * @param {URL} model Reference to associated model.
-   * @param {URL} location Reference to associated location.
-   * @param {timespan} duration Duration of flight.
+   * @param {date} entry.date Date of flight.
+   * @param {URL} entry.model Reference to associated model.
+   * @param {URL} entry.location Reference to associated location.
+   * @param {timespan} entry.duration Duration of flight.
    */
   addEntry(entry)
   {
     // Generate a unique URL name (path element) for the entry
-    let entryName = generateEntryName(entry.date);
+    let entryName = this.generateEntryName(entry.date);
 
     // Combine entryName with base URL to get complete URL for new entry
     let entryUrl = this.store.sym(LogbookRepository.LogBookUrl + entryName);
 
-    // Add statements to the local store for each relevant value of the entry
-    this.store.add(entryUrl, NS_RDF('type'), NS_SOLIDRC('logentry'), entryUrl);
-    this.store.add(entryUrl, NS_DCTERM('created'), new Date(), entryUrl);
-    // FIXME: read from current login
-    this.store.add(entryUrl, NS_DCTERM('creator'), this.store.sym('https://elfisk.solid.community/profile/card#me'), entryUrl);
-
-    // Modify string baseduser input from browser to strong types and RDF links
-    entry.location = this.store.sym(entry.location);
-    entry.model = this.store.sym(entry.model);
+    // Make properties strongly typed for RDFLIB and add extra statements
     entry.date = new moment(entry.date, 'YYYY-MM-DD').toDate();
+    entry.created = new Date();
+    // FIXME: read from current login
+    entry.creator = 'https://elfisk.solid.community/profile/card#me';
 
-    // Use supplied mapping to copy the remaining properties
-    this.copyPropertiesIntoStatements(entryUrl, entry);
-
-    // Put the new statements onto the web
-    this.fetcher.putBack(entryUrl);
+    this.storeObject(entryUrl, entry);
   }
 
 
   deleteEntry(entry)
   {
     // FIXME: error handling
-
-    let doc
-    this.fetcher.delete(entry.id);
-    this.store.removeDocument(this.store.sym(entry.id));
+    this.deleteObject(entry.id);
   }
-}
 
 
-function generateEntryName(date)
-{
-  const timestamp = Math.floor(Date.now() / 1000);
-  return 'entry-' + timestamp;
+  generateEntryName(date)
+  {
+    const timestamp = Math.floor(Date.now() / 1000);
+    return 'entry-' + timestamp;
+  }
 }
 
 

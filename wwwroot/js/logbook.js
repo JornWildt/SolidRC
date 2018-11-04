@@ -44,7 +44,6 @@ $(async function()
 
       refresh : function()
       {
-        this.logEntries = [];
         let entries = logRepo.getEntries();
         this.logEntries = entries;
       }
@@ -54,9 +53,7 @@ $(async function()
   $('.date-input').datepicker(
     {
       format: 'yyyy-mm-dd',
-      xxxstartDate: '',
       autoclose: true
     }
   );
-
 });
