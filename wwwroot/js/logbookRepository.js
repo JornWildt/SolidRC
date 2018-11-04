@@ -1,6 +1,6 @@
 /** Logbook repository with CRUD methods for logbook entries.
  */
-class LogbookRepository extends GenericRepository
+class LogbookRepository extends ORDFMapper
 {
   constructor()
   {

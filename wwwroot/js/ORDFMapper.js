@@ -5,7 +5,7 @@ const PropertyType =
   Uri: 'Uri'
 }
 
-class GenericRepository
+class ORDFMapper
 {
   constructor()
   {
