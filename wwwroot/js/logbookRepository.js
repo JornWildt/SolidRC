@@ -43,7 +43,7 @@ class LogbookRepository extends ORDFMapper
     let entries = this.store.match(null, NS_RDF('type'), NS_SOLIDRC('logentry'));
 
     // Build a list of all logbook entries by fetching the logbook entry data from the entry URL (subject)
-    let result = entries.map(q => this.readEntryFromUrl(q.subject));
+    let result = entries.map(e => this.readEntryFromUrl(e.subject));
 
     return result; 
   }
@@ -55,6 +55,7 @@ class LogbookRepository extends ORDFMapper
   readEntryFromUrl(url)
   {
     var entry = this.readObject(url);
+    entry.date = new moment(entry.date).format('YYYY-MM-DD');
     return entry;
   }
 
