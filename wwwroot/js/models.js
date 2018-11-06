@@ -24,14 +24,17 @@ $(async function()
     {
       addNewModel : function()
       {
-        modelRepo.addModel(
-          {
-            name: this.modelName
-          });
+        if (!this.$v.$invalid)
+        {
+          modelRepo.addModel(
+            {
+              name: this.modelName
+            });
 
-        this.refresh();
+          this.refresh();
 
-        $('#addModelDialog').modal('hide');
+          $('#addModelDialog').modal('hide');
+        }
       },
 
       deleteModel : function(model)

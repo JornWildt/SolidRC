@@ -12,11 +12,12 @@ $(async function()
       selectedModel: "http://blah.blah/chipmunk",
       selectedDate: new moment().format('YYYY-MM-DD'),
       selectedLocation: "http://blah.blah/kildedal",
-      selectedDuration: "5:00",
+      selectedDuration: "",
       logEntries: []
     },
     mounted() {
       this.refresh();
+      this.$v.$touch();
       $("#selectedDate").datepicker({
         format: 'yyyy-mm-dd',
         autoclose: true
