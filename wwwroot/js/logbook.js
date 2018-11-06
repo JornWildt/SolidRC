@@ -1,9 +1,4 @@
-Vue.use(window.vuelidate.default);
-const { required, minLength } = window.validators;
-
-
-const dateValidator = (value) => new moment(value, 'YYYY-MM-DD').isValid();
-const timespanValidator = (value) => /^(\d+:)?(\d{1,2}:)?(\d{1,2})?$/.test(value);
+Vue.use(vuelidate.default);
 
 $(async function()
 {
@@ -11,7 +6,7 @@ $(async function()
   let logRepo = new LogbookRepository();
   await logRepo.initialize();
 
-  var logbookViewModel = new Vue({
+  var logbookApp = new Vue({
     el: '#logbook',
     data: {
       selectedModel: "http://blah.blah/chipmunk",
@@ -29,14 +24,14 @@ $(async function()
     },
     validations: {
       selectedDate: {
-        required,
+        required: validators.required,
         dateValidator
       },
       selectedDuration: {
         timespanValidator
       }
     },
-    methods:
+    methods: $.extend({}, ViewModelBase, 
     {
       addNewEntry : function()
       {
@@ -56,13 +51,6 @@ $(async function()
         }
       },
 
-      status(v) {
-        return {
-          error: v.$error,
-          dirty: v.$dirty
-        }
-      },
-      
       deleteEntry : function(entry)
       {
         if (confirm('Delete entry?'))
@@ -77,6 +65,6 @@ $(async function()
         let entries = logRepo.getEntries();
         this.logEntries = entries;
       }
-    }
+    })
   });
 });

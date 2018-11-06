@@ -1,28 +1,32 @@
+Vue.use(vuelidate.default);
+
 $(async function()
 {
   let modelRepo = new ModelRepository();
   await modelRepo.initialize();
 
-  var modelViewModel = new Vue({
+  var modelsApp = new Vue({
     el: '#modelsApp',
     data: {
-      selectedName: "Mossie",
+      modelName: "",
       models: []
     },
     mounted() {
       this.refresh();
-      // $("#selectedDate").datepicker({
-      //   format: 'yyyy-mm-dd',
-      //   autoclose: true
-      // }).on("changeDate", () => {this.selectedDate = $('#selectedDate').val(); });
+      this.$v.$touch();
     },
-    methods:
+    validations: {
+      modelName: {
+        required: validators.required
+      }
+    },
+    methods: $.extend({}, ViewModelBase, 
     {
       addNewModel : function()
       {
         modelRepo.addModel(
           {
-            name: this.selectedName
+            name: this.modelName
           });
 
         this.refresh();
@@ -44,7 +48,7 @@ $(async function()
         let models = modelRepo.getModels();
         this.models = models;
       }
-    }
+    })
   });
 
   // $('.date-input').datepicker(

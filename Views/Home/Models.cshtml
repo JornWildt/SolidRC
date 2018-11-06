@@ -36,8 +36,8 @@
         <div class="modal-body">
           <form>
             <div class="form-group">
-              <label for="selectedName">Name</label>
-              <input v-model="selectedName" id="selectedName">
+              <label for="modelName">Name</label>
+              <input v-model="$v.modelName.$model" :class="validationStatus($v.modelName)" id="modelName">
             </div>
           </form>
         </div>
@@ -58,6 +58,8 @@
   <!-- <script src="~/lib/moment/min/moment.min.js"></script>
   <script src="~/lib/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js"></script> -->
   <script src="~/lib/vue/dist/vue.min.js"></script>
+  <script src="~/lib/vuelidate/dist/vuelidate.min.js"></script>
+  <script src="~/lib/vuelidate/dist/validators.min.js"></script>
   <script src="~/js/namespaces.js"></script>
   <script src="~/js/ORDFMapper.js"></script>
   <script src="~/js/models.js"></script>

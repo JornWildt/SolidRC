@@ -48,7 +48,7 @@
           <form>
             <div class="form-group">
               <label for="selectedDate">Date</label>
-              <input v-model.trim="$v.selectedDate.$model" :class="status($v.selectedDate)" id="selectedDate">
+              <input v-model.trim="$v.selectedDate.$model" :class="validationStatus($v.selectedDate)" id="selectedDate">
             </div>
             <div class="form-group">
               <label for="selectedModel">Model</label>
@@ -66,7 +66,7 @@
             </div>
             <div class="form-group">
               <label for="selectedDuration">Duration</label>
-              <input v-model="$v.selectedDuration.$model" :class="status($v.selectedDuration)" id="selectedDuration">
+              <input v-model="$v.selectedDuration.$model" :class="validationStatus($v.selectedDuration)" id="selectedDuration">
             </div>
           </form>
         </div>

@@ -22,3 +22,21 @@ $('#logout-button').click(() => solid.auth.logout());
 $(function () {
   $('[data-toggle="tooltip"]').tooltip()
 })
+
+
+// Various common functionality for many pages
+
+
+// Validators using vuelidator.js
+const dateValidator = (value) => new moment(value, 'YYYY-MM-DD').isValid();
+const timespanValidator = (value) => /^(\d+:)?(\d{1,2}:)?(\d{1,2})?$/.test(value);
+
+let ViewModelBase =
+{
+  validationStatus(val) {
+    return {
+      error: val.$error,
+      dirty: val.$dirty
+    }
+  }
+}
