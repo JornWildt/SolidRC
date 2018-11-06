@@ -32,8 +32,11 @@ $(async function()
 
       deleteModel : function(model)
       {
-        modelRepo.deleteModel(model);
-        this.refresh();
+        if (confirm('Delete model?'))
+        {
+          modelRepo.deleteModel(model);
+          this.refresh();
+        }
       },
 
       refresh : function()

@@ -38,8 +38,11 @@ $(async function()
 
       deleteEntry : function(entry)
       {
-        logRepo.deleteEntry(entry);
-        this.refresh();
+        if (confirm('Delete entry?'))
+        {
+          logRepo.deleteEntry(entry);
+          this.refresh();
+        }
       },
 
       refresh : function()
