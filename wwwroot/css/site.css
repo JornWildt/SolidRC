@@ -11,3 +11,22 @@ img.grid-action
   width: auto;
   height: 16px;
 }
+
+
+.dirty {
+  border-color: #5A5;
+  background: #EFE;
+}
+
+.dirty:focus {
+  outline-color: #8E8;
+}
+
+.error {
+  border-color: red;
+  background: #FDD;
+}
+
+.error:focus {
+  outline-color: #F99;
+}

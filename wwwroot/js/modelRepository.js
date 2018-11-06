@@ -68,7 +68,6 @@ class ModelRepository extends ORDFMapper
     let modelUrl = this.store.sym(ModelRepository.ModelUrl + modelName);
 
     // Make properties strongly typed for RDFLIB and add extra statements
-    //model.date = new moment(model.date, 'YYYY-MM-DD').toDate();
     model.created = new Date();
     // FIXME: read from current login
     model.creator = 'https://elfisk.solid.community/profile/card#me';

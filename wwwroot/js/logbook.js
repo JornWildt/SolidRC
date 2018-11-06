@@ -1,5 +1,13 @@
+Vue.use(window.vuelidate.default);
+const { required, minLength } = window.validators;
+
+
+const dateValidator = (value) => new moment(value, 'YYYY-MM-DD').isValid();
+const timespanValidator = (value) => /^(\d+:)?(\d{1,2}:)?(\d{1,2})?$/.test(value);
+
 $(async function()
 {
+  
   let logRepo = new LogbookRepository();
   await logRepo.initialize();
 
@@ -19,23 +27,42 @@ $(async function()
         autoclose: true
       }).on("changeDate", () => {this.selectedDate = $('#selectedDate').val(); });
     },
+    validations: {
+      selectedDate: {
+        required,
+        dateValidator
+      },
+      selectedDuration: {
+        timespanValidator
+      }
+    },
     methods:
     {
       addNewEntry : function()
       {
-        logRepo.addEntry(
-          {
-            date: this.selectedDate, 
-            model: this.selectedModel, 
-            location: this.selectedLocation, 
-            duration: this.selectedDuration
-          });
+        if (!this.$v.$invalid)
+        {
+          logRepo.addEntry(
+            {
+              date: this.selectedDate, 
+              model: this.selectedModel, 
+              location: this.selectedLocation, 
+              duration: this.selectedDuration
+            });
 
-        this.refresh();
+          this.refresh();
 
-        $('#addEntryDialog').modal('hide');
+          $('#addEntryDialog').modal('hide');
+        }
       },
 
+      status(v) {
+        return {
+          error: v.$error,
+          dirty: v.$dirty
+        }
+      },
+      
       deleteEntry : function(entry)
       {
         if (confirm('Delete entry?'))
@@ -52,11 +79,4 @@ $(async function()
       }
     }
   });
-
-  $('.date-input').datepicker(
-    {
-      format: 'yyyy-mm-dd',
-      autoclose: true
-    }
-  );
 });
