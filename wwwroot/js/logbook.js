@@ -4,18 +4,25 @@ $(async function()
 {
   
   let logRepo = new LogbookRepository();
+  let modelRepo = new ModelRepository();
+
   await logRepo.initialize();
+  await modelRepo.initialize();  
 
   var logbookApp = new Vue({
     el: '#logbook',
     data: {
-      selectedModel: "http://blah.blah/chipmunk",
+      models: [],
+      selectedModel: null,
       selectedDate: new moment().format('YYYY-MM-DD'),
       selectedLocation: "http://blah.blah/kildedal",
       selectedDuration: "",
       logEntries: []
     },
     mounted() {
+      this.models = modelRepo.getModels();
+      if (this.models.length > 0)
+        this.selectedModel = this.models[0].id;
       this.refresh();
       this.$v.$touch();
       $("#selectedDate").datepicker({

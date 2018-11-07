@@ -42,6 +42,9 @@ class ModelRepository extends ORDFMapper
     // Build a list of all models by fetching the model data from the models URL (subject)
     let result = models.map(m => this.readModelFromUrl(m.subject));
 
+    // Make sure we always get a consistent sort order
+    result.sort((a,b) => a.name.localeCompare(b.name))
+
     return result; 
   }
 
