@@ -26,8 +26,8 @@
       <tr v-for="entry in logEntries" v-bind:entry="entry" v-bind:key="entry.id">
         <td><img width="16" height="16"></td>
         <td>{{entry.date}}</td>
-        <td>{{entry.model}}</td>
-        <td>{{entry.location}}</td>
+        <td>{{entry.modelName}}</td>
+        <td>{{entry.locationName}}</td>
         <td>{{entry.duration}}</td>
         <td><a href="#" v-on:click="deleteEntry(entry)"><img src="~/open-iconic/svg/circle-x.svg" alt="Remove" class="grid-action"></a></td>
       </tr>

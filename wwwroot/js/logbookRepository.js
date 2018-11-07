@@ -37,13 +37,14 @@ class LogbookRepository extends ORDFMapper
   /**
    * Get a list of all logbook entries as simple javascript objects.
    */
-  getEntries()
+  async getEntries()
   {    
     // Find the subjects of all logbook entries (from statements having type = 'logentry')
     let entries = this.store.match(null, NS_RDF('type'), NS_SOLIDRC('logentry'));
 
     // Build a list of all logbook entries by fetching the logbook entry data from the entry URL (subject)
-    let result = entries.map(e => this.readEntryFromUrl(e.subject));
+    // and adding details from referenced resources (model and location).
+    let result = Promise.all(entries.map(e => this.addReferencedDetails(this.readEntryFromUrl(e.subject))));
 
     return result; 
   }
@@ -56,6 +57,23 @@ class LogbookRepository extends ORDFMapper
   {
     var entry = this.readObject(url);
     entry.date = new moment(entry.date).format('YYYY-MM-DD');
+    return entry;
+  }
+
+
+  // FIXME: Add as ORDFMapper utility!
+  async addReferencedDetails(entry)
+  {
+    // FIXME: error handling
+    await this.fetcher.load(entry.model).catch(err => {});
+    await this.fetcher.load(entry.location).catch(err => {});
+
+    // FIXME: check for existence of statement before .value
+    entry.modelName = this.store.any(this.store.sym(entry.model), NS_DCTERM('title')).value;
+
+    // FIXME: check for existence of statement before .value
+    // - Add mouse-over info about the missing URL/value
+    entry.locationName = (this.store.any(this.store.sym(entry.location), NS_DCTERM('title')) || this.store.any(this.store.sym(entry.location), NS_FOAF('name')) || { value: 'unknown'}).value;
     return entry;
   }
 

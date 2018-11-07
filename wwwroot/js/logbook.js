@@ -83,9 +83,9 @@ $(async function()
         }
       },
 
-      refresh : function()
+      refresh : async function()
       {
-        let entries = logRepo.getEntries();
+        let entries = await logRepo.getEntries();
         this.logEntries = entries;
       }
     })
