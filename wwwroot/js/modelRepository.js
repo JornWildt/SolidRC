@@ -34,13 +34,13 @@ class ModelRepository extends ORDFMapper
   /**
    * Get a list of all models as simple javascript objects.
    */
-  getModels()
+  async getModels()
   {    
     // Find the subjects of all models (from statements having type = 'model')
     let models = this.store.match(null, NS_RDF('type'), NS_SOLIDRC('model'));
 
     // Build a list of all models by fetching the model data from the models URL (subject)
-    let result = models.map(m => this.readModelFromUrl(m.subject));
+    let result = await Promise.all(models.map(m => this.readModelFromUrl(m.subject)));
 
     // Make sure we always get a consistent sort order
     result.sort((a,b) => a.name.localeCompare(b.name))
@@ -52,9 +52,9 @@ class ModelRepository extends ORDFMapper
   /**
    * Read a single model from its URL, assuming it has already been loaded into the store.
    */
-  readModelFromUrl(url)
+  async readModelFromUrl(url)
   {
-    var model = this.readObject(url);
+    var model = await this.readObject(url);
     return model;
   }
 

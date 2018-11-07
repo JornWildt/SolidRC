@@ -5,6 +5,12 @@ const PropertyType =
   Uri: 'Uri'
 }
 
+const MappingType =
+{
+  Direct: 'Direct',
+  Derived: 'Derived'
+}
+
 class ORDFMapper
 {
   constructor()
@@ -31,6 +37,7 @@ class ORDFMapper
   {
     let mapping = 
     {
+      mappingType: MappingType.Direct,
       predicate: predicate.value,
       property: propertyName,
       valueType: valueType
@@ -41,18 +48,44 @@ class ORDFMapper
   }
 
 
-  readObject(url)
+  addDerivedMapping(predicate, targetPredicate, propertyName, valueType)
+  {
+    let mapping = 
+    {
+      mappingType: MappingType.Derived,
+      predicate: predicate.value,
+      targetPredicate: targetPredicate,
+      propertyName: propertyName,
+      valueType: valueType
+    };
+
+    this.predicateToPropertyMapping[predicate.value] = mapping;
+    this.propertyToPredicateMapping[propertyName] = mapping;
+  }
+
+
+  async readObject(url)
+  {
+    let result = await this.readObjectInternal(url);
+
+    // Assign ID to the result
+    result[this.idProperty] = url.value;
+
+    return result;
+  }
+
+
+  async readObjectInternal(url)
   {
     console.debug("Read object from : " + url);
 
     // Find all statements having  the object URL as the subject.
     let statements = this.store.match(url, null, null);
 
-    // Copy object values from all the statements into a simple javascript object.
-    let result = this.copyStatementsIntoObject(statements);
+    // FIXME: we do not always need to fetch derived values - only when presenting a list of items
 
-    // Assign ID to the result
-    result[this.idProperty] = url.value;
+    // Copy object values from all the statements into a simple javascript object.
+    let result = await this.copyStatementsIntoObject(statements);
 
     return result;
   }
@@ -86,7 +119,7 @@ class ORDFMapper
    * 
    * @param statements {Array} Array of statements.
    */
-  copyStatementsIntoObject(statements)
+  async copyStatementsIntoObject(statements)
   {
     let result = {};
 
@@ -94,16 +127,30 @@ class ORDFMapper
     $.each(this.predicateToPropertyMapping, (key, mapping) => { result[mapping.property] = null; });
 
     // Go through each statement, get the property name from the predicate and set property to the statement object value.
-    statements.forEach(st => {
+    await Promise.all(statements.map(async st => {
       let mapping = this.predicateToPropertyMapping[st.predicate.value];
-      if (mapping)
+
+      // Simple direct mappings get the property value directly from the value of the statement
+      if (mapping && mapping.mappingType == MappingType.Direct)
       {
         let value = st.object.value;
         if (mapping.PropertyType == PropertyType.Uri)
           value = value.value;
         result[mapping.property] = value;
       }
-    });
+      // Derived mappings assume the statement value is a URL and fetches the data at the URL.
+      // It then selects mapped predicates and their values from that document
+      else if (mapping && mapping.mappingType == MappingType.Derived)
+      {
+        let value = st.object.value;
+        await this.fetcher.load(value).catch(err => {}); // FIXME: error handling
+
+        let targetSt = this.store.any(st.object, mapping.targetPredicate);
+        let targetValue = (targetSt ? targetSt.value : null);
+
+        result[mapping.propertyName] = targetValue;
+      }
+    })).catch(err => {}); // FIXME: error handling
 
     return result;
   }

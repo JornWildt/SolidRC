@@ -13,9 +13,9 @@ $(async function()
       externalUrl: "",
       locations: []
     },
-    mounted() {
+    async mounted() {
       // Refresh (fetch) the locations for the list
-      this.refresh();
+      await this.refresh();
       
       // Touch all vuelidation inputs to trigger validation (and disabling the "Add" button before everything is valid)
       this.$v.$touch();
@@ -55,9 +55,9 @@ $(async function()
         }
       },
 
-      refresh : function()
+      refresh : async function()
       {
-        let locations = locationRepo.getLocations();
+        let locations = await locationRepo.getLocations();
         this.locations = locations;
       }
     })

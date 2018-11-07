@@ -22,14 +22,14 @@ $(async function()
       selectedDuration: "",
       logEntries: []
     },
-    mounted() {
+    async mounted() {
       // Get the list of models for the "Models" dropdown box
-      this.models = modelRepo.getModels();
+      this.models = await modelRepo.getModels();
       if (this.models.length > 0)
         this.selectedModel = this.models[0].id;
         
       // Get the list of locations for the "Locations" dropdown box
-      this.locations = locationRepo.getLocations();
+      this.locations = await locationRepo.getLocations();
       if (this.locations.length > 0)
         this.selectedLocation = this.locations[0].url;
 

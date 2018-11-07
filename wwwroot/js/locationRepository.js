@@ -35,13 +35,13 @@ class LocationRepository extends ORDFMapper
   /**
    * Get a list of all locations as simple javascript objects.
    */
-  getLocations()
+  async getLocations()
   {    
     // Find the subjects of all locations (from statements having type = 'location')
     let locations = this.store.match(null, NS_RDF('type'), NS_SOLIDRC('location'));
 
     // Build a list of all locations by fetching the location data from the locations URL (subject)
-    let result = locations.map(l => this.readLocationFromUrl(l.subject));
+    let result = await Promise.all(locations.map(l => this.readLocationFromUrl(l.subject)));
 
     // Make sure we always get a consistent sort order
     result.sort((a,b) => a.name.localeCompare(b.name))
@@ -53,9 +53,9 @@ class LocationRepository extends ORDFMapper
   /**
    * Read a single location from its URL, assuming it has already been loaded into the store.
    */
-  readLocationFromUrl(url)
+  async readLocationFromUrl(url)
   {
-    var location = this.readObject(url);
+    var location = await this.readObject(url);
     return location;
   }
 
