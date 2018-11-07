@@ -3,16 +3,19 @@ Vue.use(vuelidate.default);
 $(async function()
 {
   
-  let logRepo = new LogbookRepository();
+  let locationRepo = new LocationRepository();
   let modelRepo = new ModelRepository();
+  let logRepo = new LogbookRepository();
 
-  await logRepo.initialize();
+  await locationRepo.initialize();  
   await modelRepo.initialize();  
+  await logRepo.initialize();
 
   var logbookApp = new Vue({
     el: '#logbook',
     data: {
       models: [],
+      locations: [],
       selectedModel: null,
       selectedDate: new moment().format('YYYY-MM-DD'),
       selectedLocation: "http://blah.blah/kildedal",
@@ -20,11 +23,23 @@ $(async function()
       logEntries: []
     },
     mounted() {
+      // Get the list of models for the "Models" dropdown box
       this.models = modelRepo.getModels();
       if (this.models.length > 0)
         this.selectedModel = this.models[0].id;
+        
+      // Get the list of locations for the "Locations" dropdown box
+      this.locations = locationRepo.getLocations();
+      if (this.locations.length > 0)
+        this.selectedLocation = this.locations[0].id;
+
+      // Refresh (fetch) the log entries for the list
       this.refresh();
+
+      // Touch all vuelidation inputs to trigger validation (and disabling the "Add" button before everything is valid)
       this.$v.$touch();
+
+      // Setup the date input
       $("#selectedDate").datepicker({
         format: 'yyyy-mm-dd',
         autoclose: true

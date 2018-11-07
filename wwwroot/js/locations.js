@@ -12,7 +12,10 @@ $(async function()
       locations: []
     },
     mounted() {
+      // Refresh (fetch) the locations for the list
       this.refresh();
+      
+      // Touch all vuelidation inputs to trigger validation (and disabling the "Add" button before everything is valid)
       this.$v.$touch();
     },
     validations: {
