@@ -3,7 +3,7 @@ A journey into building Solid applications with C#, Dotnet Core, RDFLIB.js, Vue.
 
 Trying to create a re-useable pattern for doing data-entry, validation and querying on data stored in Solid PODs.
 
-Example case is a logbook for loggin flights with remote controlled aircraft models.
+Example case is a logbook for logging flights with remote controlled aircraft models.
 
 Related resources:
 - What is Solid? - https://solid.inrupt.com/
