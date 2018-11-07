@@ -9,6 +9,8 @@ $(async function()
     el: '#locationsApp',
     data: {
       locationName: "",
+      useExternalUrl: false,
+      externalUrl: "",
       locations: []
     },
     mounted() {
@@ -21,6 +23,9 @@ $(async function()
     validations: {
       locationName: {
         required: validators.required
+      },
+      externalUrl: {
+        url: validators.url
       }
     },
     methods: $.extend({}, ViewModelBase, 
@@ -31,7 +36,8 @@ $(async function()
         {
           locationRepo.addLocation(
             {
-              name: this.locationName
+              name: this.locationName,
+              url : (this.useExternalUrl ? this.externalUrl : null)
             });
 
           this.refresh();

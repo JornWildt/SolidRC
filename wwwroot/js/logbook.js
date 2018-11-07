@@ -31,7 +31,7 @@ $(async function()
       // Get the list of locations for the "Locations" dropdown box
       this.locations = locationRepo.getLocations();
       if (this.locations.length > 0)
-        this.selectedLocation = this.locations[0].id;
+        this.selectedLocation = this.locations[0].url;
 
       // Refresh (fetch) the log entries for the list
       this.refresh();

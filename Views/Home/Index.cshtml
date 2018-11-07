@@ -59,7 +59,7 @@
             <div class="form-group">
               <label for="selectedLocation">Location</label>
               <select v-model="selectedLocation" id="selectedLocation">
-                <option v-for="location in locations" v-bind:value="location.id">{{ location.name }}</option>
+                <option v-for="location in locations" v-bind:value="location.url">{{ location.name }}</option>
               </select>
             </div>
             <div class="form-group">

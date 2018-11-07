@@ -17,6 +17,7 @@ class LocationRepository extends ORDFMapper
     this.addMapping(NS_DCTERM('created'), 'created');
     this.addMapping(NS_DCTERM('creator'), 'creator', PropertyType.Uri);
     this.addMapping(NS_DCTERM('title'), 'name');
+    this.addMapping(NS_SOLIDRC('url'), 'url');
 
     // Load *all* the locations into the store
     try
@@ -74,6 +75,9 @@ class LocationRepository extends ORDFMapper
     location.created = new Date();
     // FIXME: read from current login
     location.creator = 'https://elfisk.solid.community/profile/card#me';
+
+    if (!location.url)
+      location.url = locationUrl;
 
     this.storeObject(locationUrl, location);
   }
