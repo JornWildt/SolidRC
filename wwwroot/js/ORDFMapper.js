@@ -115,7 +115,7 @@ class ORDFMapper
 
 
   /**
-   * Copy values from an array of RDF statements into a single object.
+   * Copy values from an array of RDF statements into a single object using supplied mappings
    * 
    * @param statements {Array} Array of statements.
    */
@@ -134,21 +134,31 @@ class ORDFMapper
       if (mapping && mapping.mappingType == MappingType.Direct)
       {
         let value = st.object.value;
+
+        // If the property type is a URI then unwrap the NamedNode object and extract URI as a plain string.
         if (mapping.PropertyType == PropertyType.Uri)
           value = value.value;
+
+        // Assign the mapped value
         result[mapping.property] = value;
       }
       // Derived mappings assume the statement value is a URL and fetches the data at the URL.
       // It then selects mapped predicates and their values from that document
       else if (mapping && mapping.mappingType == MappingType.Derived)
       {
-        let value = st.object.value;
-        await this.fetcher.load(value).catch(err => {}); // FIXME: error handling
-
-        let targetSt = this.store.any(st.object, mapping.targetPredicate);
-        let targetValue = (targetSt ? targetSt.value : null);
-
-        result[mapping.propertyName] = targetValue;
+        let url = st.object.value;
+        await this.fetcher.load(url)
+        .then(() => 
+          {
+            let targetStatement = this.store.any(st.object, mapping.targetPredicate);
+            let targetValue = (targetStatement ? targetStatement.value : null);
+    
+            result[mapping.propertyName] = targetValue;    
+          })
+        .catch(err => 
+          {
+            result[mapping.propertyName] = '';
+          });
       }
     })).catch(err => {}); // FIXME: error handling
 
