@@ -93,6 +93,7 @@ class LocationRepository extends ORDFMapper
   generateLocationName(name)
   {
     const timestamp = Math.floor(Date.now() / 1000);
+    name = this.generateValidUrlName(name);
     return name + '-' + timestamp;
   }
 }
