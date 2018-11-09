@@ -13,6 +13,7 @@ img.grid-action
 }
 
 
+/*
 .dirty {
   border-color: #5A5;
   background: #EFE;
@@ -21,6 +22,7 @@ img.grid-action
 .dirty:focus {
   outline-color: #8E8;
 }
+*/
 
 .error {
   border-color: red;
