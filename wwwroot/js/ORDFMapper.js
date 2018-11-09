@@ -50,17 +50,35 @@ class ORDFMapper
 
   addDerivedMapping(predicate, targetPredicate, propertyName, valueType)
   {
-    let mapping = 
+    let mapping = this.predicateToPropertyMapping[predicate.value];
+    if (!mapping || !mapping.targetMappings)
     {
-      mappingType: MappingType.Derived,
-      predicate: predicate.value,
-      targetPredicate: targetPredicate,
-      propertyName: propertyName,
-      valueType: valueType
-    };
+      mapping = 
+      {
+        mappingType: MappingType.Derived,
+        predicate: predicate.value,
+        targetMappings:
+        [
+          {
+            predicate: targetPredicate,
+            propertyName: propertyName,
+            valueType: valueType    
+          }
+        ]
+      };
 
-    this.predicateToPropertyMapping[predicate.value] = mapping;
-    this.propertyToPredicateMapping[propertyName] = mapping;
+      this.predicateToPropertyMapping[predicate.value] = mapping;
+      this.propertyToPredicateMapping[propertyName] = mapping;
+    }
+    else
+    {
+      mapping.targetMappings.push(
+      {
+        predicate: targetPredicate,
+        propertyName: propertyName,
+        valueType: valueType
+      });
+    }
   }
 
 
@@ -150,17 +168,37 @@ class ORDFMapper
         await this.fetcher.load(url)
         .then(() => 
           {
-            let targetStatement = this.store.any(st.object, mapping.targetPredicate);
-            let targetValue = (targetStatement ? targetStatement.value : null);
-    
-            result[mapping.propertyName] = targetValue;    
+            mapping.targetMappings.forEach(m => {
+              let targetStatement = this.store.any(st.object, m.predicate);
+              let targetValue = (targetStatement ? targetStatement.value : null);
+      
+              if (targetValue)
+                result[m.propertyName] = 
+                {
+                  valid: true,
+                  value: targetValue
+                }
+              else
+              result[m.propertyName] = 
+              {
+                valid: false,
+                value: 'Property not available'
+              }
+          });
           })
         .catch(err => 
           {
-            result[mapping.propertyName] = '';
+            console.warn(err);
+            mapping.targetMappings.forEach(m =>
+              result[m.propertyName] =
+              {
+                valid: false,
+                value: `Resource not available (${url})`
+              }
+            );
           });
       }
-    })).catch(err => {}); // FIXME: error handling
+    })).catch(err => console.warn(err)); // Not doing anything here - assuming all errors handled inside
 
     return result;
   }

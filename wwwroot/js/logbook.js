@@ -34,7 +34,7 @@ $(async function()
         this.selectedLocation = this.locations[0].url;
 
       // Refresh (fetch) the log entries for the list
-      this.refresh();
+      await this.refresh();
 
       // Touch all vuelidation inputs to trigger validation (and disabling the "Add" button before everything is valid)
       this.$v.$touch();
@@ -56,7 +56,7 @@ $(async function()
     },
     methods: $.extend({}, ViewModelBase, 
     {
-      addNewEntry : function()
+      addNewEntry : async function()
       {
         if (!this.$v.$invalid)
         {
@@ -68,18 +68,18 @@ $(async function()
               duration: this.selectedDuration
             });
 
-          this.refresh();
+          await this.refresh();
 
           $('#addEntryDialog').modal('hide');
         }
       },
 
-      deleteEntry : function(entry)
+      deleteEntry : async function(entry)
       {
         if (confirm('Delete entry?'))
         {
           logRepo.deleteEntry(entry);
-          this.refresh();
+          await this.refresh();
         }
       },
 
