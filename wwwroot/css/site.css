@@ -13,6 +13,20 @@ img.grid-action
 }
 
 
+.form-group label {
+  display: block;
+}
+
+
+.image-preview {
+  background-image:url('');
+  background-size:cover;
+  background-position: center;
+  height: 100px; width: 100px;
+  border: 1px solid #bbb;  
+  margin-top: 10px;
+}
+
 /*
 .dirty {
   border-color: #5A5;

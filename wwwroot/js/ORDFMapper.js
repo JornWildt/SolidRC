@@ -173,17 +173,19 @@ class ORDFMapper
               let targetValue = (targetStatement ? targetStatement.value : null);
       
               if (targetValue)
+              {
                 result[m.propertyName] = 
                 {
                   valid: true,
                   value: targetValue
                 }
-              else
-              result[m.propertyName] = 
-              {
-                valid: false,
-                value: 'Property not available'
               }
+              else
+                result[m.propertyName] = 
+                {
+                  valid: false,
+                  value: 'Property not available'
+                }
           });
           })
         .catch(err => 
@@ -201,6 +203,16 @@ class ORDFMapper
     })).catch(err => console.warn(err)); // Not doing anything here - assuming all errors handled inside
 
     return result;
+  }
+
+
+  decodePropertyTypeValue(mapping, value)
+  {
+    // If the property type is a URI then unwrap the NamedNode object and extract URI as a plain string.
+    if (mapping.valueType == PropertyType.Uri)
+      value = value.value;
+
+    return value;
   }
 
 

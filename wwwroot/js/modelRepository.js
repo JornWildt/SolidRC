@@ -5,6 +5,8 @@ class ModelRepository extends ORDFMapper
   constructor()
   {
     super();
+
+    this.imageRepo = new ImageRepository();
   }
 
   
@@ -16,6 +18,7 @@ class ModelRepository extends ORDFMapper
     // Map statement predicate/objects into simple javascript key/values.
     this.addMapping(NS_DCTERM('created'), 'created');
     this.addMapping(NS_DCTERM('creator'), 'creator', PropertyType.Uri);
+    this.addMapping(NS_SOLIDRC('image'), 'image', PropertyType.Uri);
     this.addMapping(NS_DCTERM('title'), 'name');
 
     // Load *all* the models into the store
@@ -62,8 +65,12 @@ class ModelRepository extends ORDFMapper
   /**
    * Add a new model
    */
-  addModel(model)
+  async addModel(model)
   {
+    // Store associated image and get it's URL
+    let imageUrl = await this.imageRepo.addImage(model.image);
+    model.image = imageUrl;
+
     // Generate a unique URL name (path element) for the model
     let modelName = this.generateModelName(model.name);
 
@@ -83,6 +90,8 @@ class ModelRepository extends ORDFMapper
   {
     // FIXME: error handling
     this.deleteObject(model.id);
+    if (model.image)
+      this.imageRepo.deleteImage(model.image);
   }
 
 

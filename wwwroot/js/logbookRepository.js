@@ -20,8 +20,9 @@ class LogbookRepository extends ORDFMapper
     this.addMapping(NS_SOLIDRC('model'), 'model', PropertyType.Uri);
     this.addMapping(NS_DCTERM('location'), 'location', PropertyType.Uri);
     this.addMapping(NS_SOLIDRC('duration'), 'duration');
-    this.addDerivedMapping(NS_DCTERM('location'), NS_DCTERM('title'), 'locationName')
-    this.addDerivedMapping(NS_SOLIDRC('model'), NS_DCTERM('title'), 'modelName')
+    this.addDerivedMapping(NS_DCTERM('location'), NS_DCTERM('title'), 'locationName');
+    this.addDerivedMapping(NS_SOLIDRC('model'), NS_DCTERM('title'), 'modelName');
+    this.addDerivedMapping(NS_SOLIDRC('model'), NS_SOLIDRC('image'), 'modelImage', PropertyType.Uri);
 
     // Load *all* the logbook entries into the store
     await this.fetcher.load(LogbookRepository.EntriesUrl).catch(err => console.debug(err));

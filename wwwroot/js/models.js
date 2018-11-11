@@ -25,13 +25,28 @@ $(async function()
     },
     methods: $.extend({}, ViewModelBase, 
     {
-      addNewModel : function()
+      previewModelImage : function(evt)
+      {
+        let image = event.target.files[0];
+        if (image)
+        {
+          let imagePath = URL.createObjectURL(image);
+          $('#modelImagePreview').css('background-image', 'url(' + imagePath + ')').addClass('image-preview');
+        }
+        else
+        {
+          $('#modelImagePreview').css('background-image', 'url()').removeClass('image-preview');
+        }
+      },
+
+      addNewModel : async function()
       {
         if (!this.$v.$invalid)
         {
-          modelRepo.addModel(
+          await modelRepo.addModel(
             {
-              name: this.modelName
+              name: this.modelName,
+              image: $('#modelImage')[0].files[0]
             });
 
           this.refresh();
@@ -56,11 +71,4 @@ $(async function()
       }
     })
   });
-
-  // $('.date-input').datepicker(
-  //   {
-  //     format: 'yyyy-mm-dd',
-  //     autoclose: true
-  //   }
-  // );
 });

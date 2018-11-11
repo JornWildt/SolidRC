@@ -16,7 +16,7 @@
     </thead>
     <tbody>
       <tr v-for="model in models" v-bind:model="model" v-bind:key="model.id">
-        <td><img width="16" height="16"></td>
+        <td><img width="32" height="32" v-bind:src="model.image"></td>
         <td>{{model.name}}</td>
         <td><a href="#" v-on:click="deleteModel(model)"><img src="~/open-iconic/svg/circle-x.svg" alt="Remove" class="grid-action"></a></td>
       </tr>
@@ -38,6 +38,12 @@
             <div class="form-group">
               <label for="modelName">Name</label>
               <input v-model="$v.modelName.$model" :class="validationStatus($v.modelName)" id="modelName">
+            </div>
+
+            <div class="form-group">
+              <label for="modelImage">Upload photo</label>
+              <input type="file" id="modelImage" v-on:change="previewModelImage">
+              <div id="modelImagePreview"></div>
             </div>
           </form>
         </div>
@@ -62,6 +68,7 @@
   <script src="~/lib/vuelidate/dist/validators.min.js"></script>
   <script src="~/js/namespaces.js"></script>
   <script src="~/js/ORDFMapper.js"></script>
-  <script src="~/js/models.js"></script>
   <script src="~/js/modelRepository.js"></script>
+  <script src="~/js/imageRepository.js"></script>
+  <script src="~/js/models.js"></script>
 }
