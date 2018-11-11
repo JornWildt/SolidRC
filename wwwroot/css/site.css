@@ -18,14 +18,18 @@ img.grid-action
 }
 
 
-.image-preview {
-  background-image:url('');
-  background-size:cover;
-  background-position: center;
-  height: 100px; width: 100px;
-  border: 1px solid #bbb;  
+.image-previewer {
   margin-top: 10px;
+  border: 1px solid #bbb;
+  padding: 1px;
+  height: 104px; 
+  width: 104px;
 }
+
+.image-previewer img {
+  display: none;
+}
+
 
 /*
 .dirty {

@@ -20,11 +20,12 @@
         <th>Model</th>
         <th>Location</th>
         <th>Duration</th>
+        <th></th>
       </tr>
     </thead>
     <tbody>
       <tr v-for="entry in logEntries" v-bind:entry="entry" v-bind:key="entry.id">
-        <td><img height="32" v-bind:src="entry.modelImage.value"></td>
+        <td><img height="32" v-bind:src="entry.modelPreview.value"></td>
         <td>{{entry.date}}</td>
         <td><derived-value v-bind:item="entry.modelName"/></td>
         <td><derived-value v-bind:item="entry.locationName"/></td>
