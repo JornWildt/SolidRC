@@ -50,5 +50,18 @@ let ViewModelBase =
       error: val.$error,
       dirty: val.$dirty
     }
+  },
+
+
+  showWaiting(target, text)
+  {
+    this.currentWaitingTarget = $(target);
+    this.currentWaitingTarget.waitMe({text: text});
+  },
+
+  
+  hideWaiting()
+  {
+    this.currentWaitingTarget.waitMe('hide');
   }
 }

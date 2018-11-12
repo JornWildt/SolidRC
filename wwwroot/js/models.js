@@ -67,6 +67,7 @@ $(async function()
       {
         if (!this.$v.$invalid)
         {
+          this.showWaiting('#addModelDialog', 'Saving');
           let imgCanvas = document.getElementById('modelImageCanvas');
           let ctx = imgCanvas.getContext('2d');
 
@@ -93,6 +94,7 @@ $(async function()
 
           this.refresh();
 
+          this.hideWaiting();
           $('#addModelDialog').modal('hide');
         }
       },
