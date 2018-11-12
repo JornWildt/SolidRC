@@ -19,7 +19,7 @@ class ModelRepository extends ORDFMapper
     this.addMapping(NS_DCTERM('created'), 'created');
     this.addMapping(NS_DCTERM('creator'), 'creator', PropertyType.Uri);
     this.addMapping(NS_SOLIDRC('image'), 'image', PropertyType.Uri);
-    this.addMapping(NS_SOLIDRC('preview'), 'preview', PropertyType.Uri);
+    this.addMapping(NS_SOLIDRC('thumbnail'), 'thumbnail', PropertyType.Uri);
     this.addMapping(NS_DCTERM('title'), 'name');
 
     // Load *all* the models into the store
@@ -69,12 +69,12 @@ class ModelRepository extends ORDFMapper
   async addModel(model)
   {
     // Store associated image and get it's URL
-    let imageUrl = await this.imageRepo.addImage(model.image);
+    let imageUrl = await this.imageRepo.addImage(model.image, model.name);
     model.image = imageUrl;
 
-    // Store associated image preview and get it's URL
-    let previewUrl = await this.imageRepo.addImage(model.preview);
-    model.preview = previewUrl;
+    // Store associated image thumbnail and get it's URL
+    let thumbnailUrl = await this.imageRepo.addImage(model.thumbnail, model.name + '-tmb');
+    model.thumbnail = thumbnailUrl;
 
     // Generate a unique URL name (path element) for the model
     let modelName = this.generateModelName(model.name);
@@ -97,8 +97,8 @@ class ModelRepository extends ORDFMapper
     this.deleteObject(model.id);
     if (model.image)
       this.imageRepo.deleteImage(model.image);
-    if (model.preview)
-      this.imageRepo.deleteImage(model.preview);
+    if (model.thumbnail)
+      this.imageRepo.deleteImage(model.thumbnail);
   }
 
 

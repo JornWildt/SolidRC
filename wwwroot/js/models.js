@@ -72,15 +72,15 @@ $(async function()
 
           // Get model name before "this" context disappears
           let modelName = this.modelName;
-          
-          let previewBlob = imgCanvas.toBlob(async function(blob)
+
+          let thumbnailBlob = imgCanvas.toBlob(async function(blob)
           {
-            let preview = new File([blob], "preview.png", { type: "image/png" });
+            let thumbnail = new File([blob], "thumbnail.png", { type: "image/png" });
             await modelRepo.addModel(
               {
                 name: modelName,
                 image: $('#modelImage')[0].files[0],
-                preview: preview
+                thumbnail: thumbnail
               });
           });
 

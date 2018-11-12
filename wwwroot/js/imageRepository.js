@@ -12,12 +12,12 @@ class ImageRepository extends ORDFMapper
    * 
    * @param {File object} image - Image to upload (represented as a File object from a file input element).
    */
-  async addImage(image)
+  async addImage(image, name)
   {
     if (image)
     {
-      let imageName = this.generateImageName(image.name);
-      let imageUrl = ImageRepository.ImageUrl + imageName;
+      let imageUrlName = this.generateImageName(image.name, name);
+      let imageUrl = ImageRepository.ImageUrl + imageUrlName;
 
       await this.fetcher.webOperation('PUT', imageUrl,
       {
@@ -46,16 +46,19 @@ class ImageRepository extends ORDFMapper
   }
 
 
-  generateImageName(name)
+  generateImageName(orgName, requiredName)
   {
-    name = this.generateValidUrlName(name);
+    // If required name has no extension then get extension from original name
+    let dotPos = requiredName.lastIndexOf('.');
+    if (dotPos < 0)
+    {
+      dotPos = orgName.lastIndexOf('.');
+      let nameExt = (dotPos >= 0 ? orgName.substring(dotPos, Infinity) : '');
+      requiredName = requiredName + nameExt;
+    }
 
-    let dotPos = name.lastIndexOf('.');
-    let nameBase = (dotPos >= 0 ? name.substring(0, dotPos) : name);
-    let nameExt = (dotPos >= 0 ? name.substring(dotPos+1, Infinity) : '');
-
-    const timestamp = Math.floor(Date.now() / 1000);
-    return `${nameBase}-${timestamp}.${nameExt}`;
+    let name = this.generateValidUrlName(requiredName);
+    return name;
   }
 }
 
