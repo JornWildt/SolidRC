@@ -64,7 +64,7 @@ class ModelRepository extends ORDFMapper
 
 
   /**
-   * Add a new model
+   * Add a new model and associated images.
    */
   async addModel(model)
   {
@@ -104,9 +104,8 @@ class ModelRepository extends ORDFMapper
 
   generateModelName(name)
   {
-    const timestamp = Math.floor(Date.now() / 1000);
-    name = this.generateValidUrlName(name);
-    return name + '-' + timestamp;
+    name = this.generateValidUrlName(name).toLowerCase();
+    return name;
   }
 }
 

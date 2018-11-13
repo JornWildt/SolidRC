@@ -57,7 +57,7 @@ class ImageRepository extends ORDFMapper
       requiredName = requiredName + nameExt;
     }
 
-    let name = this.generateValidUrlName(requiredName);
+    let name = this.generateValidUrlName(requiredName).toLowerCase();
     return name;
   }
 }

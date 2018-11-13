@@ -28,7 +28,7 @@ $(async function()
       previewModelImage : function(evt)
       {
         let image = event.target.files[0];
-        if (image)
+        if (image && image.type.match(/image.*/))
         {
           let imagePath = URL.createObjectURL(image);
 
