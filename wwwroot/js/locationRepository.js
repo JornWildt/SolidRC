@@ -13,7 +13,7 @@ class LocationRepository extends ORDFMapper
     // Assign RDF type for objects managed by this repository
     this.setObjectType(NS_SOLIDRC('location'));
 
-    // Map statement predicate/objects into simple javascript key/values.
+    // Map RDF predicate/objects into simple javascript key/values.
     this.addMapping(NS_DCTERM('created'), 'created');
     this.addMapping(NS_DCTERM('creator'), 'creator', PropertyType.Uri);
     this.addMapping(NS_DCTERM('title'), 'name');
@@ -92,9 +92,8 @@ class LocationRepository extends ORDFMapper
 
   generateLocationName(name)
   {
-    const timestamp = Math.floor(Date.now() / 1000);
-    name = this.generateValidUrlName(name);
-    return name + '-' + timestamp;
+    name = this.generateValidUrlName(name).toLowerCase();
+    return name;
   }
 }
 
