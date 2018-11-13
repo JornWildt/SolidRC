@@ -39,10 +39,7 @@ class ImageRepository extends ORDFMapper
    */
   async deleteImage(imageUrl)
   {
-    await this.fetcher.webOperation('DELETE', imageUrl,
-    {
-      credentials: 'include'
-    });
+    await this.deleteObject(imageUrl);
   }
 
 

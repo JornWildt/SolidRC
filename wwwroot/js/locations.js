@@ -46,12 +46,12 @@ $(async function()
         }
       },
 
-      deleteLocation : function(location)
+      deleteLocation : async function(location)
       {
         if (confirm('Delete location?'))
         {
-          locationRepo.deleteLocation(location);
-          this.refresh();
+          await locationRepo.deleteLocation(location);
+          await this.refresh();
         }
       },
 

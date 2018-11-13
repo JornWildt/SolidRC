@@ -82,10 +82,10 @@ class LogbookRepository extends ORDFMapper
   }
 
 
-  deleteEntry(entry)
+  async deleteEntry(entry)
   {
     // FIXME: error handling
-    this.deleteObject(entry.id);
+    await this.deleteObject(entry.id);
   }
 
 

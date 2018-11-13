@@ -91,14 +91,15 @@ class ModelRepository extends ORDFMapper
   }
 
 
-  deleteModel(model)
+  async deleteModel(model)
   {
-    // FIXME: error handling
-    this.deleteObject(model.id);
-    if (model.image)
-      this.imageRepo.deleteImage(model.image);
-    if (model.thumbnail)
-      this.imageRepo.deleteImage(model.thumbnail);
+    // Run all requests in parallel - catch errors for each one to avoid "fail fast" behavior of Promise.All()
+    await Promise.all(
+    [
+      this.deleteObject(model.id).catch(err => console.debug(err)),
+      model.image ? this.imageRepo.deleteImage(model.image).catch(err => console.debug(err)) : null,
+      model.thumbnail ? this.imageRepo.deleteImage(model.thumbnail).catch(err => console.debug(err)) : null
+    ]);
   }
 
 

@@ -83,10 +83,10 @@ class LocationRepository extends ORDFMapper
   }
 
 
-  deleteLocation(location)
+  async deleteLocation(location)
   {
     // FIXME: error handling
-    this.deleteObject(location.id);
+    await this.deleteObject(location.id);
   }
 
 

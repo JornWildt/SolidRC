@@ -122,11 +122,12 @@ class ORDFMapper
   }
 
 
-  deleteObject(url)
+  async deleteObject(url)
   {
     console.debug("Delete object: " + url);
-    // FIXME: error handling
-    this.fetcher.delete(url);
+    // Catch errors to make sure we continue deleting all items (no transactional guarantees here!)
+    await this.fetcher.delete(url).catch(ex => console.debug(ex) );
+    console.debug("Done delete object: " + url);
     this.store.removeMatches(this.store.sym(url));
     this.store.removeDocument(this.store.sym(url));
   }
@@ -233,5 +234,12 @@ class ORDFMapper
   generateValidUrlName(name)
   {
     return name.replace(/[^-\w0-9_.]/g, '-');
+  }
+
+
+  Debug(x)
+  {
+    console.debug(x);
+    return x;
   }
 }

@@ -99,12 +99,14 @@ $(async function()
         }
       },
 
-      deleteModel : function(model)
+      deleteModel : async function(model)
       {
         if (confirm('Delete model?'))
         {
-          modelRepo.deleteModel(model);
-          this.refresh();
+          console.debug("Start delete model");
+          await modelRepo.deleteModel(model);
+          await this.refresh();
+          console.debug("Done delete model");
         }
       },
 
