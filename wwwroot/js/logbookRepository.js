@@ -52,6 +52,15 @@ class LogbookRepository extends ORDFMapper
   {
     var entry = await this.readObject(url);
     entry.date = new moment(entry.date).format('YYYY-MM-DD');
+    let colonCount = countCharacter(entry.duration, ':');
+    if (colonCount == 0)
+      entry.durationText = entry.duration + ' sec';
+    else if (colonCount == 1)
+      entry.durationText = entry.duration + ' min';
+    else if (colonCount == 2)
+      entry.durationText = entry.duration + ' hr';
+    else
+      entry.durationText = entry.duration;
     return entry;
   }
 
@@ -84,7 +93,6 @@ class LogbookRepository extends ORDFMapper
 
   async deleteEntry(entry)
   {
-    // FIXME: error handling
     await this.deleteObject(entry.id);
   }
 

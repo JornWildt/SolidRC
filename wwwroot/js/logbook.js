@@ -78,7 +78,7 @@ $(async function()
       {
         if (confirm('Delete entry?'))
         {
-          logRepo.deleteEntry(entry);
+          await logRepo.deleteEntry(entry);
           await this.refresh();
         }
       },

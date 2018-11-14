@@ -12,24 +12,19 @@
 <div id="logbook">
   <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addEntryDialog">Add new entry</button>
 
-  <table id="logentries" class="table">
-    <thead>
-      <tr>
-        <th></th>
-        <th>Date</th>
-        <th>Model</th>
-        <th>Location</th>
-        <th>Duration</th>
-        <th></th>
-      </tr>
-    </thead>
+  <table class="table log-entries">
     <tbody>
       <tr v-for="entry in logEntries" v-bind:entry="entry" v-bind:key="entry.id">
-        <td><linked-image height="50" v-bind:item="entry.modelThumbnail"></td>
-        <td>{{entry.date}}</td>
-        <td><linked-value v-bind:item="entry.modelName"/></td>
-        <td><linked-value v-bind:item="entry.locationName"/></td>
-        <td>{{entry.duration}}</td>
+        <td><linked-image height="60" v-bind:item="entry.modelThumbnail"></td>
+        <td>
+          <div>
+            {{entry.date}} - <linked-value v-bind:item="entry.locationName"></linked-value> 
+            <span v-if="entry.duration">({{entry.durationText}})</span>
+          </div>
+          <div>
+            <linked-value v-bind:item="entry.modelName"></linked-value>
+          </div>          
+        </td>
         <td><a href="#" v-on:click="deleteEntry(entry)"><img src="~/open-iconic/svg/circle-x.svg" alt="Remove" class="grid-action"></a></td>
       </tr>
     </tbody>
