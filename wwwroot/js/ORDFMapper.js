@@ -8,7 +8,7 @@ const PropertyType =
 const MappingType =
 {
   Direct: 'Direct',
-  Derived: 'Derived'
+  Linked: 'Linked'
 }
 
 class ORDFMapper
@@ -48,14 +48,14 @@ class ORDFMapper
   }
 
 
-  addDerivedMapping(predicate, targetPredicate, propertyName, valueType)
+  addLinkedMapping(predicate, targetPredicate, propertyName, valueType)
   {
     let mapping = this.predicateToPropertyMapping[predicate.value];
     if (!mapping || !mapping.targetMappings)
     {
       mapping = 
       {
-        mappingType: MappingType.Derived,
+        mappingType: MappingType.Linked,
         predicate: predicate.value,
         targetMappings:
         [
@@ -100,7 +100,7 @@ class ORDFMapper
     // Find all statements having  the object URL as the subject.
     let statements = this.store.match(url, null, null);
 
-    // FIXME: we do not always need to fetch derived values - only when presenting a list of items
+    // FIXME: we do not always need to fetch linked values - only when presenting a list of items
 
     // Copy object values from all the statements into a simple javascript object.
     let result = await this.copyStatementsIntoObject(statements);
@@ -161,9 +161,9 @@ class ORDFMapper
         // Assign the mapped value
         result[mapping.property] = value;
       }
-      // Derived mappings assume the statement value is a URL and fetches the data at the URL.
+      // Linked mappings assume the statement value is a URL and fetches the data at the URL.
       // It then selects mapped predicates and their values from that document
-      else if (mapping && mapping.mappingType == MappingType.Derived)
+      else if (mapping && mapping.mappingType == MappingType.Linked)
       {
         let url = st.object.value;
         await this.fetcher.load(url)
