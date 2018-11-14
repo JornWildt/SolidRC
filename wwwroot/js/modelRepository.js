@@ -6,7 +6,7 @@ class ModelRepository extends ORDFMapper
   {
     super();
 
-    this.imageRepo = new ImageRepository();
+    this.imageRepo = new ImageRepository(ModelRepository.ImageUrl);
   }
 
   
@@ -113,3 +113,4 @@ class ModelRepository extends ORDFMapper
 
 ModelRepository.ModelUrl = 'https://elfisk.solid.community/public/solidrc/models/';
 ModelRepository.ModelsUrl = 'https://elfisk.solid.community/public/solidrc/models/*';
+ModelRepository.ImageUrl = 'https://elfisk.solid.community/public/solidrc/models/';

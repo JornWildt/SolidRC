@@ -2,9 +2,10 @@
  */
 class ImageRepository extends ORDFMapper
 {
-  constructor()
+  constructor(baseUrl)
   {
     super();
+    this.baseUrl = baseUrl;
   }
 
 
@@ -17,7 +18,7 @@ class ImageRepository extends ORDFMapper
     if (image)
     {
       let imageUrlName = this.generateImageName(image.name, name);
-      let imageUrl = ImageRepository.ImageUrl + imageUrlName;
+      let imageUrl = this.baseUrl + imageUrlName;
 
       await this.fetcher.webOperation('PUT', imageUrl,
       {
@@ -59,5 +60,3 @@ class ImageRepository extends ORDFMapper
   }
 }
 
-
-ImageRepository.ImageUrl = 'https://elfisk.solid.community/public/solidrc/images/';
