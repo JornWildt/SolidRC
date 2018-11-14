@@ -26,14 +26,19 @@ $(function () {
 
 // Various common functionality for many pages
 
-function countCharacter(str, char) {
+function countCharacter(str, char) 
+{
+  if (!str)
+    return 0;
 
   var count = 0;
-  for(var i = 0; i < str.length; i++){
+  for(var i = 0; i < str.length; i++)
+  {
     if(str.charAt(i) === char)
       count++;
   }
- return count;
+  
+  return count;
 }
 
 let ViewModelBase =

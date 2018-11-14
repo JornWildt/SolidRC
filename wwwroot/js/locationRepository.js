@@ -11,13 +11,13 @@ class LocationRepository extends ORDFMapper
   async initialize()
   {
     // Assign RDF type for objects managed by this repository
-    this.setObjectType(NS_SOLIDRC('location'));
+    this.setObjectType(NS_SCHEMA('Place'));
 
     // Map RDF predicate/objects into simple javascript key/values.
-    this.addMapping(NS_DCTERM('created'), 'created');
-    this.addMapping(NS_DCTERM('creator'), 'creator', PropertyType.Uri);
-    this.addMapping(NS_DCTERM('title'), 'name');
-    this.addMapping(NS_SOLIDRC('url'), 'url');
+    this.addMapping(NS_SCHEMA('dateCreated'), 'created');
+    this.addMapping(NS_SCHEMA('author'), 'creator', PropertyType.Uri);
+    this.addMapping(NS_SCHEMA('name'), 'name');
+    this.addMapping(NS_SCHEMA('url'), 'url');
 
     // Load *all* the locations into the store
     try
@@ -38,13 +38,13 @@ class LocationRepository extends ORDFMapper
   async getLocations()
   {    
     // Find the subjects of all locations (from statements having type = 'location')
-    let locations = this.store.match(null, NS_RDF('type'), NS_SOLIDRC('location'));
+    let locations = this.store.match(null, NS_RDF('type'), NS_SCHEMA('Place'));
 
     // Build a list of all locations by fetching the location data from the locations URL (subject)
     let result = await Promise.all(locations.map(l => this.readLocationFromUrl(l.subject)));
 
     // Make sure we always get a consistent sort order
-    result.sort((a,b) => a.name.localeCompare(b.name))
+    result.sort((a,b) => (a.name ? a.name.localeCompare(b.name) : 0))
 
     return result; 
   }

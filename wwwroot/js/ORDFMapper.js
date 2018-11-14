@@ -143,7 +143,19 @@ class ORDFMapper
     let result = {};
 
     // Initialize result by assigning null to all properties such that missing statements/predicates yield a null value.
-    $.each(this.predicateToPropertyMapping, (key, mapping) => { result[mapping.property] = null; });
+    $.each(this.predicateToPropertyMapping, (key, mapping) => 
+    { 
+      if (mapping.mappingType == MappingType.Direct)
+      {
+        result[mapping.property] = null; 
+      }
+      else
+      {
+        mapping.targetMappings.forEach(targetMapping =>
+          result[targetMapping.propertyName] = { valid: false, value: `Property '${targetMapping.propertyName}' not available.` }
+        );
+      }
+    });
 
     // Go through each statement, get the property name from the predicate and set property to the statement object value.
     await Promise.all(statements.map(async st => {
@@ -185,10 +197,10 @@ class ORDFMapper
                 result[m.propertyName] = 
                 {
                   valid: false,
-                  value: 'Property not available'
+                  value: `Property '${m.propertyName}'not available`
                 }
           });
-          })
+        })
         .catch(err => 
           {
             console.warn(err);

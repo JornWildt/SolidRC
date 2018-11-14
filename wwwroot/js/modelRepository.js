@@ -16,11 +16,11 @@ class ModelRepository extends ORDFMapper
     this.setObjectType(NS_SOLIDRC('model'));
 
     // Map statement predicate/objects into simple javascript key/values.
-    this.addMapping(NS_DCTERM('created'), 'created');
-    this.addMapping(NS_DCTERM('creator'), 'creator', PropertyType.Uri);
-    this.addMapping(NS_SOLIDRC('image'), 'image', PropertyType.Uri);
-    this.addMapping(NS_SOLIDRC('thumbnail'), 'thumbnail', PropertyType.Uri);
-    this.addMapping(NS_DCTERM('title'), 'name');
+    this.addMapping(NS_SCHEMA('dateCreated'), 'created');
+    this.addMapping(NS_SCHEMA('author'), 'creator', PropertyType.Uri);
+    this.addMapping(NS_SCHEMA('image'), 'image', PropertyType.Uri);
+    this.addMapping(NS_SCHEMA('thumbnail'), 'thumbnail', PropertyType.Uri);
+    this.addMapping(NS_SCHEMA('name'), 'name');
 
     // Load *all* the models into the store
     try
@@ -47,7 +47,7 @@ class ModelRepository extends ORDFMapper
     let result = await Promise.all(models.map(m => this.readModelFromUrl(m.subject)));
 
     // Make sure we always get a consistent sort order
-    result.sort((a,b) => a.name.localeCompare(b.name))
+    result.sort((a,b) => (a.name ? a.name.localeCompare(b.name) : 0));
 
     return result; 
   }

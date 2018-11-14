@@ -14,16 +14,16 @@ class LogbookRepository extends ORDFMapper
     this.setObjectType(NS_SOLIDRC('logentry'));
 
     // Map statement predicate/objects into simple javascript key/values.
-    this.addMapping(NS_DCTERM('created'), 'created');
-    this.addMapping(NS_DCTERM('creator'), 'creator', PropertyType.Uri);
-    this.addMapping(NS_DCTERM('date'), 'date');
+    this.addMapping(NS_SCHEMA('dateCreated'), 'created');
+    this.addMapping(NS_SCHEMA('author'), 'creator', PropertyType.Uri);
+    this.addMapping(NS_SCHEMA('startDate'), 'date');
     this.addMapping(NS_SOLIDRC('model'), 'model', PropertyType.Uri);
-    this.addMapping(NS_DCTERM('location'), 'location', PropertyType.Uri);
-    this.addMapping(NS_SOLIDRC('duration'), 'duration');
-    this.addLinkedMapping(NS_DCTERM('location'), NS_DCTERM('title'), 'locationName');
-    this.addLinkedMapping(NS_SOLIDRC('model'), NS_DCTERM('title'), 'modelName');
-    this.addLinkedMapping(NS_SOLIDRC('model'), NS_SOLIDRC('image'), 'modelImage', PropertyType.Uri);
-    this.addLinkedMapping(NS_SOLIDRC('model'), NS_SOLIDRC('thumbnail'), 'modelThumbnail', PropertyType.Uri);
+    this.addMapping(NS_SCHEMA('location'), 'location', PropertyType.Uri);
+    this.addMapping(NS_SCHEMA('duration'), 'duration');
+    this.addLinkedMapping(NS_SCHEMA('location'), NS_SCHEMA('name'), 'locationName');
+    this.addLinkedMapping(NS_SOLIDRC('model'), NS_SCHEMA('name'), 'modelName');
+    this.addLinkedMapping(NS_SOLIDRC('model'), NS_SCHEMA('image'), 'modelImage', PropertyType.Uri);
+    this.addLinkedMapping(NS_SOLIDRC('model'), NS_SCHEMA('thumbnail'), 'modelThumbnail', PropertyType.Uri);
 
     // Load *all* the logbook entries into the store
     await this.fetcher.load(LogbookRepository.EntriesUrl).catch(err => console.debug(err));
