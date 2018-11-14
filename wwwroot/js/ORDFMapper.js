@@ -233,7 +233,7 @@ class ORDFMapper
 
   generateValidUrlName(name)
   {
-    return name.replace(/[^-\w0-9_.]/g, '-');
+    return name.replace(/[^-\w0-9_]/g, '-');
   }
 
 
