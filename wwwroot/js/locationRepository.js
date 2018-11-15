@@ -20,20 +20,12 @@ class LocationRepository extends ORDFMapper
     this.addMapping(NS_SCHEMA('sameAs'), 'externalUrl');
 
     // Load *all* the locations into the store
-    try
-    {
-      await this.fetcher.load(LocationRepository.LocationsUrl);
-    }
-    catch (err)
-    {
-      // FIXME: improved error handling should be applied here!
-      console.log(err);
-    }
+    return this.loadAllContainerItems(LocationRepository.LocationsUrl);
   }
 
 
   /**
-   * Get a list of all locations as simple javascript objects.
+   * Get a list of all locations (from local store) as simple javascript objects.
    */
   async getLocations()
   {    
@@ -41,7 +33,7 @@ class LocationRepository extends ORDFMapper
     let locations = this.store.match(null, NS_RDF('type'), NS_SCHEMA('Place'));
 
     // Build a list of all locations by fetching the location data from the locations URL (subject)
-    let result = await Promise.all(locations.map(l => this.readLocationFromUrl(l.subject)));
+    let result = await Promise.all(locations.map(l => this.readLocationFromUrl(l.subject).catch(err => console.warn(err))));
 
     // Make sure we always get a consistent sort order
     result.sort((a,b) => (a.name ? a.name.localeCompare(b.name) : 0));
@@ -92,7 +84,6 @@ class LocationRepository extends ORDFMapper
    */
   async updateLocation(location)
   {
-    console.debug(location);
     return this.updateObject(location.id, location);
   }
 
@@ -113,4 +104,4 @@ class LocationRepository extends ORDFMapper
 
 
 LocationRepository.LocationUrl = 'https://elfisk.solid.community/public/solidrc/locations/';
-LocationRepository.LocationsUrl = 'https://elfisk.solid.community/public/solidrc/locations/*';
+LocationRepository.LocationsUrl = 'https://elfisk.solid.community/public/solidrc/locations/';

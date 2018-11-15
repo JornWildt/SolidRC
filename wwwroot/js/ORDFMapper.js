@@ -82,6 +82,21 @@ class ORDFMapper
   }
 
 
+  async loadAllContainerItems(url)
+  {
+    // Load container document itself into local store
+    await this.fetcher.load(url).catch(err => console.warn(err));
+
+    // Find the URLs of the items in the container
+    let folderItemUrls = await this.store.match(this.store.sym(url), NS_LDP('contains'));
+
+    // Load each item in the container into the local store
+    // (do local catch() to avoid fail-fast in Promise.all())
+    return Promise.all(folderItemUrls.map(itemUrl => 
+      this.fetcher.load(itemUrl.object).catch(err => console.warn(err))));
+  }
+
+
   async readObject(url)
   {
     let result = await this.readObjectInternal(url);
@@ -128,15 +143,11 @@ class ORDFMapper
     let existingStatements = this.store.match(this.store.sym(url), null, null);
     let insertStatements = this.copyPropertiesIntoStatements(url, obj);
     let deleteStatements = existingStatements.filter(st => insertStatements.find(is => is.predicate.value == st.predicate.value) != undefined);
-    console.debug(existingStatements);
-    console.debug(insertStatements);
-    console.debug(deleteStatements);
+
+    console.debug("Update object: " + url + `(${deleteStatements.length} deletes, ${insertStatements.length} inserts)`);
     return new Promise((accept,reject) => this.updater.update(deleteStatements, insertStatements, 
       (uri,ok,message) => 
       {
-        console.debug(uri);
-        console.debug(ok);
-        console.debug(message);
         if (ok)
           accept();
         else
@@ -254,6 +265,7 @@ class ORDFMapper
 
   copyPropertiesIntoStatements(subject, object)
   {
+    subject = this.store.sym(subject);
     return Object.entries(object).map(([key,value]) => {
       let mapping = this.propertyToPredicateMapping[key];
       if (mapping != undefined && value != undefined)

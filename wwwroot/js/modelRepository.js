@@ -23,15 +23,7 @@ class ModelRepository extends ORDFMapper
     this.addMapping(NS_SCHEMA('name'), 'name');
 
     // Load *all* the models into the store
-    try
-    {
-      await this.fetcher.load(ModelRepository.ModelsUrl);
-    }
-    catch (err)
-    {
-      // FIXME: improved error handling should be applied here!
-      console.log(err);
-    }
+    return this.loadAllContainerItems(ModelRepository.ModelsUrl);
   }
 
 
@@ -112,5 +104,5 @@ class ModelRepository extends ORDFMapper
 
 
 ModelRepository.ModelUrl = 'https://elfisk.solid.community/public/solidrc/models/';
-ModelRepository.ModelsUrl = 'https://elfisk.solid.community/public/solidrc/models/*';
-ModelRepository.ImageUrl = 'https://elfisk.solid.community/public/solidrc/models/';
+ModelRepository.ModelsUrl = 'https://elfisk.solid.community/public/solidrc/models/';
+ModelRepository.ImageUrl = 'https://elfisk.solid.community/public/solidrc/images/';
