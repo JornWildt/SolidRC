@@ -17,7 +17,7 @@ class LocationRepository extends ORDFMapper
     this.addMapping(NS_SCHEMA('dateCreated'), 'created');
     this.addMapping(NS_SCHEMA('author'), 'creator', PropertyType.Uri);
     this.addMapping(NS_SCHEMA('name'), 'name');
-    this.addMapping(NS_SCHEMA('url'), 'url');
+    this.addMapping(NS_SCHEMA('sameAs'), 'externalUrl');
 
     // Load *all* the locations into the store
     try
@@ -56,8 +56,12 @@ class LocationRepository extends ORDFMapper
   async readLocationFromUrl(url)
   {
     var location = await this.readObject(url);
-    if (!location.url)
-      location.url = url;
+    location.url = url; 
+
+    // location.url could also be the externalUrl, if it exists, but then we have a runtime dependency on that.
+    // - so currently we always use the "local" URL and only remember the external URL for later reference.
+    //  (location.externalUrl ? location.externalUrl : url);
+    
     return location;
   }
 

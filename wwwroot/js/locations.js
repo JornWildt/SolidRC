@@ -50,7 +50,7 @@ $(async function()
           locationRepo.addLocation(
             {
               name: this.locationName,
-              url : (this.useExternalUrl ? this.externalUrl : null)
+              externalUrl : (this.useExternalUrl ? this.externalUrl : null)
             });
 
           this.refresh();
@@ -65,8 +65,8 @@ $(async function()
         this.formTitle = "Edit location";
         this.formState = 'edit';
         this.locationName = location.name;
-        this.useExternalUrl = location.url != null;
-        this.externalUrl = location.url;
+        this.useExternalUrl = location.externalUrl != null;
+        this.externalUrl = location.externalUrl;
         $('#locationDialog').modal('show');
       },
 
