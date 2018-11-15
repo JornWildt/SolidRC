@@ -17,7 +17,10 @@
     <tbody>
       <tr v-for="location in locations" v-bind:location="location" v-bind:key="location.id">
         <td>{{location.name}}</td>
-        <td><a href="#" v-on:click="deleteLocation(location)"><img src="~/open-iconic/svg/circle-x.svg" alt="Remove" class="grid-action"></a></td>
+        <td>
+          <a href="#" v-on:click="editLocation(location)"><img src="~/open-iconic/svg/pencil.svg" alt="Remove" class="grid-action"></a>
+          <a href="#" v-on:click="deleteLocation(location)"><img src="~/open-iconic/svg/circle-x.svg" alt="Edit" class="grid-action"></a>
+        </td>
       </tr>
     </tbody>
   </table>
@@ -26,7 +29,7 @@
     <div class="modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="addLocationDialogLabel">Add new location</h5>
+          <h5 class="modal-title" id="addLocationDialogLabel">{{formTitle}}</h5>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
@@ -51,7 +54,8 @@
 
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-          <button type="button" class="btn btn-primary" v-on:click="addNewLocation">Add</button>
+          <button v-if="formState=='add'" type="button" class="btn btn-primary" v-on:click="addNewLocation">Add</button>
+          <button v-if="formState=='edit'"type="button" class="btn btn-primary" v-on:click="saveLocation">Save</button>
         </div>
       </div>
     </div>

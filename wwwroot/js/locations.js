@@ -8,6 +8,8 @@ $(async function()
   var locationsApp = new Vue({
     el: '#locationsApp',
     data: {
+      formState: 'add',
+      formTitle: "",
       locationName: "",
       useExternalUrl: false,
       externalUrl: "",
@@ -44,6 +46,21 @@ $(async function()
 
           $('#addLocationDialog').modal('hide');
         }
+      },
+
+      editLocation : function(location)
+      {
+        this.formTitle = "Edit location";
+        this.formState = 'edit';
+        this.locationName = location.name;
+        this.useExternalUrl = location.url != null;
+        this.externalUrl = location.url;
+        $('#addLocationDialog').modal();
+      },
+
+      saveLocation : async function()
+      {
+
       },
 
       deleteLocation : async function(location)

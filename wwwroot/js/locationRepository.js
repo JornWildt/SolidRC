@@ -76,9 +76,6 @@ class LocationRepository extends ORDFMapper
     // FIXME: read from current login
     location.creator = 'https://elfisk.solid.community/profile/card#me';
 
-    if (!location.url)
-      location.url = locationUrl;
-
     this.storeObject(locationUrl, location);
   }
 
