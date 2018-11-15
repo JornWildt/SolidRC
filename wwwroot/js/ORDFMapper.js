@@ -115,10 +115,33 @@ class ORDFMapper
     this.store.add(url, NS_RDF('type'), this.objectType, url);
 
     // Use supplied mapping to copy the properties into the RDF store
-    this.copyPropertiesIntoStatements(url, obj);
+    let statements = this.copyPropertiesIntoStatements(url, obj);
+    this.store.add(statements);
 
     // Put the new statements onto the web
     this.fetcher.putBack(url);
+  }
+
+
+  updateObject(url, obj)
+  {
+    let existingStatements = this.store.match(this.store.sym(url), null, null);
+    let insertStatements = this.copyPropertiesIntoStatements(url, obj);
+    let deleteStatements = existingStatements.filter(st => insertStatements.find(is => is.predicate.value == st.predicate.value) != undefined);
+    console.debug(existingStatements);
+    console.debug(insertStatements);
+    console.debug(deleteStatements);
+    return new Promise((accept,reject) => this.updater.update(deleteStatements, insertStatements, 
+      (uri,ok,message) => 
+      {
+        console.debug(uri);
+        console.debug(ok);
+        console.debug(message);
+        if (ok)
+          accept();
+        else
+          reject(message);
+      }));
   }
 
 
@@ -231,15 +254,16 @@ class ORDFMapper
 
   copyPropertiesIntoStatements(subject, object)
   {
-    $.each(object, (key,value) => {
+    return Object.entries(object).map(([key,value]) => {
       let mapping = this.propertyToPredicateMapping[key];
       if (mapping != undefined && value != undefined)
       {
         if (mapping.valueType == PropertyType.Uri)
           value = this.store.sym(value);
-        this.store.add(subject, this.store.sym(mapping.predicate), value, subject);
+        return $rdf.st(subject, this.store.sym(mapping.predicate), value, subject);
       }
-    });
+    })
+    .filter(st => st != undefined);
   }
 
 

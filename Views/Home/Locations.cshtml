@@ -5,7 +5,7 @@
 <h1>Locations</h1>
 
 <div id="locationsApp">
-  <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addLocationDialog">Add new location</button>
+  <button type="button" class="btn btn-primary" v-on:click="editNewLocation()">Add new location</button>
 
   <table id="locations" class="table">
     <thead>
@@ -25,11 +25,11 @@
     </tbody>
   </table>
 
-  <div class="modal fade" id="addLocationDialog" tabindex="-1" role="dialog" aria-labelledby="addLocationDialog" aria-hidden="true">
-    <div class="modal-dialog" role="document">
+  <div class="modal fade" data-show="false" id="locationDialog" tabindex="-1" role="dialog" aria-labelledby="locationDialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="addLocationDialogLabel">{{formTitle}}</h5>
+          <h5 class="modal-title" id="locationDialogLabel">{{formTitle}}</h5>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
@@ -54,8 +54,8 @@
 
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-          <button v-if="formState=='add'" type="button" class="btn btn-primary" v-on:click="addNewLocation">Add</button>
-          <button v-if="formState=='edit'"type="button" class="btn btn-primary" v-on:click="saveLocation">Save</button>
+          <button v-if="formState=='add'" type="button" class="btn btn-primary" v-on:click="addLocation()">Add</button>
+          <button v-if="formState=='edit'"type="button" class="btn btn-primary" v-on:click="saveLocation()">Save</button>
         </div>
       </div>
     </div>

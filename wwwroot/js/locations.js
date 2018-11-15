@@ -13,6 +13,7 @@ $(async function()
       locationName: "",
       useExternalUrl: false,
       externalUrl: "",
+      currentLocation: null,
       locations: []
     },
     async mounted() {
@@ -32,7 +33,17 @@ $(async function()
     },
     methods: $.extend({}, ViewModelBase, 
     {
-      addNewLocation : function()
+      editNewLocation : function()
+      {
+        this.formTitle = "Add location";
+        this.formState = 'add';
+        this.locationName = '';
+        this.useExternalUrl = false;
+        this.externalUrl = null;
+        $('#locationDialog').modal('show');
+      },
+
+      addLocation : function()
       {
         if (!this.$v.$invalid)
         {
@@ -44,23 +55,31 @@ $(async function()
 
           this.refresh();
 
-          $('#addLocationDialog').modal('hide');
+          $('#locationDialog').modal('hide');
         }
       },
 
       editLocation : function(location)
       {
+        this.currentLocation = location;
         this.formTitle = "Edit location";
         this.formState = 'edit';
         this.locationName = location.name;
         this.useExternalUrl = location.url != null;
         this.externalUrl = location.url;
-        $('#addLocationDialog').modal();
+        $('#locationDialog').modal('show');
       },
 
       saveLocation : async function()
       {
-
+        if (!this.$v.$invalid)
+        {
+          this.currentLocation.name = this.locationName;          
+          this.currentLocation.url = this.externalUrl;
+          await locationRepo.updateLocation(this.currentLocation);
+          await this.refresh();
+          $('#locationDialog').modal('hide');
+        }
       },
 
       deleteLocation : async function(location)
@@ -79,11 +98,4 @@ $(async function()
       }
     })
   });
-
-  // $('.date-input').datepicker(
-  //   {
-  //     format: 'yyyy-mm-dd',
-  //     autoclose: true
-  //   }
-  // );
 });

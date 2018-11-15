@@ -44,7 +44,7 @@ class LocationRepository extends ORDFMapper
     let result = await Promise.all(locations.map(l => this.readLocationFromUrl(l.subject)));
 
     // Make sure we always get a consistent sort order
-    result.sort((a,b) => (a.name ? a.name.localeCompare(b.name) : 0))
+    result.sort((a,b) => (a.name ? a.name.localeCompare(b.name) : 0));
 
     return result; 
   }
@@ -56,6 +56,8 @@ class LocationRepository extends ORDFMapper
   async readLocationFromUrl(url)
   {
     var location = await this.readObject(url);
+    if (!location.url)
+      location.url = url;
     return location;
   }
 
@@ -77,6 +79,17 @@ class LocationRepository extends ORDFMapper
     location.creator = 'https://elfisk.solid.community/profile/card#me';
 
     this.storeObject(locationUrl, location);
+  }
+
+
+  /**
+   * Update an existing location.
+   * @param {object} location 
+   */
+  async updateLocation(location)
+  {
+    console.debug(location);
+    return this.updateObject(location.id, location);
   }
 
 
