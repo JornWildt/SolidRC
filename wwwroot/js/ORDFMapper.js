@@ -150,18 +150,19 @@ class ORDFMapper
 
     // Remove existing statements from local store
     this.store.removeMatches(this.store.sym(url), null, null);
-
+    
     // Load the same statements again, but this time from the real resource URL
     await this.fetcher.load(url);
     let existingStatements = this.store.match(this.store.sym(url), null, null);
-    console.debug(existingStatements);
 
     // Create new statements for the changed values
     let insertStatements = this.copyPropertiesIntoStatements(url, obj);
 
     // Find the existing statements that must now be deleted
-    let deleteStatements = existingStatements.filter(st => insertStatements.find(is => is.predicate.value == st.predicate.value) != undefined);
-    console.debug(deleteStatements);
+    // - For some odd reason, rdflib fails to remove some of the preloaded statements (bug?), 
+    //   so delete only those from the real URL (filtering on the "why" component)
+    let deleteStatements = existingStatements.filter(st => 
+      insertStatements.find(is => is.predicate.value == st.predicate.value && st.why.value == url) != undefined);
 
     console.debug("Update object: " + url + `(${deleteStatements.length} deletes, ${insertStatements.length} inserts)`);
     return new Promise((accept,reject) => this.updater.update(deleteStatements, insertStatements, 

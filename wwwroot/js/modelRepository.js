@@ -104,5 +104,5 @@ class ModelRepository extends ORDFMapper
 
 
 ModelRepository.ModelUrl = 'https://elfisk.solid.community/public/solidrc/models/';
-ModelRepository.ModelsUrl = 'https://elfisk.solid.community/public/solidrc/models/';
+ModelRepository.ModelsUrl = 'https://elfisk.solid.community/public/solidrc/models/*';
 ModelRepository.ImageUrl = 'https://elfisk.solid.community/public/solidrc/images/';
