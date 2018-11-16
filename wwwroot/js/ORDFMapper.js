@@ -86,7 +86,7 @@ class ORDFMapper
   {
     // Load container document itself into local store
     await this.fetcher.load(url).catch(err => console.warn(err));
-
+/*
     // Find the URLs of the items in the container
     let folderItemUrls = await this.store.match(this.store.sym(url), NS_LDP('contains'));
 
@@ -94,6 +94,7 @@ class ORDFMapper
     // (do local catch() to avoid fail-fast in Promise.all())
     return Promise.all(folderItemUrls.map(itemUrl => 
       this.fetcher.load(itemUrl.object).catch(err => console.warn(err))));
+*/
   }
 
 
@@ -138,11 +139,29 @@ class ORDFMapper
   }
 
 
-  updateObject(url, obj)
+  async updateObject(url, obj)
   {
+    // At this point our existing knowledge of the resource at URL may have come from a "globbing"
+    // operation (fetching all resources inside a container in one single request).
+    // This means we cannot update the original statements directly and patch them back on
+    // the globbing URL. 
+    // So we need to extract the changed statements, remove all existing knowledge from the
+    // local store, refetch from the real resource URL and then do an update/patch.
+
+    // Remove existing statements from local store
+    this.store.removeMatches(this.store.sym(url), null, null);
+
+    // Load the same statements again, but this time from the real resource URL
+    await this.fetcher.load(url);
     let existingStatements = this.store.match(this.store.sym(url), null, null);
+    console.debug(existingStatements);
+
+    // Create new statements for the changed values
     let insertStatements = this.copyPropertiesIntoStatements(url, obj);
+
+    // Find the existing statements that must now be deleted
     let deleteStatements = existingStatements.filter(st => insertStatements.find(is => is.predicate.value == st.predicate.value) != undefined);
+    console.debug(deleteStatements);
 
     console.debug("Update object: " + url + `(${deleteStatements.length} deletes, ${insertStatements.length} inserts)`);
     return new Promise((accept,reject) => this.updater.update(deleteStatements, insertStatements, 

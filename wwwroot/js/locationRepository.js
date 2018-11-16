@@ -104,4 +104,4 @@ class LocationRepository extends ORDFMapper
 
 
 LocationRepository.LocationUrl = 'https://elfisk.solid.community/public/solidrc/locations/';
-LocationRepository.LocationsUrl = 'https://elfisk.solid.community/public/solidrc/locations/';
+LocationRepository.LocationsUrl = 'https://elfisk.solid.community/public/solidrc/locations/*';
