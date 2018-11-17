@@ -84,17 +84,8 @@ class ORDFMapper
 
   async loadAllContainerItems(url)
   {
-    // Load container document itself into local store
+    // Load all items, assuming the URL is a "globbing" URL like "/items/*"
     await this.fetcher.load(url).catch(err => console.warn(err));
-/*
-    // Find the URLs of the items in the container
-    let folderItemUrls = await this.store.match(this.store.sym(url), NS_LDP('contains'));
-
-    // Load each item in the container into the local store
-    // (do local catch() to avoid fail-fast in Promise.all())
-    return Promise.all(folderItemUrls.map(itemUrl => 
-      this.fetcher.load(itemUrl.object).catch(err => console.warn(err))));
-*/
   }
 
 
@@ -135,7 +126,7 @@ class ORDFMapper
     this.store.add(statements);
 
     // Put the new statements onto the web
-    this.fetcher.putBack(url);
+    return this.fetcher.putBack(url);
   }
 
 
@@ -159,7 +150,7 @@ class ORDFMapper
     let insertStatements = this.copyPropertiesIntoStatements(url, obj);
 
     // Find the existing statements that must now be deleted
-    // - For some odd reason, rdflib fails to remove some of the preloaded statements (bug?), 
+    // - For some unknown reason, rdflib fails to remove some of the preloaded statements (bug?), 
     //   so delete only those from the real URL (filtering on the "why" component)
     let deleteStatements = existingStatements.filter(st => 
       insertStatements.find(is => is.predicate.value == st.predicate.value && st.why.value == url) != undefined);

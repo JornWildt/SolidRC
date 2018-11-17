@@ -28,14 +28,14 @@ class ModelRepository extends ORDFMapper
 
 
   /**
-   * Get a list of all models as simple javascript objects.
+   * Get a list of all models as simple javascript objects from the local store.
    */
   async getModels()
   {    
     // Find the subjects of all models (from statements having type = 'model')
     let models = this.store.match(null, NS_RDF('type'), NS_SOLIDRC('model'));
 
-    // Build a list of all models by fetching the model data from the models URL (subject)
+    // Build a list of all models by fetching the model data from the model's URL (subject)
     let result = await Promise.all(models.map(m => this.readModelFromUrl(m.subject)));
 
     // Make sure we always get a consistent sort order
@@ -50,8 +50,7 @@ class ModelRepository extends ORDFMapper
    */
   async readModelFromUrl(url)
   {
-    var model = await this.readObject(url);
-    return model;
+    return this.readObject(url);
   }
 
 
@@ -61,12 +60,16 @@ class ModelRepository extends ORDFMapper
   async addModel(model)
   {
     // Store associated image and get it's URL
-    let imageUrl = await this.imageRepo.addImage(model.image, model.name);
-    model.image = imageUrl;
+    let imageP = this.imageRepo.addImage(model.image, model.name)
+                 .then(url => model.image = url)
+                 .catch(err => console.warn(err));
 
     // Store associated image thumbnail and get it's URL
-    let thumbnailUrl = await this.imageRepo.addImage(model.thumbnail, model.name + '-tmb');
-    model.thumbnail = thumbnailUrl;
+    let thumbnailP = this.imageRepo.addImage(model.thumbnail, model.name + '-tmb')
+                     .then(url => model.thumbnail = url)
+                     .catch(err => console.warn(err));
+
+    await Promise.all([imageP, thumbnailP]);
 
     // Generate a unique URL name (path element) for the model
     let modelName = this.generateModelName(model.name);
@@ -79,7 +82,7 @@ class ModelRepository extends ORDFMapper
     // FIXME: read from current login
     model.creator = 'https://elfisk.solid.community/profile/card#me';
 
-    this.storeObject(modelUrl, model);
+    return this.storeObject(modelUrl, model).catch(err => console.warn(err));
   }
 
 

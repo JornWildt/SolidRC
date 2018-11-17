@@ -92,7 +92,7 @@ $(async function()
             });
           })
 
-          this.refresh();
+          await this.refresh();
 
           this.hideWaiting();
           $('#addModelDialog').modal('hide');
