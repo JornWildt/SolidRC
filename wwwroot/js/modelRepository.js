@@ -86,6 +86,16 @@ class ModelRepository extends ORDFMapper
   }
 
 
+  /**
+   * Update an existing model.
+   * @param {object} model 
+   */
+  async updateModel(model)
+  {
+    return this.updateObject(model.id, model);
+  }
+
+
   async deleteModel(model)
   {
     // Run all requests in parallel - catch errors for each one to avoid "fail fast" behavior of Promise.All()

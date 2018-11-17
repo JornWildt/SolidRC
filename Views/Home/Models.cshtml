@@ -10,7 +10,7 @@
 <h1>Models</h1>
 
 <div id="modelsApp">
-  <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addModelDialog">Add new model</button>
+  <button type="button" class="btn btn-primary" v-on:click="editNewModel()">Add new model</button>
 
   <table id="models" class="table">
     <thead>
@@ -24,16 +24,19 @@
       <tr v-for="model in models" v-bind:model="model" v-bind:key="model.id">
         <td><img width="100" height="100" v-bind:src="model.thumbnail"></td>
         <td>{{model.name}}</td>
-        <td><a href="#" v-on:click="deleteModel(model)"><img src="~/open-iconic/svg/circle-x.svg" alt="Remove" class="grid-action"></a></td>
+        <td>
+          <a href="#" v-on:click="editModel(model)"><img src="~/open-iconic/svg/pencil.svg" alt="Edit" class="grid-action"></a>
+          <a href="#" v-on:click="deleteModel(model)"><img src="~/open-iconic/svg/circle-x.svg" alt="Remove" class="grid-action"></a>
+          </td>
       </tr>
     </tbody>
   </table>
 
-  <div class="modal fade" id="addModelDialog" tabindex="-1" role="dialog" aria-labelledby="addModelDialog" aria-hidden="true">
-    <div class="modal-dialog" role="document">
+  <div class="modal fade" id="modelDialog" tabindex="-1" role="dialog" aria-labelledby="addModelDialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="addModelDialogLabel">Add new model</h5>
+          <h5 class="modal-title" id="addModelDialogLabel">{{formTitle}}</h5>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
@@ -59,7 +62,8 @@
 
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-          <button type="button" class="btn btn-primary" v-on:click="addNewModel">Add</button>
+          <button v-if="formState=='add'" type="button" class="btn btn-primary" v-on:click="addModel()">Add</button>
+          <button v-if="formState=='edit'"type="button" class="btn btn-primary" v-on:click="saveModel()">Save</button>
         </div>
       </div>
     </div>
@@ -70,6 +74,7 @@
 @section Scripts
 {
   <script src="~/lib/rdflib/dist/rdflib.min.js"></script>
+  <!-- <script src="~/lib-local/rdflib.min.js"></script> -->
   <!-- <script src="~/lib/moment/min/moment.min.js"></script>
   <script src="~/lib/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js"></script> -->
   <script src="~/lib/vue/dist/vue.min.js"></script>

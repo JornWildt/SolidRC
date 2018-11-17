@@ -8,7 +8,10 @@ $(async function()
   var modelsApp = new Vue({
     el: '#modelsApp',
     data: {
+      formState: 'add',
+      formTitle: "",
       modelName: "",
+      currentLocation: null,
       models: []
     },
     async mounted() {
@@ -63,11 +66,19 @@ $(async function()
         }
       },
 
-      addNewModel : async function()
+      editNewModel : function()
+      {
+        this.formTitle = "Add model";
+        this.formState = 'add';
+        this.modelName = '';
+        $('#modelDialog').modal('show');
+      },
+
+      addModel : async function()
       {
         if (!this.$v.$invalid)
         {
-          this.showWaiting('#addModelDialog', 'Saving');
+          this.showWaiting('#modelDialog', 'Saving');
           let imgCanvas = document.getElementById('modelImageCanvas');
           let ctx = imgCanvas.getContext('2d');
 
@@ -95,7 +106,29 @@ $(async function()
           await this.refresh();
 
           this.hideWaiting();
-          $('#addModelDialog').modal('hide');
+          $('#modelDialog').modal('hide');
+        }
+      },
+
+      editModel : function(model)
+      {
+        this.currentModel = model;
+        this.formTitle = "Edit model";
+        this.formState = 'edit';
+        this.modelName = model.name;
+        $('#modelDialog').modal('show');
+      },
+
+      saveModel : async function()
+      {
+        if (!this.$v.$invalid)
+        {
+          this.currentModel.name = this.modelName;
+          await modelRepo.updateModel(this.currentModel);
+          console.debug("Refresh1");
+          await this.refresh();
+          console.debug("Refresh2");
+          $('#modelDialog').modal('hide');
         }
       },
 

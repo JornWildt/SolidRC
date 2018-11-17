@@ -86,6 +86,14 @@ class ORDFMapper
   {
     // Load all items, assuming the URL is a "globbing" URL like "/items/*"
     await this.fetcher.load(url).catch(err => console.warn(err));
+
+    // // Find the URLs of the items in the container
+    // let folderItemUrls = await this.store.match(this.store.sym(url), NS_LDP('contains'));
+
+    // // Load each item in the container into the local store
+    // // (do local catch() to avoid fail-fast in Promise.all())
+    // return Promise.all(folderItemUrls.map(itemUrl => 
+    //   this.fetcher.load(itemUrl.object).catch(err => console.warn(err))));
   }
 
 
@@ -143,11 +151,15 @@ class ORDFMapper
     this.store.removeMatches(this.store.sym(url), null, null);
     
     // Load the same statements again, but this time from the real resource URL
-    await this.fetcher.load(url);
-    let existingStatements = this.store.match(this.store.sym(url), null, null);
+    await this.fetcher.load(this.store.sym(url));
+    let existingStatements = this.store.match(this.store.sym(url), null, null, null);
+    
+    //console.debug("existingStatements: " + JSON.stringify(existingStatements,null,2));
 
     // Create new statements for the changed values
     let insertStatements = this.copyPropertiesIntoStatements(url, obj);
+
+    //console.debug("insertStatements: " + JSON.stringify(insertStatements,null,2));
 
     // Find the existing statements that must now be deleted
     // - For some unknown reason, rdflib fails to remove some of the preloaded statements (bug?), 
@@ -155,10 +167,14 @@ class ORDFMapper
     let deleteStatements = existingStatements.filter(st => 
       insertStatements.find(is => is.predicate.value == st.predicate.value && st.why.value == url) != undefined);
 
+    //console.debug("deleteStatements: " + JSON.stringify(deleteStatements,null,2));
+
     console.debug("Update object: " + url + `(${deleteStatements.length} deletes, ${insertStatements.length} inserts)`);
     return new Promise((accept,reject) => this.updater.update(deleteStatements, insertStatements, 
       (uri,ok,message) => 
       {
+        // let existingStatements2 = this.store.match(this.store.sym(url), null, null, this.store.sym(url));
+        // console.debug("existingStatements after update: " + JSON.stringify(existingStatements2,null,2));
         if (ok)
           accept();
         else

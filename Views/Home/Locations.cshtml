@@ -18,8 +18,8 @@
       <tr v-for="location in locations" v-bind:location="location" v-bind:key="location.id">
         <td>{{location.name}}</td>
         <td>
-          <a href="#" v-on:click="editLocation(location)"><img src="~/open-iconic/svg/pencil.svg" alt="Remove" class="grid-action"></a>
-          <a href="#" v-on:click="deleteLocation(location)"><img src="~/open-iconic/svg/circle-x.svg" alt="Edit" class="grid-action"></a>
+          <a href="#" v-on:click="editLocation(location)"><img src="~/open-iconic/svg/pencil.svg" alt="Edit" class="grid-action"></a>
+          <a href="#" v-on:click="deleteLocation(location)"><img src="~/open-iconic/svg/circle-x.svg" alt="Remove" class="grid-action"></a>
         </td>
       </tr>
     </tbody>
