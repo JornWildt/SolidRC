@@ -55,7 +55,13 @@ class ImageRepository extends ORDFMapper
       requiredName = requiredName + nameExt;
     }
 
-    let name = this.generateValidUrlName(requiredName).toLowerCase();
+    // Normally we do not allow dots in URLs as the Solid server uses that for content type(!)
+    // So remove extension before creating name and then add the extension again afterwards.
+    dotPos = requiredName.lastIndexOf('.');
+    let nameExt = (dotPos >= 0 ? requiredName.substring(dotPos, Infinity) : '');
+    requiredName = requiredName.substring(0, dotPos);
+
+    let name = this.generateValidUrlName(requiredName).toLowerCase() + nameExt;
     return name;
   }
 }
