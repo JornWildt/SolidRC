@@ -92,21 +92,24 @@ class ModelRepository extends ORDFMapper
    */
   async updateModel(model)
   {
+    let imageP = null;
+    let thumbnailP = null;
+
     // Update associated image if given
     if (model.imageFile)
     {
-      let imageP = this.imageRepo.updateImage(model.imageFile)
-                  .catch(err => console.warn(err));
+      imageP = this.imageRepo.updateImage(model.imageFile, model.image)
+               .catch(err => console.warn(err));
     }
 
     // Update associated image thumbnail if given
-    if (image.thumbnailFile)
+    if (model.thumbnailFile)
     {
-      let thumbnailP = this.imageRepo.updateImage(model.thumbnailFile)
-                      .catch(err => console.warn(err));
+      thumbnailP = this.imageRepo.updateImage(model.thumbnailFile, model.thumbnail)
+                   .catch(err => console.warn(err));
     }
 
-    //await Promise.all([imageP, thumbnailP]);
+    await Promise.all([imageP, thumbnailP]);
 
     return this.updateObject(model.id, model);
   }

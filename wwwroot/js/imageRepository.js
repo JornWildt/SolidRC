@@ -34,6 +34,17 @@ class ImageRepository extends ORDFMapper
   }
 
 
+  async updateImage(image, url)
+  {
+    return this.fetcher.webOperation('PUT', url,
+    {
+      body: image,
+      contentType: image.type,
+      credentials: 'include'
+    });
+  }
+
+
   /** Delete image.
    * 
    * @param {URL string} imageUrl - Image URL.
