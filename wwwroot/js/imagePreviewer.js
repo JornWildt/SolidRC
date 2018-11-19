@@ -4,6 +4,8 @@ class ImagePreviewer
   {
     this.imgElementId = imgElementId;
     this.imgCanvasId = imgCanvasId;
+    this.imageMaxHeight = 100;
+    this.imageMaxWidth = 100;
   }
 
 
@@ -12,11 +14,9 @@ class ImagePreviewer
    */
   showThumbnail(image)
   {
-    const imageMaxHeight = 100;
-    const imageMaxWidth = 100;
-
     if (image && image.type.match(/image.*/))
     {
+      let previewer = this;
       let imgCanvas = document.getElementById(this.imgCanvasId);
       let imagePath = URL.createObjectURL(image);  
       let imgHtml = document.getElementById(this.imgElementId);
@@ -26,7 +26,7 @@ class ImagePreviewer
         
         var width = imgHtml.width;
         var height = imgHtml.height;
-        const scale = Math.min(imageMaxHeight/height, imageMaxWidth/width);
+        const scale = Math.min(previewer.imageMaxHeight/height, previewer.imageMaxWidth/width);
         if (scale < 1)
         {
           height *= scale;
@@ -34,7 +34,7 @@ class ImagePreviewer
         }
   
         ctx.clearRect(0, 0, imgCanvas.width, imgCanvas.height);
-        ctx.drawImage(imgHtml, (imageMaxWidth - width) / 2, (imageMaxHeight - height) / 2, width,height);
+        ctx.drawImage(imgHtml, (previewer.imageMaxWidth - width) / 2, (previewer.imageMaxHeight - height) / 2, width,height);
       };
     }
     else
@@ -58,6 +58,26 @@ class ImagePreviewer
         let thumbnailFile = new File([blob], filename, { type: "image/png" });
         resolve(thumbnailFile);
       });
+    });
+  }
+
+
+  loadPreview(url)
+  {
+    let previewer = this;
+    let imgCanvas = document.getElementById(this.imgCanvasId);
+    let ctx = imgCanvas.getContext('2d');
+
+    var img = new Image();
+    img.crossOrigin = 'Anonymous';
+    return new Promise((accept) =>
+    {
+      img.onload = function()
+      {
+        ctx.drawImage(img, (previewer.imageMaxWidth - img.width) / 2, (previewer.imageMaxHeight - img.height) / 2, img.width,img.height);
+        accept();
+      }
+      img.src = url; 
     });
   }
 }

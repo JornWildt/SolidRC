@@ -65,12 +65,13 @@ $(async function()
         }
       },
 
-      editModel : function(model)
+      editModel : async function(model)
       {
         this.currentModel = model;
         this.formTitle = "Edit model";
         this.formState = 'edit';
         this.modelName = model.name;
+        await imagePreviewer.loadPreview(model.thumbnail);
         $('#modelDialog').modal('show');
       },
 
@@ -79,10 +80,14 @@ $(async function()
         if (!this.$v.$invalid)
         {
           this.currentModel.name = this.modelName;
+          this.currentModel.imageFile = $('#modelImage')[0].files[0];
+          this.currentModel.thumbnailFile = (this.currentModel.image ? await imagePreviewer.createPreviewFile("thumbnail.png") : null);
+
+          console.debug(this.currentModel.image);
+          console.debug(this.currentModel.thumbnail);
+
           await modelRepo.updateModel(this.currentModel);
-          console.debug("Refresh1");
           await this.refresh();
-          console.debug("Refresh2");
           $('#modelDialog').modal('hide');
         }
       },
