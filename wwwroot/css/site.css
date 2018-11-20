@@ -6,6 +6,11 @@
 }
 
 
+#pageAlert
+{
+  display: none;
+}
+
 img.grid-action
 {
   width: auto;

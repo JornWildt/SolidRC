@@ -14,6 +14,7 @@ $(async function()
       formTitle: "",
       modelName: "",
       currentLocation: null,
+      hasModifiedPhoto: false,
       models: []
     },
     async mounted() {
@@ -34,6 +35,7 @@ $(async function()
       {
         let image = event.target.files[0];
         imagePreviewer.showThumbnail(image);
+        this.hasModifiedPhoto = true;
       },
 
       editNewModel : function()
@@ -72,6 +74,7 @@ $(async function()
         this.formState = 'edit';
         this.modelName = model.name;
         await imagePreviewer.loadPreview(model.thumbnail);
+        $('#pageAlert').hide();
         $('#modelDialog').modal('show');
       },
 
@@ -89,6 +92,11 @@ $(async function()
           await modelRepo.updateModel(this.currentModel);
           await this.refresh();
           $('#modelDialog').modal('hide');
+          if (this.hasModifiedPhoto)
+          {
+            $('#pageAlert').show();
+            this.hasModifiedPhoto = false;
+          }
         }
       },
 
