@@ -65,7 +65,7 @@ $(async function()
         this.formTitle = "Edit location";
         this.formState = 'edit';
         this.locationName = location.name;
-        this.useExternalUrl = location.externalUrl != null;
+        this.useExternalUrl = location.useExternalUrl;
         this.externalUrl = location.externalUrl;
         $('#locationDialog').modal('show');
       },
@@ -74,8 +74,9 @@ $(async function()
       {
         if (!this.$v.$invalid)
         {
-          this.currentLocation.name = this.locationName;          
-          this.currentLocation.url = this.externalUrl;
+          this.currentLocation.name = this.locationName;
+          this.currentLocation.externalUrl = this.externalUrl;
+          this.currentLocation.useExternalUrl = this.useExternalUrl ? true : false; // Convert to real bool
           await locationRepo.updateLocation(this.currentLocation);
           await this.refresh();
           $('#locationDialog').modal('hide');

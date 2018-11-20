@@ -16,11 +16,11 @@ class ModelRepository extends ORDFMapper
     this.setObjectType(NS_SOLIDRC('model'));
 
     // Map statement predicate/objects into simple javascript key/values.
-    this.addMapping(NS_SCHEMA('dateCreated'), 'created');
-    this.addMapping(NS_SCHEMA('author'), 'creator', PropertyType.Uri);
-    this.addMapping(NS_SCHEMA('image'), 'image', PropertyType.Uri);
-    this.addMapping(NS_SCHEMA('thumbnail'), 'thumbnail', PropertyType.Uri);
-    this.addMapping(NS_SCHEMA('name'), 'name');
+    this.addMapping(NS_SCHEMA('dateCreated'), 'created', PropertyType.Raw, false);
+    this.addMapping(NS_SCHEMA('author'), 'creator', PropertyType.Uri, false);
+    this.addMapping(NS_SCHEMA('image'), 'image', PropertyType.Uri, false);
+    this.addMapping(NS_SCHEMA('thumbnail'), 'thumbnail', PropertyType.Uri, false);
+    this.addMapping(NS_SCHEMA('name'), 'name', PropertyType.Raw, true);
 
     // Load *all* the models into the store
     return this.loadAllContainerItems(ModelRepository.ModelsUrl);

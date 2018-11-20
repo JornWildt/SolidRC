@@ -14,12 +14,12 @@ class LogbookRepository extends ORDFMapper
     this.setObjectType(NS_SOLIDRC('logentry'));
 
     // Map statement predicate/objects into simple javascript key/values.
-    this.addMapping(NS_SCHEMA('dateCreated'), 'created');
-    this.addMapping(NS_SCHEMA('author'), 'creator', PropertyType.Uri);
-    this.addMapping(NS_SCHEMA('startDate'), 'date');
-    this.addMapping(NS_SOLIDRC('model'), 'model', PropertyType.Uri);
-    this.addMapping(NS_SCHEMA('location'), 'location', PropertyType.Uri);
-    this.addMapping(NS_SCHEMA('duration'), 'duration');
+    this.addMapping(NS_SCHEMA('dateCreated'), 'created', PropertyType.Raw, false);
+    this.addMapping(NS_SCHEMA('author'), 'creator', PropertyType.Uri, false);
+    this.addMapping(NS_SCHEMA('startDate'), 'date', PropertyType.Raw, true);
+    this.addMapping(NS_SOLIDRC('model'), 'model', PropertyType.Uri, true);
+    this.addMapping(NS_SCHEMA('location'), 'location', PropertyType.Uri, true);
+    this.addMapping(NS_SCHEMA('duration'), 'duration', PropertyType.Raw, true);
     this.addLinkedMapping(NS_SCHEMA('location'), NS_SCHEMA('name'), 'locationName');
     this.addLinkedMapping(NS_SOLIDRC('model'), NS_SCHEMA('name'), 'modelName');
     this.addLinkedMapping(NS_SOLIDRC('model'), NS_SCHEMA('image'), 'modelImage', PropertyType.Uri);

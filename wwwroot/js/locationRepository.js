@@ -14,10 +14,11 @@ class LocationRepository extends ORDFMapper
     this.setObjectType(NS_SCHEMA('Place'));
 
     // Map RDF predicate/objects into simple javascript key/values.
-    this.addMapping(NS_SCHEMA('dateCreated'), 'created');
-    this.addMapping(NS_SCHEMA('author'), 'creator', PropertyType.Uri);
-    this.addMapping(NS_SCHEMA('name'), 'name');
-    this.addMapping(NS_SCHEMA('sameAs'), 'externalUrl');
+    this.addMapping(NS_SCHEMA('dateCreated'), 'created', PropertyType.Raw, false);
+    this.addMapping(NS_SCHEMA('author'), 'creator', PropertyType.Uri, false);
+    this.addMapping(NS_SCHEMA('name'), 'name', PropertyType.Raw, true);
+    this.addMapping(NS_SOLIDRC('useExternalUrl'), 'useExternalUrl', PropertyType.Raw, true);
+    this.addMapping(NS_SCHEMA('sameAs'), 'externalUrl', PropertyType.Uri, true);
 
     // Load *all* the locations into the store
     return this.loadAllContainerItems(LocationRepository.LocationsUrl);
@@ -53,7 +54,11 @@ class LocationRepository extends ORDFMapper
     // location.url could also be the externalUrl, if it exists, but then we have a runtime dependency on that.
     // - so currently we always use the "local" URL and only remember the external URL for later reference.
     //  (location.externalUrl ? location.externalUrl : url);
-    
+
+    console.debug(url + ": " + JSON.stringify(location,null,2));
+
+    location.useExternalUrl = ((location.useExternalUrl == '0' || !location.useExternalUrl) ? false : true);
+
     return location;
   }
 

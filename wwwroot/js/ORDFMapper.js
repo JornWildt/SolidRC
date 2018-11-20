@@ -1,6 +1,8 @@
 // List of well known property types that need special handling
 const PropertyType =
 {
+  Raw: 'Raw',
+
   // URI values implies automatical wrapping of values in store.sym(x)
   Uri: 'Uri'
 }
@@ -33,14 +35,15 @@ class ORDFMapper
   }
 
 
-  addMapping(predicate, propertyName, valueType)
+  addMapping(predicate, propertyName, valueType, mutable)
   {
     let mapping = 
     {
       mappingType: MappingType.Direct,
       predicate: predicate.value,
       property: propertyName,
-      valueType: valueType
+      valueType: valueType,
+      mutable: mutable
     };
 
     this.predicateToPropertyMapping[predicate.value] = mapping;
@@ -130,8 +133,10 @@ class ORDFMapper
     this.store.add(url, NS_RDF('type'), this.objectType, url);
 
     // Use supplied mapping to copy the properties into the RDF store
-    let statements = this.copyPropertiesIntoStatements(url, obj);
+    let statements = this.copyPropertiesIntoStatements(url, obj, 'insert');
     this.store.add(statements);
+
+    console.debug("Store statements: " + JSON.stringify(statements,null,2));
 
     // Put the new statements onto the web
     return this.fetcher.putBack(url);
@@ -157,9 +162,9 @@ class ORDFMapper
     //console.debug("existingStatements: " + JSON.stringify(existingStatements,null,2));
 
     // Create new statements for the changed values
-    let insertStatements = this.copyPropertiesIntoStatements(url, obj);
+    let insertStatements = this.copyPropertiesIntoStatements(url, obj, 'update');
 
-    //console.debug("insertStatements: " + JSON.stringify(insertStatements,null,2));
+    console.debug("insertStatements: " + JSON.stringify(insertStatements,null,2));
 
     // Find the existing statements that must now be deleted
     // - For some unknown reason, rdflib fails to remove some of the preloaded statements (bug?), 
@@ -290,16 +295,20 @@ class ORDFMapper
   }
 
 
-  copyPropertiesIntoStatements(subject, object)
+  copyPropertiesIntoStatements(subject, object, mode)
   {
     subject = this.store.sym(subject);
     return Object.entries(object).map(([key,value]) => {
       let mapping = this.propertyToPredicateMapping[key];
-      if (mapping != undefined && value != undefined)
+      if (mapping != undefined && value !== undefined)
       {
-        if (mapping.valueType == PropertyType.Uri)
-          value = this.store.sym(value);
-        return $rdf.st(subject, this.store.sym(mapping.predicate), value, subject);
+        if (mode == 'insert' || mode == 'update' && mapping.mutable)
+        {
+          if (mapping.valueType == PropertyType.Uri && value)
+            value = this.store.sym(value);
+          if (value !== undefined)
+            return $rdf.st(subject, this.store.sym(mapping.predicate), value, subject);
+        }        
       }
     })
     .filter(st => st != undefined);
