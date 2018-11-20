@@ -7,9 +7,10 @@ $(async function()
   let modelRepo = new ModelRepository();
   let logRepo = new LogbookRepository();
 
-  await locationRepo.initialize();  
-  await modelRepo.initialize();  
-  await logRepo.initialize();
+  let p1 = locationRepo.initialize();
+  let p2 = modelRepo.initialize();
+  let p3 = logRepo.initialize();
+  await Promise.all([p1,p2,p3]);
 
   var logbookApp = new Vue({
     el: '#logbook',
@@ -44,6 +45,9 @@ $(async function()
         format: 'yyyy-mm-dd',
         autoclose: true
       }).on("changeDate", () => {this.selectedDate = $('#selectedDate').val(); });
+
+      // Activate tooltips
+      $('[data-toggle="tooltip"]').tooltip()
     },
     validations: {
       selectedDate: {
