@@ -41,6 +41,11 @@ function countCharacter(str, char)
   return count;
 }
 
+function DebugJson(x)
+{
+  console.debug(JSON.stringify(x,null,2));
+}
+
 let ViewModelBase =
 {
   validationStatus(val) {

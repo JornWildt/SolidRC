@@ -91,6 +91,12 @@ class LogbookRepository extends ORDFMapper
   }
 
 
+  async updateEntry(entry)
+  {
+    return this.updateObject(entry.id, entry);
+  }
+
+
   async deleteEntry(entry)
   {
     this.deleteObject(entry.id);

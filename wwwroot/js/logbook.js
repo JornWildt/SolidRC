@@ -15,12 +15,15 @@ $(async function()
   var logbookApp = new Vue({
     el: '#logbook',
     data: {
+      formTitle: null,
+      formState: null,
       models: [],
       locations: [],
       selectedModel: null,
       selectedDate: new moment().format('YYYY-MM-DD'),
-      selectedLocation: "http://blah.blah/kildedal",
+      selectedLocation: "",
       selectedDuration: "",
+      currentEntry: null,
       logEntries: []
     },
     async mounted() {
@@ -60,7 +63,18 @@ $(async function()
     },
     methods: $.extend({}, ViewModelBase, 
     {
-      addNewEntry : async function()
+      editNewEntry : function()
+      {
+        this.formTitle = "Add model";
+        this.formState = 'add';
+        this.selectedDate = new moment().format('YYYY-MM-DD');
+        this.selectedModel =  this.models[0].id;
+        this.selectedLocation = this.locations[0].id;
+        this.selectedDuration = "";
+        $('#entryDialog').modal('show');
+      },
+
+      addEntry : async function()
       {
         if (!this.$v.$invalid)
         {
@@ -74,7 +88,34 @@ $(async function()
 
           await this.refresh();
 
-          $('#addEntryDialog').modal('hide');
+          $('#entryDialog').modal('hide');
+        }
+      },
+
+      editEntry : function(entry)
+      {
+        DebugJson(entry);
+        this.currentEntry = entry;
+        this.formTitle = "Edit entry";
+        this.formState = 'edit';
+        this.selectedDate = entry.date
+        this.selectedModel =  entry.model;
+        this.selectedLocation = entry.location;
+        this.selectedDuration = entry.duration;
+        $('#entryDialog').modal('show');
+      },
+
+      saveEntry : async function()
+      {
+        if (!this.$v.$invalid)
+        {
+          this.currentEntry.date = this.selectedDate;
+          this.currentEntry.model = this.selectedModel;
+          this.currentEntry.location = this.selectedLocation;
+          this.currentEntry.duration = this.selectedDuration;
+          await logRepo.updateEntry(this.currentEntry);
+          await this.refresh();
+          $('#entryDialog').modal('hide');
         }
       },
 

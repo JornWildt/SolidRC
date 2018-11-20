@@ -25,6 +25,8 @@ class ORDFMapper
     this.updater = new $rdf.UpdateManager(this.store);
     this.predicateToPropertyMapping = {};
     this.propertyToPredicateMapping = {};
+    this.linkedPredicateToPropertyMapping = {};
+    this.linkedPropertyToPredicateMapping = {};
     this.idProperty = 'id';
   }
 
@@ -53,7 +55,7 @@ class ORDFMapper
 
   addLinkedMapping(predicate, targetPredicate, propertyName, valueType)
   {
-    let mapping = this.predicateToPropertyMapping[predicate.value];
+    let mapping = this.linkedPredicateToPropertyMapping[predicate.value];
     if (!mapping || !mapping.targetMappings)
     {
       mapping = 
@@ -70,8 +72,8 @@ class ORDFMapper
         ]
       };
 
-      this.predicateToPropertyMapping[predicate.value] = mapping;
-      this.propertyToPredicateMapping[propertyName] = mapping;
+      this.linkedPredicateToPropertyMapping[predicate.value] = mapping;
+      this.linkedPropertyToPredicateMapping[propertyName] = mapping;
     }
     else
     {
@@ -164,7 +166,7 @@ class ORDFMapper
     // Create new statements for the changed values
     let insertStatements = this.copyPropertiesIntoStatements(url, obj, 'update');
 
-    console.debug("insertStatements: " + JSON.stringify(insertStatements,null,2));
+    //console.debug("insertStatements: " + JSON.stringify(insertStatements,null,2));
 
     // Find the existing statements that must now be deleted
     // - For some unknown reason, rdflib fails to remove some of the preloaded statements (bug?), 
@@ -211,16 +213,13 @@ class ORDFMapper
     // Initialize result by assigning null to all properties such that missing statements/predicates yield a null value.
     $.each(this.predicateToPropertyMapping, (key, mapping) => 
     { 
-      if (mapping.mappingType == MappingType.Direct)
-      {
-        result[mapping.property] = null; 
-      }
-      else
-      {
-        mapping.targetMappings.forEach(targetMapping =>
-          result[targetMapping.propertyName] = { valid: false, value: `Property '${targetMapping.propertyName}' not available.` }
-        );
-      }
+      result[mapping.property] = null; 
+    });
+
+    $.each(this.linkedPredicateToPropertyMapping, (key, mapping) => 
+    { 
+      mapping.targetMappings.forEach(targetMapping =>
+        result[targetMapping.propertyName] = { valid: false, value: `Property '${targetMapping.propertyName}' not available.` });
     });
 
     // Go through each statement, get the property name from the predicate and set property to the statement object value.
@@ -228,7 +227,7 @@ class ORDFMapper
       let mapping = this.predicateToPropertyMapping[st.predicate.value];
 
       // Simple direct mappings get the property value directly from the value of the statement
-      if (mapping && mapping.mappingType == MappingType.Direct)
+      if (mapping)
       {
         let value = st.object.value;
 
@@ -239,15 +238,18 @@ class ORDFMapper
         // Assign the mapped value
         result[mapping.property] = value;
       }
+
+      let linkedMapping = this.linkedPredicateToPropertyMapping[st.predicate.value];
+
       // Linked mappings assume the statement value is a URL and fetches the data at the URL.
       // It then selects mapped predicates and their values from that document
-      else if (mapping && mapping.mappingType == MappingType.Linked)
+      if (linkedMapping)
       {
         let url = st.object.value;
         await this.fetcher.load(url)
         .then(() => 
           {
-            mapping.targetMappings.forEach(m => {
+            linkedMapping.targetMappings.forEach(m => {
               let targetStatement = this.store.any(st.object, m.predicate);
               let targetValue = (targetStatement ? targetStatement.value : null);
       
@@ -270,7 +272,7 @@ class ORDFMapper
         .catch(err => 
           {
             console.warn(err);
-            mapping.targetMappings.forEach(m =>
+            linkedMapping.targetMappings.forEach(m =>
               result[m.propertyName] =
               {
                 valid: false,
@@ -300,13 +302,13 @@ class ORDFMapper
     subject = this.store.sym(subject);
     return Object.entries(object).map(([key,value]) => {
       let mapping = this.propertyToPredicateMapping[key];
-      if (mapping != undefined && value !== undefined)
+      if (mapping !== undefined && value !== undefined)
       {
         if (mode == 'insert' || mode == 'update' && mapping.mutable)
         {
           if (mapping.valueType == PropertyType.Uri && value)
             value = this.store.sym(value);
-          if (value !== undefined)
+          if (value !== null)
             return $rdf.st(subject, this.store.sym(mapping.predicate), value, subject);
         }        
       }

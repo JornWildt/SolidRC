@@ -55,8 +55,6 @@ class LocationRepository extends ORDFMapper
     // - so currently we always use the "local" URL and only remember the external URL for later reference.
     //  (location.externalUrl ? location.externalUrl : url);
 
-    console.debug(url + ": " + JSON.stringify(location,null,2));
-
     location.useExternalUrl = ((location.useExternalUrl == '0' || !location.useExternalUrl) ? false : true);
 
     return location;
