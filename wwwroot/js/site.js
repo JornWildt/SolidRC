@@ -48,11 +48,15 @@ function DebugJson(x)
 
 let ViewModelBase =
 {
-  validationStatus(val) {
-    return {
+  validationStatus(val, extra) {
+    let c = {
       error: val.$error,
-      dirty: val.$dirty
-    }
+      dirty: val.$dirty,
+      "form-control" : true
+    };
+    if (extra)
+      c[extra] = true;
+    return c;
   },
 
 
