@@ -7,19 +7,23 @@ $(async function()
   let modelRepo = new ModelRepository();
   let logRepo = new LogbookRepository();
 
-  await locationRepo.initialize();  
-  await modelRepo.initialize();  
-  await logRepo.initialize();
+  let p1 = locationRepo.initialize();
+  let p2 = modelRepo.initialize();
+  let p3 = logRepo.initialize();
+  await Promise.all([p1,p2,p3]);
 
   var logbookApp = new Vue({
     el: '#logbook',
     data: {
+      formTitle: null,
+      formState: null,
       models: [],
       locations: [],
       selectedModel: null,
       selectedDate: new moment().format('YYYY-MM-DD'),
-      selectedLocation: "http://blah.blah/kildedal",
+      selectedLocation: "",
       selectedDuration: "",
+      currentEntry: null,
       logEntries: []
     },
     async mounted() {
@@ -44,6 +48,9 @@ $(async function()
         format: 'yyyy-mm-dd',
         autoclose: true
       }).on("changeDate", () => {this.selectedDate = $('#selectedDate').val(); });
+
+      // Activate tooltips
+      $('[data-toggle="tooltip"]').tooltip()
     },
     validations: {
       selectedDate: {
@@ -56,7 +63,18 @@ $(async function()
     },
     methods: $.extend({}, ViewModelBase, 
     {
-      addNewEntry : async function()
+      editNewEntry : function()
+      {
+        this.formTitle = "Add model";
+        this.formState = 'add';
+        this.selectedDate = new moment().format('YYYY-MM-DD');
+        this.selectedModel =  this.models[0].id;
+        this.selectedLocation = this.locations[0].id;
+        this.selectedDuration = "";
+        $('#entryDialog').modal('show');
+      },
+
+      addEntry : async function()
       {
         if (!this.$v.$invalid)
         {
@@ -70,7 +88,34 @@ $(async function()
 
           await this.refresh();
 
-          $('#addEntryDialog').modal('hide');
+          $('#entryDialog').modal('hide');
+        }
+      },
+
+      editEntry : function(entry)
+      {
+        DebugJson(entry);
+        this.currentEntry = entry;
+        this.formTitle = "Edit entry";
+        this.formState = 'edit';
+        this.selectedDate = entry.date
+        this.selectedModel =  entry.model;
+        this.selectedLocation = entry.location;
+        this.selectedDuration = entry.duration;
+        $('#entryDialog').modal('show');
+      },
+
+      saveEntry : async function()
+      {
+        if (!this.$v.$invalid)
+        {
+          this.currentEntry.date = this.selectedDate;
+          this.currentEntry.model = this.selectedModel;
+          this.currentEntry.location = this.selectedLocation;
+          this.currentEntry.duration = this.selectedDuration;
+          await logRepo.updateEntry(this.currentEntry);
+          await this.refresh();
+          $('#entryDialog').modal('hide');
         }
       },
 

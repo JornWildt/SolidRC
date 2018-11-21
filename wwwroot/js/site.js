@@ -41,13 +41,22 @@ function countCharacter(str, char)
   return count;
 }
 
+function DebugJson(x)
+{
+  console.debug(JSON.stringify(x,null,2));
+}
+
 let ViewModelBase =
 {
-  validationStatus(val) {
-    return {
+  validationStatus(val, extra) {
+    let c = {
       error: val.$error,
-      dirty: val.$dirty
-    }
+      dirty: val.$dirty,
+      "form-control" : true
+    };
+    if (extra)
+      c[extra] = true;
+    return c;
   },
 
 

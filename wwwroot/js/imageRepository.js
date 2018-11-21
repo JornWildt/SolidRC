@@ -51,7 +51,7 @@ class ImageRepository extends ORDFMapper
    */
   async deleteImage(imageUrl)
   {
-    await this.deleteObject(imageUrl);
+    return this.deleteObject(imageUrl);
   }
 
 

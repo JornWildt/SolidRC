@@ -26,7 +26,7 @@ class LogbookRepository extends ORDFMapper
     this.addLinkedMapping(NS_SOLIDRC('model'), NS_SCHEMA('thumbnail'), 'modelThumbnail', PropertyType.Uri);
 
     // Load *all* the logbook entries into the store
-    await this.fetcher.load(LogbookRepository.EntriesUrl).catch(err => console.debug(err));
+    return this.fetcher.load(LogbookRepository.EntriesUrl).catch(err => console.debug(err));
   }
 
 
@@ -91,9 +91,15 @@ class LogbookRepository extends ORDFMapper
   }
 
 
+  async updateEntry(entry)
+  {
+    return this.updateObject(entry.id, entry);
+  }
+
+
   async deleteEntry(entry)
   {
-    await this.deleteObject(entry.id);
+    this.deleteObject(entry.id);
   }
 
 

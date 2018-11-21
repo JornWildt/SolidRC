@@ -6,6 +6,11 @@
 }
 
 
+#pageAlert
+{
+  display: none;
+}
+
 img.grid-action
 {
   width: auto;
@@ -13,6 +18,10 @@ img.grid-action
   margin-right: 8px;
 }
 
+.missing-item
+{
+  cursor: help;
+}
 
 .form-group label {
   display: block;

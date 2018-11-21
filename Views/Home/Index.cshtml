@@ -10,7 +10,7 @@
 <h1>Logbook</h1>
 
 <div id="logbook">
-  <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addEntryDialog">Add new entry</button>
+  <button type="button" class="btn btn-primary" v-on:click="editNewEntry()">Add new entry</button>
 
   <table class="table log-entries">
     <tbody>
@@ -25,16 +25,19 @@
             <linked-value v-bind:item="entry.modelName"></linked-value>
           </div>          
         </td>
-        <td><a href="#" v-on:click="deleteEntry(entry)"><img src="~/open-iconic/svg/circle-x.svg" alt="Remove" class="grid-action"></a></td>
+        <td>
+          <a href="#" v-on:click="editEntry(entry)"><img src="~/open-iconic/svg/pencil.svg" alt="Edit" class="grid-action"></a>
+          <a href="#" v-on:click="deleteEntry(entry)"><img src="~/open-iconic/svg/circle-x.svg" alt="Remove" class="grid-action"></a>
+        </td>
       </tr>
     </tbody>
   </table>
 
-  <div class="modal fade" id="addEntryDialog" tabindex="-1" role="dialog" aria-labelledby="addEntryDialog" aria-hidden="true">
-    <div class="modal-dialog" role="document">
+  <div class="modal fade" data-show="false" id="entryDialog" tabindex="-1" role="dialog" aria-labelledby="entryDialogLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="addEntryDialogLabel">Add new log entry</h5>
+          <h5 class="modal-title" id="entryDialogLabel">{{formTitle}}</h5>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
@@ -55,7 +58,7 @@
             <div class="form-group">
               <label for="selectedLocation">Location</label>
               <select v-model="selectedLocation" id="selectedLocation">
-                <option v-for="location in locations" v-bind:value="location.url">{{ location.name }}</option>
+                <option v-for="location in locations" v-bind:value="location.id">{{ location.name }}</option>
               </select>
             </div>
             <div class="form-group">
@@ -67,7 +70,8 @@
 
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-          <button type="button" class="btn btn-primary" v-on:click="addNewEntry">Add</button>
+          <button v-if="formState=='add'" type="button" class="btn btn-primary" v-on:click="addEntry()">Add</button>
+          <button v-if="formState=='edit'"type="button" class="btn btn-primary" v-on:click="saveEntry()">Save</button>
         </div>
       </div>
     </div>
