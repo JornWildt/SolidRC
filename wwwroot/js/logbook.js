@@ -73,6 +73,7 @@ $(async function()
         this.selectedLocation = this.locations[0].id;
         this.selectedDuration = "";
         this.selectedComment = "";
+        this.showSelectedModel();
         $('#entryDialog').modal('show');
       },
 
@@ -106,6 +107,7 @@ $(async function()
         this.selectedLocation = entry.location;
         this.selectedDuration = entry.duration;
         this.selectedComment = entry.comment;
+        this.showSelectedModel();
         $('#entryDialog').modal('show');
       },
 
@@ -137,6 +139,21 @@ $(async function()
       {
         let entries = await logRepo.getEntries();
         this.logEntries = entries;
+      },
+
+      handleModelChanged : function()
+      {
+        this.showSelectedModel();
+      },
+
+      showSelectedModel : function()
+      {
+        let img = document.getElementById("modelThumbnail");
+        let model = this.models.find(m => m.id == this.selectedModel);
+        if (model)
+          img.src = model.thumbnail;
+        else
+          img.src = "";
       }
     })
   });
