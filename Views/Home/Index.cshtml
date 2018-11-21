@@ -23,7 +23,10 @@
           </div>
           <div>
             <linked-value v-bind:item="entry.modelName"></linked-value>
-          </div>          
+          </div>
+          <div v-if="entry.comment" class="log-comment">
+            {{entry.comment}}
+          </div>
         </td>
         <td>
           <a href="#" v-on:click="editEntry(entry)"><img src="~/open-iconic/svg/pencil.svg" alt="Edit" class="grid-action"></a>
@@ -45,9 +48,19 @@
 
         <div class="modal-body">
           <form>
-            <div class="form-group">
-              <label for="selectedDate">Date</label>
-              <input v-model.trim="$v.selectedDate.$model" :class="validationStatus($v.selectedDate)" id="selectedDate">
+            <div class="row">
+              <div class="col">
+                <div class="form-group">
+                  <label for="selectedDate">Date</label>
+                  <input v-model.trim="$v.selectedDate.$model" :class="validationStatus($v.selectedDate)" id="selectedDate">
+                </div>
+              </div>
+              <div class="col">
+                <div class="form-group">
+                  <label for="selectedDuration">Duration (min.)</label>
+                  <input v-model="$v.selectedDuration.$model" :class="validationStatus($v.selectedDuration)" id="selectedDuration" placeholder="HH:MM:SS">
+                </div>
+              </div>
             </div>
             <div class="form-group">
               <label for="selectedModel">Model</label>
@@ -62,8 +75,8 @@
               </select>
             </div>
             <div class="form-group">
-              <label for="selectedDuration">Duration</label>
-              <input v-model="$v.selectedDuration.$model" :class="validationStatus($v.selectedDuration)" id="selectedDuration" placeholder="HH:MM:SS">
+              <label for="selectedComment">Comment</label>
+              <textarea v-model="selectedComment" class="form-control" id="selectedComment" rows="3"></textarea>
             </div>
           </form>
         </div>

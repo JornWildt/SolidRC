@@ -23,6 +23,7 @@ $(async function()
       selectedDate: new moment().format('YYYY-MM-DD'),
       selectedLocation: "",
       selectedDuration: "",
+      selectedComment: "",
       currentEntry: null,
       logEntries: []
     },
@@ -71,6 +72,7 @@ $(async function()
         this.selectedModel =  this.models[0].id;
         this.selectedLocation = this.locations[0].id;
         this.selectedDuration = "";
+        this.selectedComment = "";
         $('#entryDialog').modal('show');
       },
 
@@ -83,7 +85,8 @@ $(async function()
               date: this.selectedDate, 
               model: this.selectedModel, 
               location: this.selectedLocation, 
-              duration: this.selectedDuration
+              duration: this.selectedDuration,
+              comment: this.selectedComment
             });
 
           await this.refresh();
@@ -102,6 +105,7 @@ $(async function()
         this.selectedModel =  entry.model;
         this.selectedLocation = entry.location;
         this.selectedDuration = entry.duration;
+        this.selectedComment = entry.comment;
         $('#entryDialog').modal('show');
       },
 
@@ -113,6 +117,7 @@ $(async function()
           this.currentEntry.model = this.selectedModel;
           this.currentEntry.location = this.selectedLocation;
           this.currentEntry.duration = this.selectedDuration;
+          this.currentEntry.comment = this.selectedComment;
           await logRepo.updateEntry(this.currentEntry);
           await this.refresh();
           $('#entryDialog').modal('hide');

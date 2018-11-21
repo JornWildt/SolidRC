@@ -11,6 +11,11 @@
   display: none;
 }
 
+.log-comment
+{
+  font-style: italic;
+}
+
 img.grid-action
 {
   width: auto;
@@ -27,6 +32,10 @@ img.grid-action
   display: block;
 }
 
+
+.form-group input.short {
+  width: 10em;
+}
 
 .image-previewer {
   margin-top: 10px;
