@@ -5,6 +5,10 @@
     padding-right: 15px;
 }
 
+[v-cloak]
+{ 
+  display: none; 
+}
 
 #pageAlert
 {

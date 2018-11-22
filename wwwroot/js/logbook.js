@@ -17,6 +17,7 @@ $(async function()
       formTitle: null,
       formState: null,
       currentEntry: null,
+      loading: true,
       models: [],
       locations: [],
       selectedModel: null,
@@ -52,9 +53,8 @@ $(async function()
       // Activate tooltips
       $('[data-toggle="tooltip"]').tooltip()
 
-      // Show log entries now that everything is loaded
-      $('#progressbar').hide();
-      $("#logbookTable").show();
+      // Show entries now that everything is loaded
+      this.loading = false;
     },
     validations: {
       selectedDate: {

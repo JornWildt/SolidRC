@@ -12,33 +12,31 @@
 <div id="logbook">
   <button type="button" class="btn btn-primary" v-on:click="editNewEntry()">Add new entry</button>
 
-  <div class="progress" id="progressbar">
-    <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%"></div>
-  </div>
-
-  <table class="table log-entries" id="logbookTable" style="display: none">
-    <tbody>
-      <tr v-for="entry in logEntries" v-bind:entry="entry" v-bind:key="entry.id">
-        <td><linked-image height="60" v-bind:item="entry.modelThumbnail"></td>
-        <td>
-          <div>
-            {{entry.date}} - <linked-value v-bind:item="entry.locationName"></linked-value> 
-            <span v-if="entry.duration">({{entry.durationText}})</span>
-          </div>
-          <div>
-            <linked-value v-bind:item="entry.modelName"></linked-value>
-          </div>
-          <div v-if="entry.comment" class="log-comment">
-            {{entry.comment}}
-          </div>
-        </td>
-        <td>
-          <a href="#" v-on:click="editEntry(entry)"><img src="~/open-iconic/svg/pencil.svg" alt="Edit" class="grid-action"></a>
-          <a href="#" v-on:click="deleteEntry(entry)"><img src="~/open-iconic/svg/circle-x.svg" alt="Remove" class="grid-action"></a>
-        </td>
-      </tr>
-    </tbody>
-  </table>
+  <data-load v-bind:loading="loading">
+    <table class="table log-entries" v-cloak>
+      <tbody>
+        <tr v-for="entry in logEntries" v-bind:entry="entry" v-bind:key="entry.id">
+          <td><linked-image height="60" v-bind:item="entry.modelThumbnail"></td>
+          <td>
+            <div>
+              {{entry.date}} - <linked-value v-bind:item="entry.locationName"></linked-value> 
+              <span v-if="entry.duration">({{entry.durationText}})</span>
+            </div>
+            <div>
+              <linked-value v-bind:item="entry.modelName"></linked-value>
+            </div>
+            <div v-if="entry.comment" class="log-comment">
+              {{entry.comment}}
+            </div>
+          </td>
+          <td>
+            <a href="#" v-on:click="editEntry(entry)"><img src="~/open-iconic/svg/pencil.svg" alt="Edit" class="grid-action"></a>
+            <a href="#" v-on:click="deleteEntry(entry)"><img src="~/open-iconic/svg/circle-x.svg" alt="Remove" class="grid-action"></a>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </data-load>
 
   <div class="modal fade" data-show="false" id="entryDialog" tabindex="-1" role="dialog" aria-labelledby="entryDialogLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">

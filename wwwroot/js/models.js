@@ -12,6 +12,7 @@ $(async function()
     data: {
       formState: 'add',
       formTitle: "",
+      loading: true,
       currentModel: null,
       modelName: "",
       hasModifiedPhoto: false,
@@ -20,6 +21,9 @@ $(async function()
     async mounted() {
       // Refresh (fetch) the models for the list
       await this.refresh();
+
+      // Show entries now that everything is loaded
+      this.loading = false;
       
       // Touch all vuelidation inputs to trigger validation (and disabling the "Add" button before everything is valid)
       this.$v.$touch();
