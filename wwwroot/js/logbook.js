@@ -154,6 +154,8 @@ $(async function()
           img.src = model.thumbnail;
         else
           img.src = "";
+        img.title = model.name;
+        img.alt = model.name;
       }
     })
   });
