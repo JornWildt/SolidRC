@@ -12,7 +12,11 @@
 <div id="logbook">
   <button type="button" class="btn btn-primary" v-on:click="editNewEntry()">Add new entry</button>
 
-  <table class="table log-entries">
+  <div class="progress" id="progressbar">
+    <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%"></div>
+  </div>
+
+  <table class="table log-entries" id="logbookTable" style="display: none">
     <tbody>
       <tr v-for="entry in logEntries" v-bind:entry="entry" v-bind:key="entry.id">
         <td><linked-image height="60" v-bind:item="entry.modelThumbnail"></td>

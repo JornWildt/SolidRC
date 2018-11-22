@@ -51,6 +51,10 @@ $(async function()
 
       // Activate tooltips
       $('[data-toggle="tooltip"]').tooltip()
+
+      // Show log entries now that everything is loaded
+      $('#progressbar').hide();
+      $("#logbookTable").show();
     },
     validations: {
       selectedDate: {
