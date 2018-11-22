@@ -13,7 +13,7 @@ $(async function()
       formState: 'add',
       formTitle: "",
       modelName: "",
-      currentLocation: null,
+      currentModel: null,
       hasModifiedPhoto: false,
       models: []
     },

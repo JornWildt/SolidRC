@@ -41,6 +41,9 @@
       <div class="modal-content">
         <div class="modal-header">
           <h5 class="modal-title" id="addModelDialogLabel">{{formTitle}}</h5>
+          <a class="share" :href="currentModel.id" v-if="currentModel" target="_new">
+            <img src="~/open-iconic/svg/share.svg" alt="Link to data" title="Link to data">
+          </a>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>

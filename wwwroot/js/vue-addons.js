@@ -1,5 +1,12 @@
 // Components
 
+Vue.component('share-data', {
+  props: ['url', 'text'],
+  template: `<a class="share" :href="url" target="_new">
+    <img src="~/open-iconic/svg/link.svg" alt="Link to data" title="Link to data">
+  </a>`
+})
+
 Vue.component('linked-value', {
   props: ['item'],
   template: `<span>

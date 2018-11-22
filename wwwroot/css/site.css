@@ -16,6 +16,17 @@
   font-style: italic;
 }
 
+a.share
+{
+  margin-left: 1em;
+}
+
+a.share img
+{
+  width: 1em;
+  height: 1em;
+}
+
 img.grid-action
 {
   width: auto;
