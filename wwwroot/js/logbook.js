@@ -2,7 +2,6 @@ Vue.use(vuelidate.default);
 
 $(async function()
 {
-  
   let locationRepo = new LocationRepository();
   let modelRepo = new ModelRepository();
   let logRepo = new LogbookRepository();
@@ -17,6 +16,7 @@ $(async function()
     data: {
       formTitle: null,
       formState: null,
+      currentEntry: null,
       models: [],
       locations: [],
       selectedModel: null,
@@ -24,7 +24,6 @@ $(async function()
       selectedLocation: "",
       selectedDuration: "",
       selectedComment: "",
-      currentEntry: null,
       logEntries: []
     },
     async mounted() {
@@ -68,6 +67,7 @@ $(async function()
       {
         this.formTitle = "Add model";
         this.formState = 'add';
+        this.currentEntry = null;
         this.selectedDate = new moment().format('YYYY-MM-DD');
         this.selectedModel =  this.models[0].id;
         this.selectedLocation = this.locations[0].id;

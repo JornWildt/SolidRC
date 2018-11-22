@@ -30,6 +30,7 @@
       <div class="modal-content">
         <div class="modal-header">
           <h5 class="modal-title" id="locationDialogLabel">{{formTitle}}</h5>
+          <share-data v-if="currentLocation" v-bind:url="currentLocation.id"></share-data>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
@@ -68,11 +69,10 @@
   <script src="~/lib/rdflib/dist/rdflib.min.js"></script>
   <!-- <script src="~/lib/moment/min/moment.min.js"></script>
   <script src="~/lib/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js"></script> -->
-  <script src="~/lib/vue/dist/vue.min.js"></script>
   <script src="~/lib/vuelidate/dist/vuelidate.min.js"></script>
   <script src="~/lib/vuelidate/dist/validators.min.js"></script>
   <script src="~/js/namespaces.js"></script>
   <script src="~/js/ORDFMapper.js"></script>
-  <script src="~/js/locations.js"></script>
   <script src="~/js/locationRepository.js"></script>
+  <script src="~/js/locations.js"></script>
 }

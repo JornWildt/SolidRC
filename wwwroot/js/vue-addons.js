@@ -1,9 +1,9 @@
 // Components
 
 Vue.component('share-data', {
-  props: ['url', 'text'],
+  props: ['url'],
   template: `<a class="share" :href="url" target="_new">
-    <img src="~/open-iconic/svg/link.svg" alt="Link to data" title="Link to data">
+    <img src="` + mapIconToUrl('link-intact.svg') + `" alt="Link to data" title="Link to data">
   </a>`
 })
 

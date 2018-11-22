@@ -31,6 +31,13 @@
       </footer>
   </div>
 
+  <script>
+    function mapIconToUrl(icon)
+    {
+      return "@Url.Content("~/open-iconic/svg/")" + icon;
+    }
+  </script>
+
   <environment include="Development">
     <script src="~/lib/jquery/dist/jquery.js"></script>
     <script src="~/lib/popper.js/dist/umd/popper.js"></script>

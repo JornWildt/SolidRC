@@ -10,10 +10,10 @@ $(async function()
     data: {
       formState: 'add',
       formTitle: "",
+      currentLocation: null,
       locationName: "",
       useExternalUrl: false,
       externalUrl: "",
-      currentLocation: null,
       locations: []
     },
     async mounted() {
@@ -37,6 +37,7 @@ $(async function()
       {
         this.formTitle = "Add location";
         this.formState = 'add';
+        this.currentLocation = null;
         this.locationName = '';
         this.useExternalUrl = false;
         this.externalUrl = null;

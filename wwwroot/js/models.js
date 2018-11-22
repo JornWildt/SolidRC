@@ -12,8 +12,8 @@ $(async function()
     data: {
       formState: 'add',
       formTitle: "",
-      modelName: "",
       currentModel: null,
+      modelName: "",
       hasModifiedPhoto: false,
       models: []
     },
@@ -42,6 +42,7 @@ $(async function()
       {
         this.formTitle = "Add model";
         this.formState = 'add';
+        this.currentModel = null;
         this.modelName = '';
         $('#modelDialog').modal('show');
       },
@@ -69,9 +70,9 @@ $(async function()
 
       editModel : async function(model)
       {
-        this.currentModel = model;
         this.formTitle = "Edit model";
         this.formState = 'edit';
+        this.currentModel = model;
         this.modelName = model.name;
         await imagePreviewer.loadPreview(model.thumbnail);
         $('#pageAlert').hide();

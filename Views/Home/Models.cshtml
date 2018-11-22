@@ -41,9 +41,7 @@
       <div class="modal-content">
         <div class="modal-header">
           <h5 class="modal-title" id="addModelDialogLabel">{{formTitle}}</h5>
-          <a class="share" :href="currentModel.id" v-if="currentModel" target="_new">
-            <img src="~/open-iconic/svg/share.svg" alt="Link to data" title="Link to data">
-          </a>
+          <share-data v-if="currentModel" v-bind:url="currentModel.id"></share-data>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
@@ -81,10 +79,6 @@
 @section Scripts
 {
   <script src="~/lib/rdflib/dist/rdflib.min.js"></script>
-  <!-- <script src="~/lib-local/rdflib.min.js"></script> -->
-  <!-- <script src="~/lib/moment/min/moment.min.js"></script>
-  <script src="~/lib/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js"></script> -->
-  <script src="~/lib/vue/dist/vue.min.js"></script>
   <script src="~/lib/vuelidate/dist/vuelidate.min.js"></script>
   <script src="~/lib/vuelidate/dist/validators.min.js"></script>
   <script src="~/lib-local/waitme/waitMe.min.js"></script>
