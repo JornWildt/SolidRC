@@ -138,7 +138,7 @@ class ORDFMapper
     let statements = this.copyPropertiesIntoStatements(url, obj, 'insert');
     this.store.add(statements);
 
-    console.debug("Store statements: " + JSON.stringify(statements,null,2));
+    //console.debug("Store statements: " + JSON.stringify(statements,null,2));
 
     // Put the new statements onto the web
     return this.fetcher.putBack(url);

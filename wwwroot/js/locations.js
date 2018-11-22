@@ -44,19 +44,21 @@ $(async function()
         $('#locationDialog').modal('show');
       },
 
-      addLocation : function()
+      addLocation : async function()
       {
         if (!this.$v.$invalid)
         {
+          $('#buttonAdd').buttonProcessing(true);
           locationRepo.addLocation(
             {
               name: this.locationName,
               externalUrl : (this.useExternalUrl ? this.externalUrl : null)
             });
 
-          this.refresh();
+          await this.refresh();
 
           $('#locationDialog').modal('hide');
+          $('#buttonAdd').buttonProcessing(false);
         }
       },
 
@@ -75,12 +77,14 @@ $(async function()
       {
         if (!this.$v.$invalid)
         {
+          $('#buttonSave').buttonProcessing(true);
           this.currentLocation.name = this.locationName;
           this.currentLocation.externalUrl = this.externalUrl;
           this.currentLocation.useExternalUrl = this.useExternalUrl ? true : false; // Convert to real bool
           await locationRepo.updateLocation(this.currentLocation);
           await this.refresh();
           $('#locationDialog').modal('hide');
+          $('#buttonSave').buttonProcessing(false);
         }
       },
 

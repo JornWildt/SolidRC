@@ -20,7 +20,7 @@ class LogbookRepository extends ORDFMapper
     this.addMapping(NS_SOLIDRC('model'), 'model', PropertyType.Uri, true);
     this.addMapping(NS_SCHEMA('location'), 'location', PropertyType.Uri, true);
     this.addMapping(NS_SCHEMA('duration'), 'duration', PropertyType.Raw, true);
-    this.addMapping(NS_SCHEMA('text'), 'comment', PropertyType.Raw, true);
+    this.addMapping(NS_SCHEMA('description'), 'comment', PropertyType.Raw, true);
     this.addLinkedMapping(NS_SCHEMA('location'), NS_SCHEMA('name'), 'locationName');
     this.addLinkedMapping(NS_SOLIDRC('model'), NS_SCHEMA('name'), 'modelName');
     this.addLinkedMapping(NS_SOLIDRC('model'), NS_SCHEMA('image'), 'modelImage', PropertyType.Uri);
@@ -100,7 +100,7 @@ class LogbookRepository extends ORDFMapper
 
   async deleteEntry(entry)
   {
-    this.deleteObject(entry.id);
+    return this.deleteObject(entry.id);
   }
 
 

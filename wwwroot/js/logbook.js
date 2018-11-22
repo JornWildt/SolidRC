@@ -81,7 +81,8 @@ $(async function()
       {
         if (!this.$v.$invalid)
         {
-          logRepo.addEntry(
+          $('#buttonAdd').buttonProcessing(true);
+          await logRepo.addEntry(
             {
               date: this.selectedDate, 
               model: this.selectedModel, 
@@ -92,6 +93,7 @@ $(async function()
 
           await this.refresh();
 
+          $('#buttonAdd').buttonProcessing(false);
           $('#entryDialog').modal('hide');
         }
       },
@@ -115,6 +117,8 @@ $(async function()
       {
         if (!this.$v.$invalid)
         {
+          $('#buttonSave').buttonProcessing(true);
+
           this.currentEntry.date = this.selectedDate;
           this.currentEntry.model = this.selectedModel;
           this.currentEntry.location = this.selectedLocation;
@@ -123,6 +127,7 @@ $(async function()
           await logRepo.updateEntry(this.currentEntry);
           await this.refresh();
           $('#entryDialog').modal('hide');
+          $('#buttonSave').buttonProcessing(false);
         }
       },
 

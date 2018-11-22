@@ -91,8 +91,8 @@
 
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-          <button v-if="formState=='add'" type="button" class="btn btn-primary" v-on:click="addEntry()">Add</button>
-          <button v-if="formState=='edit'"type="button" class="btn btn-primary" v-on:click="saveEntry()">Save</button>
+          <button v-if="formState=='add'" type="button" class="btn btn-primary" v-on:click="addEntry()" id="buttonAdd">Add</button>
+          <button v-if="formState=='edit'" type="button" class="btn btn-primary" v-on:click="saveEntry()" id="buttonSave">Save</button>
         </div>
       </div>
     </div>
