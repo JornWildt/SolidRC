@@ -1,25 +1,35 @@
-$('#logout').hide();
-
-const popupUri = '/lib/solid-auth-client/dist-popup/popup.html';
-$('#login-button').click(() => solid.auth.popupLogin({ popupUri }));
-
-
-solid.auth.trackSession(session => {
-    const loggedIn = !!session;
-    $('#login-container').toggle(!loggedIn);
-    $('#logout-container').toggle(loggedIn);
-
-    if (session) {
-      $('#user-badge').attr('title', session.webId);
-      if (!$('#profile').val())
-        $('#profile').val(session.webId);
-    }
-  });
-
-$('#logout-button').click(() => solid.auth.logout());  
+async function showSolidLogin()
+{
+  const popupUri = '/lib/solid-auth-client/dist-popup/popup.html';
+  const session = await solid.auth.popupLogin({ popupUri });
+  if (session)
+    window.location.replace(homeRedirectUrl);
+}
 
 
 $(function ($) {
+  $('#logout').hide();
+
+  $('#login-button').click(showSolidLogin);
+  
+  
+  solid.auth.trackSession(session => {    
+      const loggedIn = !!session;
+      if (!loggedIn && window.location != loginRedirectUrl)
+        window.location.replace(loginRedirectUrl);
+      $('#login-container').toggle(!loggedIn);
+      $('#logout-container').toggle(loggedIn);
+  
+      if (session) {
+        $('#user-badge').attr('title', session.webId);
+        if (!$('#profile').val())
+          $('#profile').val(session.webId);
+      }
+    });
+  
+  $('#logout-button').click(() => solid.auth.logout());  
+  
+  
   $('[data-toggle="tooltip"]').tooltip()
 
   $.fn.buttonProcessing = function(active)

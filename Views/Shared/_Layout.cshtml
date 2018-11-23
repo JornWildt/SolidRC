@@ -15,6 +15,11 @@
   </environment>
 
   @RenderSection("Styles", required: false)
+
+  <script>
+    var loginRedirectUrl = "@Url.Action("login", "home", null, Context.Request.Scheme)";
+    var homeRedirectUrl = "@Url.Action("index", "home", null, Context.Request.Scheme)";
+  </script>
 </head>
 
 <body>
