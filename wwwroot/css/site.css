@@ -10,6 +10,11 @@
   display: none; 
 }
 
+.btn-toolbar
+{
+  margin-bottom: 0.5ex;
+}
+
 #pageAlert
 {
   display: none;

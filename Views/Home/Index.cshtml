@@ -10,7 +10,9 @@
 <h1>Logbook</h1>
 
 <div id="logbook">
-  <button type="button" class="btn btn-primary" v-on:click="editNewEntry()">Add new entry</button>
+  <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with buttons">
+    <button type="button" class="btn btn-primary" v-on:click="editNewEntry()">Add new entry</button>
+  </div>
 
   <data-load v-bind:loading="loading">
     <table class="table log-entries" v-cloak>

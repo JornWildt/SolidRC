@@ -5,8 +5,10 @@
 <h1>Locations</h1>
 
 <div id="locationsApp">
-  <button type="button" class="btn btn-primary" v-on:click="editNewLocation()">Add new location</button>
-
+  <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with buttons">
+    <button type="button" class="btn btn-primary" v-on:click="editNewLocation()">Add new location</button>
+  </div>
+  
   <data-load v-bind:loading="loading">
     <table id="locations" class="table" v-cloak>
       <thead>

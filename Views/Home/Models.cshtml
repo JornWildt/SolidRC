@@ -14,8 +14,10 @@
 </div>
 
 <div id="modelsApp">
-  <button type="button" class="btn btn-primary" v-on:click="editNewModel()">Add new model</button>
-
+  <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with buttons">
+    <button type="button" class="btn btn-primary" v-on:click="editNewModel()">Add new model</button>
+  </div>
+  
   <data-load v-bind:loading="loading">
     <table id="models" class="table" v-cloak>
       <thead>
