@@ -36,7 +36,7 @@ class ModelRepository extends ORDFMapper
     let models = this.store.match(null, NS_RDF('type'), NS_SOLIDRC('model'));
 
     // Build a list of all models by fetching the model data from the model's URL (subject)
-    let result = await Promise.all(models.map(m => this.readModelFromUrl(m.subject)));
+    let result = await Promise.all(models.map(m => this.readModelFromUrl(m.subject).catch(err => console.warn(err))));
 
     // Make sure we always get a consistent sort order
     result.sort((a,b) => (a.name ? a.name.localeCompare(b.name) : 0));

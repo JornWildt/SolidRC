@@ -49,7 +49,7 @@ $(async function()
       // Refresh (fetch) the log entries for the list
       let rp = this.refresh();
 
-      // Wait for the asyncs in parallel
+      // Wait for the previous operations to complete in parallel
       await Promise.all([mp,lp,rp]);
 
       // Touch all vuelidation inputs to trigger validation (and disabling the "Add" button before everything is valid)

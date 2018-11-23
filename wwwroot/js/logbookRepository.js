@@ -40,7 +40,7 @@ class LogbookRepository extends ORDFMapper
     let entries = this.store.match(null, NS_RDF('type'), NS_SOLIDRC('logentry'));
 
     // Build a list of all logbook entries by fetching the logbook entry data from each entry URL (subject).
-    let result = Promise.all(entries.map(e => this.readEntryFromUrl(e.subject)));
+    let result = Promise.all(entries.map(e => this.readEntryFromUrl(e.subject).catch(err => console.warn(err))));
 
     return result; 
   }
