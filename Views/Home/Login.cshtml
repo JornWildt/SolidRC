@@ -1,0 +1,19 @@
+@{
+    ViewData["Title"] = "Login";
+}
+
+<h1>Login</h1>
+
+<p>Pleae login before using SolidRC.</p>
+
+<a class="btn btn-primary" id="login-button-2" href="#">Log in</a>
+
+@section Scripts
+{
+<script>
+  $(function ()
+  {
+    $('#login-button-2').click(() => solid.auth.popupLogin({ solidLoginUrl }));
+  });
+</script>
+}
