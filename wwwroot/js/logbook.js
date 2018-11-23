@@ -29,17 +29,28 @@ $(async function()
     },
     async mounted() {
       // Get the list of models for the "Models" dropdown box
-      this.models = await modelRepo.getModels();
-      if (this.models.length > 0)
-        this.selectedModel = this.models[0].id;
+      let mp = modelRepo.getModels()
+        .then(models =>
+        {
+          this.models = models;
+          if (this.models.length > 0)
+            this.selectedModel = this.models[0].id;
+        });
         
       // Get the list of locations for the "Locations" dropdown box
-      this.locations = await locationRepo.getLocations();
-      if (this.locations.length > 0)
-        this.selectedLocation = this.locations[0].url;
+      let lp = locationRepo.getLocations()
+        .then(locations =>
+        {
+          this.locations = locations;
+          if (this.locations.length > 0)
+            this.selectedLocation = this.locations[0].url;
+        });
 
       // Refresh (fetch) the log entries for the list
-      await this.refresh();
+      let rp = this.refresh();
+
+      // Wait for the asyncs in parallel
+      await Promise.all([mp,lp,rp]);
 
       // Touch all vuelidation inputs to trigger validation (and disabling the "Add" button before everything is valid)
       this.$v.$touch();
