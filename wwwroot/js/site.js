@@ -25,8 +25,7 @@ $(function ($) {
   
       if (session) {
         $('#user-badge').attr('title', session.webId);
-        if (!$('#profile').val())
-          $('#profile').val(session.webId);
+        $('#user-badge').attr('href', session.webId);
       }
     });
   

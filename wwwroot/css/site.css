@@ -10,6 +10,12 @@
   display: none; 
 }
 
+#user-badge img
+{
+  height: 2ex;
+  width: 2ex;
+}
+
 .btn-toolbar
 {
   margin-bottom: 0.5ex;
