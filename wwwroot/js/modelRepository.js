@@ -5,8 +5,7 @@ class ModelRepository extends ORDFMapper
   constructor()
   {
     super();
-
-    this.imageRepo = new ImageRepository(ModelRepository.ImageUrl);
+    this.profileService = new ProfileService();
   }
 
   
@@ -22,8 +21,16 @@ class ModelRepository extends ORDFMapper
     this.addMapping(NS_SCHEMA('thumbnail'), 'thumbnail', PropertyType.Uri, false);
     this.addMapping(NS_SCHEMA('name'), 'name', PropertyType.Raw, true);
 
+    await this.profileService.initialize();
+
+    this.containerUrl = this.profileService.profile.storage + solidRcRootContainerPath + "models/*";
+    this.modelUrl = this.profileService.profile.storage + solidRcRootContainerPath + "models/";
+    this.imageUrl = this.profileService.profile.storage + solidRcRootContainerPath + "images/";
+
+    this.imageRepo = new ImageRepository(this.imageUrl);
+
     // Load *all* the models into the store
-    return this.loadAllContainerItems(ModelRepository.ModelsUrl);
+    return this.loadAllContainerItems(this.containerUrl);
   }
 
 
@@ -75,7 +82,7 @@ class ModelRepository extends ORDFMapper
     let modelName = this.generateModelName(model.name);
 
     // Combine modelName with base URL to get complete URL for new model
-    let modelUrl = this.store.sym(ModelRepository.ModelUrl + modelName);
+    let modelUrl = this.store.sym(this.modelUrl + modelName);
 
     // Make properties strongly typed for RDFLIB and add extra statements
     model.created = new Date();
@@ -135,6 +142,4 @@ class ModelRepository extends ORDFMapper
 }
 
 
-ModelRepository.ModelUrl = 'https://elfisk.solid.community/public/solidrc/models/';
-ModelRepository.ModelsUrl = 'https://elfisk.solid.community/public/solidrc/models/*';
 ModelRepository.ImageUrl = 'https://elfisk.solid.community/public/solidrc/images/';

@@ -1,3 +1,6 @@
+const solidRcRootContainerPath = 'solid-rc/'
+
+
 async function showSolidLogin()
 {
   const popupUri = '/lib/solid-auth-client/dist-popup/popup.html';

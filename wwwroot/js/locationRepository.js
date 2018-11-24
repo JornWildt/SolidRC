@@ -5,6 +5,7 @@ class LocationRepository extends ORDFMapper
   constructor()
   {
     super();
+    this.profileService = new ProfileService();
   }
 
   
@@ -20,8 +21,13 @@ class LocationRepository extends ORDFMapper
     this.addMapping(NS_SOLIDRC('useExternalUrl'), 'useExternalUrl', PropertyType.Raw, true);
     this.addMapping(NS_SCHEMA('sameAs'), 'externalUrl', PropertyType.Uri, true);
 
+    await this.profileService.initialize();
+
+    this.containerUrl = this.profileService.profile.storage + solidRcRootContainerPath + "locations/*";
+    this.locationUrl = this.profileService.profile.storage + solidRcRootContainerPath + "locations/";
+
     // Load *all* the locations into the store
-    return this.loadAllContainerItems(LocationRepository.LocationsUrl);
+    return this.loadAllContainerItems(this.containerUrl);
   }
 
 
@@ -70,7 +76,7 @@ class LocationRepository extends ORDFMapper
     let locationName = this.generateLocationName(location.name);
 
     // Combine locationName with base URL to get complete URL for new location
-    let locationUrl = this.store.sym(LocationRepository.LocationUrl + locationName);
+    let locationUrl = this.store.sym(this.locationUrl + locationName);
 
     // Make properties strongly typed for RDFLIB and add extra statements
     location.created = new Date();
@@ -106,5 +112,4 @@ class LocationRepository extends ORDFMapper
 }
 
 
-LocationRepository.LocationUrl = 'https://elfisk.solid.community/public/solidrc/locations/';
 LocationRepository.LocationsUrl = 'https://elfisk.solid.community/public/solidrc/locations/*';

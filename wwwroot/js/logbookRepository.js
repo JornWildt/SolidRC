@@ -5,6 +5,7 @@ class LogbookRepository extends ORDFMapper
   constructor()
   {
     super();
+    this.profileService = new ProfileService();
   }
 
   
@@ -25,9 +26,14 @@ class LogbookRepository extends ORDFMapper
     this.addLinkedMapping(NS_SOLIDRC('model'), NS_SCHEMA('name'), 'modelName');
     this.addLinkedMapping(NS_SOLIDRC('model'), NS_SCHEMA('image'), 'modelImage', PropertyType.Uri);
     this.addLinkedMapping(NS_SOLIDRC('model'), NS_SCHEMA('thumbnail'), 'modelThumbnail', PropertyType.Uri);
+    
+    await this.profileService.initialize();
+
+    this.containerUrl = this.profileService.profile.storage + solidRcRootContainerPath + "logbook/*";
+    this.entryUrl = this.profileService.profile.storage + solidRcRootContainerPath + "logbook/";
 
     // Load *all* the logbook entries into the store
-    return this.fetcher.load(LogbookRepository.EntriesUrl).catch(err => console.debug(err));
+    return this.fetcher.load(this.containerUrl).catch(err => console.debug(err));
   }
 
 
@@ -80,7 +86,7 @@ class LogbookRepository extends ORDFMapper
     let entryName = this.generateEntryName(entry.date);
 
     // Combine entryName with base URL to get complete URL for new entry
-    let entryUrl = this.store.sym(LogbookRepository.LogBookUrl + entryName);
+    let entryUrl = this.store.sym(this.entryUrl + entryName);
 
     // Make properties strongly typed for RDFLIB and add extra statements
     entry.date = new moment(entry.date, 'YYYY-MM-DD').toDate();
@@ -112,5 +118,3 @@ class LogbookRepository extends ORDFMapper
 }
 
 
-LogbookRepository.LogBookUrl = 'https://elfisk.solid.community/public/solidrc/logbook/';
-LogbookRepository.EntriesUrl = 'https://elfisk.solid.community/public/solidrc/logbook/entry-*';

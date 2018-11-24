@@ -89,8 +89,10 @@ class ORDFMapper
 
   async loadAllContainerItems(url)
   {
-    // Load all items, assuming the URL is a "globbing" URL like "/items/*"
-    await this.fetcher.load(url).catch(err => console.warn(err));
+    console.debug("Load container URL: " + url);
+
+    // Load all items at the URL
+    return this.fetcher.load(url).catch(err => console.warn(err));
 
     // // Find the URLs of the items in the container
     // let folderItemUrls = await this.store.match(this.store.sym(url), NS_LDP('contains'));
@@ -115,10 +117,13 @@ class ORDFMapper
 
   async readObjectInternal(url)
   {
+    url = $rdf.sym(url);
     console.debug("Read object from : " + url);
 
     // Find all statements having  the object URL as the subject.
     let statements = this.store.match(url, null, null);
+    
+    console.debug(`Found ${statements.length} statements for ${url}.`);
 
     // FIXME: we do not always need to fetch linked values - only when presenting a list of items
 
