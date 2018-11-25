@@ -15,7 +15,6 @@ $(function ($) {
 
   $('#login-button').click(showSolidLogin);
   
-  
   solid.auth.trackSession(session => {    
       const loggedIn = !!session;
       if (!loggedIn && window.location != loginRedirectUrl)
@@ -43,7 +42,7 @@ $(function ($) {
         this.data('normalText', this.html());
       }
       this.prop('disabled', true);
-      this.html(this.data('processingText') || "Savin ...");
+      this.html(this.data('processingText') || "Saving ...");
     }
     else
     {
