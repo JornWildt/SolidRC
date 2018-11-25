@@ -1,0 +1,38 @@
+@{
+    ViewData["Title"] = "Settings";
+}
+
+<h1>Settings</h1>
+
+<div class="alert alert-info" role="alert">
+  <p>Here you can see what Solid-RC has configured, based on your personal profile settings from your own POD.</p>
+</div>
+
+<div id="settingsApp">
+  <form>
+    <div class="form-group">
+      <label for="webId">Logged in as</label>
+      <div class="input-group">
+        <input v-model="webId" id="webId" class="form-control" readonly>
+        <div class="input-group-text">
+          <a :href="webId"><img src="~/open-iconic/svg/external-link.svg" alt="Open profile" title="Open profile"></a>
+        </div>
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="dataLocation">Solid-RC data location</label>
+      <div class="input-group">
+        <input v-model="dataLocation" id="dataLocation" class="form-control" readonly>
+        <div class="input-group-text">
+          <a :href="dataLocation"><img src="~/open-iconic/svg/external-link.svg" alt="Open POD data" title="Open POD data"></a>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>
+
+
+@section Scripts
+{
+  <script src="~/js/settings.js" asp-append-version="true"></script>
+}

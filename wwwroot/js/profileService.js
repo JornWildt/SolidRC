@@ -8,6 +8,8 @@ class ProfileService extends ORDFMapper
 
   async initialize()
   {
+    const solidRcRootContainerPath = 'solid-rc/'
+
     // Assign RDF type for objects managed by this repository
     this.setObjectType(NS_FOAF('PersonalProfileDocument'));
 
@@ -24,6 +26,9 @@ class ProfileService extends ORDFMapper
 
     await this.loadAllContainerItems(this.profileUrl);
     this.profile = await this.readProfile();
+    this.profile.webId = session.webId;
+
+    this.rcStorageRoot = this.profile.storage + solidRcRootContainerPath;
 
     /* NOT USED SO FAR
     

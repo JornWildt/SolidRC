@@ -30,6 +30,11 @@ namespace SolidRC.Controllers
             return View();
         }
 
+        public IActionResult Settings()
+        {
+            return View();
+        }
+
         public IActionResult About()
         {
             ViewData["Message"] = "Your application description page.";

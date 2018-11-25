@@ -1,6 +1,3 @@
-const solidRcRootContainerPath = 'solid-rc/'
-
-
 async function showSolidLogin()
 {
   const popupUri = '/lib/solid-auth-client/dist-popup/popup.html';
@@ -23,8 +20,7 @@ $(function ($) {
       $('#logout-container').toggle(loggedIn);
   
       if (session) {
-        $('#user-badge').attr('title', session.webId);
-        $('#user-badge').attr('href', session.webId);
+        $('#user-badge').attr('title', "Logged in as '" + session.webId + "'");
       }
     });
   

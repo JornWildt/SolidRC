@@ -54,10 +54,11 @@ img.grid-action
   cursor: help;
 }
 
-.form-group label {
-  display: block;
+.input-group img
+{
+  width: 2ex;
+  height: 2ex;
 }
-
 
 .form-group input.short {
   width: 10em;
