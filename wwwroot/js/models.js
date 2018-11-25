@@ -87,6 +87,8 @@ $(async function()
       {
         if (!this.$v.$invalid)
         {
+          this.showWaiting('#modelDialog', 'Saving');
+
           this.currentModel.name = this.modelName;
           this.currentModel.imageFile = $('#modelImage')[0].files[0];
           this.currentModel.thumbnailFile = (this.currentModel.image ? await imagePreviewer.createPreviewFile("thumbnail.png") : null);
@@ -102,6 +104,7 @@ $(async function()
             $('#pageAlert').show();
             this.hasModifiedPhoto = false;
           }
+          this.hideWaiting();
         }
       },
 
