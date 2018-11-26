@@ -44,7 +44,6 @@ $(async function()
 
       editNewModel : function()
       {
-        window.alert("AAA")
         this.formTitle = "Add model";
         this.formState = 'add';
         this.currentModel = null;
@@ -64,8 +63,8 @@ $(async function()
           await modelRepo.addModel(
           {
             name: this.modelName,
-            image: imageFile,
-            thumbnail: thumbnailFile
+            imageFile: imageFile,
+            thumbnailFile: thumbnailFile
           });
 
           await this.refresh();
@@ -81,7 +80,8 @@ $(async function()
         this.formState = 'edit';
         this.currentModel = model;
         this.modelName = model.name;
-        await imagePreviewer.loadPreview(model.thumbnail);
+        if (model.thumbnail)
+          await imagePreviewer.loadPreview(model.thumbnail);
         $('#pageAlert').hide();
         $('#modelDialog').modal('show');
       },
@@ -94,13 +94,14 @@ $(async function()
 
           this.currentModel.name = this.modelName;
           this.currentModel.imageFile = $('#modelImage')[0].files[0];
-          this.currentModel.thumbnailFile = (this.currentModel.image ? await imagePreviewer.createPreviewFile("thumbnail.png") : null);
+          this.currentModel.thumbnailFile = (this.currentModel.imageFile ? await imagePreviewer.createPreviewFile("thumbnail.png") : null);
 
           console.debug(this.currentModel.image);
           console.debug(this.currentModel.thumbnail);
 
           await modelRepo.updateModel(this.currentModel);
           await this.refresh();
+
           $('#modelDialog').modal('hide');
           if (this.hasModifiedPhoto)
           {

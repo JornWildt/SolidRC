@@ -17,8 +17,8 @@ class ModelRepository extends ORDFMapper
     // Map statement predicate/objects into simple javascript key/values.
     this.addMapping(NS_SCHEMA('dateCreated'), 'created', PropertyType.Raw, false);
     this.addMapping(NS_SCHEMA('author'), 'creator', PropertyType.Uri, false);
-    this.addMapping(NS_SCHEMA('image'), 'image', PropertyType.Uri, false);
-    this.addMapping(NS_SCHEMA('thumbnail'), 'thumbnail', PropertyType.Uri, false);
+    this.addMapping(NS_SCHEMA('image'), 'image', PropertyType.Uri, true);
+    this.addMapping(NS_SCHEMA('thumbnail'), 'thumbnail', PropertyType.Uri, true);
     this.addMapping(NS_SCHEMA('name'), 'name', PropertyType.Raw, true);
 
     await this.profileService.initialize();
@@ -66,7 +66,7 @@ class ModelRepository extends ORDFMapper
    */
   async addModel(model)
   {
-    if (model.image)
+    if (model.imageFile)
       await this.createImages(model);
 
     // Generate a unique URL name (path element) for the model
@@ -90,6 +90,33 @@ class ModelRepository extends ORDFMapper
    */
   async updateModel(model)
   {
+    if (model.image)
+      await this.updateImages(model);
+    else
+      await this.createImages(model);
+
+    return this.updateObject(model.id, model);
+  }
+
+
+  async createImages(model)
+  {
+    // Store associated image and get it's URL
+    let imageP = this.imageRepo.addImage(model.imageFile, model.name)
+                 .then(url => model.image = url)
+                 .catch(err => console.warn(err));
+
+    // Store associated image thumbnail and get it's URL
+    let thumbnailP = this.imageRepo.addImage(model.thumbnailFile, model.name + '-tmb')
+                     .then(url => model.thumbnail = url)
+                     .catch(err => console.warn(err));
+
+    return Promise.all([imageP, thumbnailP]);
+  }
+
+
+  async updateImages(model)
+  {
     let imageP = null;
     let thumbnailP = null;
 
@@ -107,26 +134,8 @@ class ModelRepository extends ORDFMapper
                    .catch(err => console.warn(err));
     }
 
-    await Promise.all([imageP, thumbnailP]);
-
-    return this.updateObject(model.id, model);
-  }
-
-
-  async createImages(model)
-  {
-    // Store associated image and get it's URL
-    let imageP = this.imageRepo.addImage(model.image, model.name)
-                 .then(url => model.image = url)
-                 .catch(err => console.warn(err));
-
-    // Store associated image thumbnail and get it's URL
-    let thumbnailP = this.imageRepo.addImage(model.thumbnail, model.name + '-tmb')
-                     .then(url => model.thumbnail = url)
-                     .catch(err => console.warn(err));
-
     return Promise.all([imageP, thumbnailP]);
-  }  
+  }
 
 
   async deleteModel(model)

@@ -17,7 +17,10 @@ class ImagePreviewer
     if (image && image.type.match(/image.*/))
     {
       let previewer = this;
+
+      // Create a complete new canvas to avoid problems with the existing canvas being "tainted" by previews.
       $('#' + this.imgCanvasId).replaceWith('<canvas id="modelImageCanvas" width="100" height="100">Your browser does not support this.</canvas>');
+      
       let imgCanvas = document.getElementById(this.imgCanvasId);
       let imagePath = URL.createObjectURL(image);  
       let imgHtml = document.getElementById(this.imgElementId);
