@@ -168,14 +168,20 @@ $(async function()
 
       showSelectedModel : function()
       {
-        let img = document.getElementById("modelThumbnail");
         let model = this.models.find(m => m.id == this.selectedModel);
-        if (model)
+        let img = document.getElementById("modelThumbnail");
+        if (model && model.thumbnail)
+        {
           img.src = model.thumbnail;
+          img.title = model.name;
+          img.alt = model.name;
+        }
         else
+        {
           img.src = "";
-        img.title = model.name;
-        img.alt = model.name;
+          img.title = "";
+          img.alt = "";
+        }
       }
     })
   });
