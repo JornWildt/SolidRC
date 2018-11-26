@@ -29,12 +29,14 @@
       </thead>
       <tbody>
         <tr v-for="model in models" v-bind:model="model" v-bind:key="model.id">
-          <td><img width="100" height="100" v-bind:src="model.thumbnail"></td>
+          <td>
+            <img v-if="model.thumbnail" width="100" height="100" v-bind:src="model.thumbnail">
+          </td>
           <td>{{model.name}}</td>
           <td>
             <a href="#" v-on:click="editModel(model)"><img src="~/open-iconic/svg/pencil.svg" alt="Edit" class="grid-action"></a>
             <a href="#" v-on:click="deleteModel(model)"><img src="~/open-iconic/svg/circle-x.svg" alt="Remove" class="grid-action"></a>
-            </td>
+          </td>
         </tr>
       </tbody>
     </table>

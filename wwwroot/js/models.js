@@ -44,6 +44,7 @@ $(async function()
 
       editNewModel : function()
       {
+        window.alert("AAA")
         this.formTitle = "Add model";
         this.formState = 'add';
         this.currentModel = null;
@@ -57,11 +58,13 @@ $(async function()
         {
           this.showWaiting('#modelDialog', 'Saving');
 
-          let thumbnailFile = await imagePreviewer.createPreviewFile("thumbnail.png");
+          let imageFile = $('#modelImage')[0].files[0];
+          let thumbnailFile = imageFile ? await imagePreviewer.createPreviewFile("thumbnail.png") : null;
+
           await modelRepo.addModel(
           {
             name: this.modelName,
-            image: $('#modelImage')[0].files[0],
+            image: imageFile,
             thumbnail: thumbnailFile
           });
 

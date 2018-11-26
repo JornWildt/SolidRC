@@ -66,17 +66,8 @@ class ModelRepository extends ORDFMapper
    */
   async addModel(model)
   {
-    // Store associated image and get it's URL
-    let imageP = this.imageRepo.addImage(model.image, model.name)
-                 .then(url => model.image = url)
-                 .catch(err => console.warn(err));
-
-    // Store associated image thumbnail and get it's URL
-    let thumbnailP = this.imageRepo.addImage(model.thumbnail, model.name + '-tmb')
-                     .then(url => model.thumbnail = url)
-                     .catch(err => console.warn(err));
-
-    await Promise.all([imageP, thumbnailP]);
+    if (model.image)
+      await this.createImages(model);
 
     // Generate a unique URL name (path element) for the model
     let modelName = this.generateModelName(model.name);
@@ -120,6 +111,22 @@ class ModelRepository extends ORDFMapper
 
     return this.updateObject(model.id, model);
   }
+
+
+  async createImages(model)
+  {
+    // Store associated image and get it's URL
+    let imageP = this.imageRepo.addImage(model.image, model.name)
+                 .then(url => model.image = url)
+                 .catch(err => console.warn(err));
+
+    // Store associated image thumbnail and get it's URL
+    let thumbnailP = this.imageRepo.addImage(model.thumbnail, model.name + '-tmb')
+                     .then(url => model.thumbnail = url)
+                     .catch(err => console.warn(err));
+
+    return Promise.all([imageP, thumbnailP]);
+  }  
 
 
   async deleteModel(model)
