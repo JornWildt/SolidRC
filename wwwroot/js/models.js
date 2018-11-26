@@ -48,6 +48,7 @@ $(async function()
         this.formState = 'add';
         this.currentModel = null;
         this.modelName = '';
+        imagePreviewer.clearPreview();
         $('#modelDialog').modal('show');
       },
 
@@ -82,6 +83,8 @@ $(async function()
         this.modelName = model.name;
         if (model.thumbnail)
           await imagePreviewer.loadPreview(model.thumbnail);
+        else
+          imagePreviewer.clearPreview();
         $('#pageAlert').hide();
         $('#modelDialog').modal('show');
       },

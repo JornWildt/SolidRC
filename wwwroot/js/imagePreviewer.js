@@ -20,7 +20,7 @@ class ImagePreviewer
 
       // Create a complete new canvas to avoid problems with the existing canvas being "tainted" by previews.
       $('#' + this.imgCanvasId).replaceWith('<canvas id="modelImageCanvas" width="100" height="100">Your browser does not support this.</canvas>');
-      
+
       let imgCanvas = document.getElementById(this.imgCanvasId);
       let imagePath = URL.createObjectURL(image);  
       let imgHtml = document.getElementById(this.imgElementId);
@@ -43,9 +43,7 @@ class ImagePreviewer
     }
     else
     {
-      let imgCanvas = document.getElementById(this.imgCanvasId);
-      let ctx = imgCanvas.getContext('2d');
-      ctx.clearRect(0, 0, imgCanvas.width, imgCanvas.height);
+      clearPreview();
     }
   }
 
@@ -82,5 +80,13 @@ class ImagePreviewer
       }
       img.src = url; 
     });
+  }
+
+
+  clearPreview()
+  {
+    let imgCanvas = document.getElementById(this.imgCanvasId);
+    let ctx = imgCanvas.getContext('2d');
+    ctx.clearRect(0, 0, imgCanvas.width, imgCanvas.height);
   }
 }
