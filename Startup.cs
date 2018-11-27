@@ -31,6 +31,7 @@ namespace SolidRC
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
+            services.AddHttpsRedirection(options => {});
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }

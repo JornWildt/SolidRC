@@ -12,6 +12,7 @@ class LocationRepository extends ORDFMapper
   async initialize()
   {
     // Assign RDF type for objects managed by this repository
+    this.setObjectType(NS_SOLIDRC('Location'));
     this.setObjectType(NS_SCHEMA('Place'));
 
     // Map RDF predicate/objects into simple javascript key/values.
