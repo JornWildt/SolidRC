@@ -12,7 +12,8 @@ class ModelRepository extends ORDFMapper
   async initialize()
   {
     // Assign RDF type for objects managed by this repository
-    this.setObjectType(NS_SOLIDRC('model'));
+    this.setObjectType(NS_SOLIDRC('Model'));
+    this.setObjectType(NS_SCHEMA('Thing'));
 
     // Map statement predicate/objects into simple javascript key/values.
     this.addMapping(NS_SCHEMA('dateCreated'), 'created', PropertyType.Raw, false);
@@ -40,7 +41,7 @@ class ModelRepository extends ORDFMapper
   async getModels()
   {    
     // Find the subjects of all models (from statements having type = 'model')
-    let models = this.store.match(null, NS_RDF('type'), NS_SOLIDRC('model'));
+    let models = this.store.match(null, NS_RDF('type'), NS_SOLIDRC('Model'));
 
     // Build a list of all models by fetching the model data from the model's URL (subject)
     let result = await Promise.all(models.map(m => this.readModelFromUrl(m.subject).catch(err => console.warn(err))));

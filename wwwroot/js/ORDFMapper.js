@@ -28,12 +28,13 @@ class ORDFMapper
     this.linkedPredicateToPropertyMapping = {};
     this.linkedPropertyToPredicateMapping = {};
     this.idProperty = 'id';
+    this.objectTypes = [];
   }
 
 
   setObjectType(objectType)
   {
-    this.objectType = objectType;
+    this.objectTypes.push(objectType);
   }
 
 
@@ -136,8 +137,9 @@ class ORDFMapper
 
   storeObject(url, obj)
   {
-    // Make sure there is a "type" statement (which is not a natural part of the user facing object)
-    this.store.add(url, NS_RDF('type'), this.objectType, url);
+    // Make sure there is one or more "type" statements (which is not a natural part of the user facing object)
+    this.objectTypes.forEach(t =>
+      this.store.add(url, NS_RDF('type'), t, url));
 
     // Use supplied mapping to copy the properties into the RDF store
     let statements = this.copyPropertiesIntoStatements(url, obj, 'insert');

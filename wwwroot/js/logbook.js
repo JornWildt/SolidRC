@@ -84,8 +84,8 @@ $(async function()
         this.formState = 'add';
         this.currentEntry = null;
         this.selectedDate = new moment().format('YYYY-MM-DD');
-        this.selectedModel =  this.models[0].id;
-        this.selectedLocation = this.locations[0].id;
+        this.selectedModel =  this.models.length > 0 ? this.models[0].id : null;
+        this.selectedLocation = this.locations.length > 0 ? this.locations[0].id : null;
         this.selectedDuration = "";
         this.selectedComment = "";
         this.showSelectedModel();
