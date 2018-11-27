@@ -11,7 +11,7 @@ class LogbookRepository extends ORDFMapper
   
   async initialize()
   {
-    // Assign RDF type for objects managed by this repository
+    // Assign RDF type(s) for objects managed by this repository
     this.setObjectType(NS_SOLIDRC('Logentry'));
     this.setObjectType(NS_SCHEMA('Event'));
 
