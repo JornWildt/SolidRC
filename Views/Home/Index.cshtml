@@ -10,8 +10,13 @@
 <h1>Logbook</h1>
 
 <div id="logbook">
-  <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with buttons">
-    <button type="button" class="btn btn-primary" v-on:click="editNewEntry()">Add new entry</button>
+  <div v-if="canAddEntry" v-cloak>
+    <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with buttons">
+      <button type="button" class="btn btn-primary" v-on:click="editNewEntry()">Add new entry</button>
+    </div>
+  </div>
+  <div v-if="!canAddEntry" class="alert alert-info" role="alert" v-cloak>
+    <p>Please add at least one model and one location before registering an activity.</p>
   </div>
 
   <data-load v-bind:loading="loading">

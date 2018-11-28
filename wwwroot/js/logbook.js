@@ -21,6 +21,7 @@ $(async function()
       currentEntry: null,
       models: [],
       locations: [],
+      canAddEntry: true,
       selectedModel: null,
       selectedDate: new moment().format('YYYY-MM-DD'),
       selectedLocation: "",
@@ -53,6 +54,9 @@ $(async function()
       // Wait for the previous operations to complete in parallel
       await Promise.all([mp,lp,rp]);
 
+      if (this.models.length == 0 || this.locations.length == 0)
+        this.canAddEntry = false;
+        
       // Touch all vuelidation inputs to trigger validation (and disabling the "Add" button before everything is valid)
       this.$v.$touch();
 
