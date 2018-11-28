@@ -46,14 +46,6 @@
               <label for="locationName">Name</label>
               <input v-model="$v.locationName.$model" :class="validationStatus($v.locationName)" id="locationName">
             </div>
-            <div class="form-check">
-              <input type="checkbox" id="useExternalUrl" class="form-check-input" v-model="useExternalUrl">
-              <label for="useExternalUrl">Use external location</label>
-            </div>
-            <div class="form-group" v-if="useExternalUrl">
-              <label for="externalUrl">External URL</label>
-              <input v-model="$v.externalUrl.$model" :class="validationStatus($v.externalUrl)" id="externalUrl">
-            </div>
           </form>
         </div>
 

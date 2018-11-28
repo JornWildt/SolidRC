@@ -14,8 +14,6 @@ $(async function()
       processing: false,
       currentLocation: null,
       locationName: "",
-      useExternalUrl: false,
-      externalUrl: "",
       locations: []
     },
     async mounted() {
@@ -31,9 +29,6 @@ $(async function()
     validations: {
       locationName: {
         required: validators.required
-      },
-      externalUrl: {
-        url: validators.url
       }
     },
     methods: $.extend({}, ViewModelBase, 
@@ -44,8 +39,6 @@ $(async function()
         this.formState = 'add';
         this.currentLocation = null;
         this.locationName = '';
-        this.useExternalUrl = false;
-        this.externalUrl = null;
         $('#locationDialog').modal('show');
       },
 
@@ -57,7 +50,6 @@ $(async function()
           await locationRepo.addLocation(
             {
               name: this.locationName,
-              externalUrl : (this.useExternalUrl ? this.externalUrl : null)
             });
 
           await this.refresh();
@@ -73,8 +65,6 @@ $(async function()
         this.formTitle = "Edit location";
         this.formState = 'edit';
         this.locationName = location.name;
-        this.useExternalUrl = location.useExternalUrl;
-        this.externalUrl = location.externalUrl;
         $('#locationDialog').modal('show');
       },
 
@@ -84,8 +74,6 @@ $(async function()
         {
           this.processing = true;
           this.currentLocation.name = this.locationName;
-          this.currentLocation.externalUrl = this.externalUrl;
-          this.currentLocation.useExternalUrl = this.useExternalUrl ? true : false; // Convert to real bool
           await locationRepo.updateLocation(this.currentLocation);
           await this.refresh();
           $('#locationDialog').modal('hide');

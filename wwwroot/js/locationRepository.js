@@ -22,8 +22,6 @@ class LocationRepository extends ORDFMapper
     this.addMapping(NS_SCHEMA('dateCreated'), 'created', PropertyType.Raw, false);
     this.addMapping(NS_SCHEMA('author'), 'creator', PropertyType.Uri, false);
     this.addMapping(NS_SCHEMA('name'), 'name', PropertyType.Raw, true);
-    this.addMapping(NS_SOLIDRC('useExternalUrl'), 'useExternalUrl', PropertyType.Raw, true);
-    this.addMapping(NS_SCHEMA('sameAs'), 'externalUrl', PropertyType.Uri, true);
 
     await this.profileService.initialize();
 
@@ -60,12 +58,6 @@ class LocationRepository extends ORDFMapper
   {
     var location = await this.readObject(url);
     location.url = url; 
-
-    // location.url could also be the externalUrl, if it exists, but then we have a runtime dependency on that.
-    // - so currently we always use the "local" URL and only remember the external URL for later reference.
-    //  (location.externalUrl ? location.externalUrl : url);
-
-    location.useExternalUrl = ((location.useExternalUrl == '0' || !location.useExternalUrl) ? false : true);
 
     return location;
   }
