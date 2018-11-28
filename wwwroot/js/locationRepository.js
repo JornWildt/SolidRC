@@ -24,8 +24,8 @@ class LocationRepository extends ORDFMapper
 
     await this.profileService.initialize();
 
-    this.containerUrl = this.profileService.rcStorageRoot + "locations/*";
-    this.locationUrl = this.profileService.rcStorageRoot + "locations/";
+    this.containerUrl = this.profileService.storage + "places/hobby/*";
+    this.locationUrl = this.profileService.storage + "places/hobby";
 
     // Load *all* the locations into the store
     return this.loadAllContainerItems(this.containerUrl);

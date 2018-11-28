@@ -2,5 +2,6 @@
   "files.exclude": {
     "/wwwroot/lib": true
   },
-  "appService.deploySubpath": "bin\\Debug\\netcoreapp2.1\\publish"
+  "appService.deploySubpath": "bin\\Debug\\netcoreapp2.1\\publish",
+  "appService.defaultWebAppToDeploy": "/subscriptions/7bb7d180-b510-49ea-8673-4bd74ce37bea/resourceGroups/solidrc/providers/Microsoft.Web/sites/solidrc"
 }

@@ -24,9 +24,9 @@ class ModelRepository extends ORDFMapper
 
     await this.profileService.initialize();
 
-    this.containerUrl = this.profileService.rcStorageRoot + "models/*";
-    this.modelUrl = this.profileService.rcStorageRoot + "models/";
-    this.imageUrl = this.profileService.rcStorageRoot + "images/";
+    this.containerUrl = this.profileService.storage + "rc-models/*";
+    this.modelUrl = this.profileService.storage + "rc-models/";
+    this.imageUrl = this.profileService.storage + "photos/rc-models";
 
     this.imageRepo = new ImageRepository(this.imageUrl);
 

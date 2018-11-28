@@ -30,8 +30,8 @@ class LogbookRepository extends ORDFMapper
     
     await this.profileService.initialize();
 
-    this.containerUrl = this.profileService.rcStorageRoot + "logbook/*";
-    this.entryUrl = this.profileService.rcStorageRoot + "logbook/";
+    this.containerUrl = this.profileService.rcStorageRoot + "rc-logbook/*";
+    this.entryUrl = this.profileService.rcStorageRoot + "rc-logbook/";
 
     // Load *all* the logbook entries into the store
     return this.fetcher.load(this.containerUrl).catch(err => console.debug(err));
