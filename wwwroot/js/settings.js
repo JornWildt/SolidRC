@@ -3,6 +3,7 @@ $(async function()
   var locationsApp = new Vue({
     el: '#settingsApp',
     data: {
+      loading: true,
       webId: "",
       logbookStorage: "",
       modelStorage: "",
@@ -18,6 +19,7 @@ $(async function()
       this.modelStorage = this.profileService.profile.storage + ModelStoragePath;
       this.modelImageStorage = this.profileService.profile.storage + ModelImageStoragePath;
       this.locationStorage = this.profileService.profile.storage + LocationStoragePath;
+      this.loading = false;
     },
     methods: $.extend({}, ViewModelBase, 
     {
