@@ -200,11 +200,18 @@ class ORDFMapper
   async deleteObject(url)
   {
     console.debug("Delete object: " + url);
+    DebugJson(this.store.match(this.store.sym(url), null, null, null));
     // Catch errors to make sure we continue deleting all items (no transactional guarantees here!)
     await this.fetcher.delete(url).catch(ex => console.debug(ex) );
     console.debug("Done delete object: " + url);
+    
     this.store.removeMatches(this.store.sym(url));
+    //console.debug("Removed matches: " + url);
+    //DebugJson(this.store.match(this.store.sym(url), null, null, null));
+
     this.store.removeDocument(this.store.sym(url));
+    //console.debug("Removed document: " + url);
+    //DebugJson(this.store.match(this.store.sym(url), null, null, null));
   }
 
 
