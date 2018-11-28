@@ -5,6 +5,12 @@
     padding-right: 15px;
 }
 
+#login-container, 
+#logout-container
+{
+  display: none;   
+}
+
 [v-cloak]
 { 
   display: none; 

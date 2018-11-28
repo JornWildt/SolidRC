@@ -1,17 +1,23 @@
 $(async function()
 {
-  let profileService = new ProfileService();
-  await profileService.initialize();
-
   var locationsApp = new Vue({
     el: '#settingsApp',
     data: {
-      webId: "X",
-      dataLocation: "Y"
+      webId: "",
+      logbookStorage: "",
+      modelStorage: "",
+      modelImageStorage: "",
+      locationStorage: ""
     },
     async mounted() {
-      this.webId = profileService.profile.webId;
-      this.dataLocation = profileService.rcStorageRoot;
+      this.profileService = new ProfileService();
+      await this.profileService.initialize();
+    
+      this.webId = this.profileService.profile.webId;
+      this.logbookStorage = this.profileService.profile.storage + LogbookStoragePath;
+      this.modelStorage = this.profileService.profile.storage + ModelStoragePath;
+      this.modelImageStorage = this.profileService.profile.storage + ModelImageStoragePath;
+      this.locationStorage = this.profileService.profile.storage + LocationStoragePath;
     },
     methods: $.extend({}, ViewModelBase, 
     {

@@ -1,3 +1,6 @@
+const LocationStoragePath = "places/hobby";
+
+
 /** Locations repository with CRUD methods for locations.
  */
 class LocationRepository extends ORDFMapper
@@ -24,8 +27,8 @@ class LocationRepository extends ORDFMapper
 
     await this.profileService.initialize();
 
-    this.containerUrl = this.profileService.profile.storage + "places/hobby/*";
-    this.locationUrl = this.profileService.profile.storage + "places/hobby/";
+    this.containerUrl = this.profileService.profile.storage + LocationStoragePath + "*";
+    this.locationUrl = this.profileService.profile.storage + LocationStoragePath;
 
     // Load *all* the locations into the store
     return this.loadAllContainerItems(this.containerUrl);

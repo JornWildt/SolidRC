@@ -28,8 +28,6 @@ class ProfileService extends ORDFMapper
     this.profile = await this.readProfile();
     this.profile.webId = session.webId;
 
-    this.rcStorageRoot = this.profile.storage + solidRcRootContainerPath;
-
     /* NOT USED SO FAR
     
     if (this.profile.preferencesFile)

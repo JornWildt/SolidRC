@@ -1,3 +1,5 @@
+const LogbookStoragePath = "rc-logbook/";
+
 /** Logbook repository with CRUD methods for logbook entries.
  */
 class LogbookRepository extends ORDFMapper
@@ -30,8 +32,8 @@ class LogbookRepository extends ORDFMapper
     
     await this.profileService.initialize();
 
-    this.containerUrl = this.profileService.profile.storage + "rc-logbook/*";
-    this.entryUrl = this.profileService.profile.storage + "rc-logbook/";
+    this.containerUrl = this.profileService.profile.storage + LogbookStoragePath + "*";
+    this.entryUrl = this.profileService.profile.storage + LogbookStoragePath;
 
     // Load *all* the logbook entries into the store
     return this.fetcher.load(this.containerUrl).catch(err => console.debug(err));

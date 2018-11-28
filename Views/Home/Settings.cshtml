@@ -20,11 +20,38 @@
       </div>
     </div>
     <div class="form-group">
-      <label for="dataLocation">Solid-RC data location</label>
+      <label for="logbookStorage">Data location for logbook</label>
       <div class="input-group">
-        <input v-model="dataLocation" id="dataLocation" class="form-control" readonly>
+        <input v-model="logbookStorage" id="logbookStorage" class="form-control" readonly>
         <div class="input-group-text">
-          <a :href="dataLocation"><img src="~/open-iconic/svg/external-link.svg" alt="Open POD data" title="Open POD data"></a>
+          <a :href="logbookStorage"><img src="~/open-iconic/svg/external-link.svg" alt="Open POD data" title="Open POD data"></a>
+        </div>
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="modelStorage">Data location for models</label>
+      <div class="input-group">
+        <input v-model="modelStorage" id="modelStorage" class="form-control" readonly>
+        <div class="input-group-text">
+          <a :href="modelStorage"><img src="~/open-iconic/svg/external-link.svg" alt="Open POD data" title="Open POD data"></a>
+        </div>
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="modelImageStorage">Data location for model images</label>
+      <div class="input-group">
+        <input v-model="modelImageStorage" id="modelImageStorage" class="form-control" readonly>
+        <div class="input-group-text">
+          <a :href="modelImageStorage"><img src="~/open-iconic/svg/external-link.svg" alt="Open POD data" title="Open POD data"></a>
+        </div>
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="locationStorage">Data location for locations</label>
+      <div class="input-group">
+        <input v-model="locationStorage" id="locationStorage" class="form-control" readonly>
+        <div class="input-group-text">
+          <a :href="locationStorage"><img src="~/open-iconic/svg/external-link.svg" alt="Open POD data" title="Open POD data"></a>
         </div>
       </div>
     </div>
@@ -35,4 +62,7 @@
 @section Scripts
 {
   <script src="~/js/settings.js" asp-append-version="true"></script>
+  <script src="~/js/locationRepository.js" asp-append-version="true"></script>
+  <script src="~/js/modelRepository.js" asp-append-version="true"></script>
+  <script src="~/js/logbookRepository.js" asp-append-version="true"></script>
 }
