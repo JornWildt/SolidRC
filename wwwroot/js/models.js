@@ -10,9 +10,9 @@ $(async function()
   var modelsApp = new Vue({
     el: '#modelsApp',
     data: {
+      loading: true,
       formState: 'add',
       formTitle: "",
-      loading: true,
       currentModel: null,
       modelName: "",
       hasModifiedPhoto: false,

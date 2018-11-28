@@ -58,9 +58,8 @@
         </div>
 
         <div class="modal-footer">
-          <!-- [{{formState}}] -->
-          <button v-if="formState=='add'" type="button" class="btn btn-primary" v-on:click="addLocation()" id="buttonAdd">Add</button>
-          <button v-if="formState=='edit'"type="button" class="btn btn-primary" v-on:click="saveLocation()" id="buttonSave">Save</button>
+          <button-processing v-if="formState=='add'" cc="btn btn-primary" v-on:click="addLocation" id="buttonAdd" :processing="processing">Add</button-processing>
+          <button-processing v-if="formState=='edit'" cc="btn btn-primary" v-on:click="saveLocation" id="buttonSave" :processing="processing">Save</button-processing>
           <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
         </div>
       </div>

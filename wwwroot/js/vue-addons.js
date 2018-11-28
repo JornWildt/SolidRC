@@ -1,5 +1,13 @@
 // Components
 
+Vue.component('button-processing', {
+  props: ['cc', 'click', 'id', 'content', 'processing'],
+  template: `<button type="button" :class="cc" v-on:click="$emit('click')" id="id">
+  <slot v-if="!processing"></slot>
+  <span v-if="processing">Saving ...</span>
+  </button>`
+});
+
 Vue.component('share-data', {
   props: ['url'],
   template: `<a class="share" :href="url" target="_new">

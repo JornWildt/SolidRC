@@ -28,24 +28,6 @@ $(function ($) {
   
   
   $('[data-toggle="tooltip"]').tooltip()
-
-  $.fn.buttonProcessing = function(active)
-  {
-    console.debug("Process: " + active + " (" + this.prop('id') + ")");
-    if (active)
-    {
-      if (!this.data('normalText')) {
-        this.data('normalText', this.html());
-      }
-      this.prop('disabled', true);
-      this.html(this.data('processingText') || "Saving ...");
-    }
-    else
-    {
-      this.prop('disabled', false);
-      this.html(this.data('normalText'));
-    }
-  }
 })
 
 

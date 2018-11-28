@@ -14,10 +14,11 @@ $(async function()
   var logbookApp = new Vue({
     el: '#logbook',
     data: {
+      loading: true,
       formTitle: null,
       formState: null,
+      processing: false,
       currentEntry: null,
-      loading: true,
       models: [],
       locations: [],
       selectedModel: null,
@@ -96,7 +97,7 @@ $(async function()
       {
         if (!this.$v.$invalid)
         {
-          $('#buttonAdd').buttonProcessing(true);
+          this.processing = true;
           await logRepo.addEntry(
             {
               date: this.selectedDate, 
@@ -108,7 +109,7 @@ $(async function()
 
           await this.refresh();
 
-          $('#buttonAdd').buttonProcessing(false);
+          this.processing = false;
           $('#entryDialog').modal('hide');
         }
       },
@@ -132,8 +133,7 @@ $(async function()
       {
         if (!this.$v.$invalid)
         {
-          $('#buttonSave').buttonProcessing(true);
-
+          this.processing = true;
           this.currentEntry.date = this.selectedDate;
           this.currentEntry.model = this.selectedModel;
           this.currentEntry.location = this.selectedLocation;
@@ -142,7 +142,7 @@ $(async function()
           await logRepo.updateEntry(this.currentEntry);
           await this.refresh();
           $('#entryDialog').modal('hide');
-          $('#buttonSave').buttonProcessing(false);
+          this.processing = false;
         }
       },
 

@@ -8,9 +8,10 @@ $(async function()
   var locationsApp = new Vue({
     el: '#locationsApp',
     data: {
+      loading: true,
       formState: 'add',
       formTitle: "",
-      loading: true,
+      processing: false,
       currentLocation: null,
       locationName: "",
       useExternalUrl: false,
@@ -52,8 +53,8 @@ $(async function()
       {
         if (!this.$v.$invalid)
         {
-          $('#buttonAdd').buttonProcessing(true);
-          locationRepo.addLocation(
+          this.processing = true;
+          await locationRepo.addLocation(
             {
               name: this.locationName,
               externalUrl : (this.useExternalUrl ? this.externalUrl : null)
@@ -62,7 +63,7 @@ $(async function()
           await this.refresh();
 
           $('#locationDialog').modal('hide');
-          $('#buttonAdd').buttonProcessing(false);
+          this.processing = false;
         }
       },
 
@@ -81,14 +82,14 @@ $(async function()
       {
         if (!this.$v.$invalid)
         {
-          $('#buttonSave').buttonProcessing(true);
+          this.processing = true;
           this.currentLocation.name = this.locationName;
           this.currentLocation.externalUrl = this.externalUrl;
           this.currentLocation.useExternalUrl = this.useExternalUrl ? true : false; // Convert to real bool
           await locationRepo.updateLocation(this.currentLocation);
           await this.refresh();
           $('#locationDialog').modal('hide');
-          $('#buttonSave').buttonProcessing(false);
+          this.processing = false;
         }
       },
 
