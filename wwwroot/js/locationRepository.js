@@ -1,4 +1,4 @@
-const LocationStoragePath = "places/hobby";
+const LocationStoragePath = "places/hobby/";
 
 
 /** Locations repository with CRUD methods for locations.
