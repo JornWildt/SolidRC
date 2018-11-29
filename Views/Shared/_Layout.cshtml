@@ -14,12 +14,13 @@
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
   </environment>
 
-  @RenderSection("Styles", required: false)
-
   <script>
     var loginRedirectUrl = "@Url.Action("login", "home", null, Context.Request.Scheme)";
     var homeRedirectUrl = "@Url.Action("index", "home", null, Context.Request.Scheme)";
+    var doRedirectAnonymous = true;
   </script>
+
+  @RenderSection("Head", required: false)
 </head>
 
 <body>
@@ -73,7 +74,6 @@
      <script src="~/js/profileService.js" asp-append-version="true"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
   </environment>
-
 
   @RenderSection("Scripts", required: false)
 </body>

@@ -1,8 +1,14 @@
 ﻿@{
-    ViewData["Title"] = "Privacy Policy";
+    ViewData["Title"] = "Privacy";
 }
 <h1>@ViewData["Title"]</h1>
 
 <p>Solid-RC does not collect any kinds of personal data. Content you add through the Solid-RC application
     is stored in your own Solid POD and is thus under your own control.</p>
 
+@section Head
+{
+<script>
+  doRedirectAnonymous = false;
+</script>
+}

@@ -14,7 +14,7 @@ $(function ($) {
   
   solid.auth.trackSession(session => {    
       const loggedIn = !!session;
-      if (!loggedIn && window.location != loginRedirectUrl)
+      if (!loggedIn && doRedirectAnonymous)
         window.location.replace(loginRedirectUrl);
       $('#login-container').toggle(!loggedIn);
       $('#logout-container').toggle(loggedIn);
