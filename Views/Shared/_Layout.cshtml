@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>@ViewData["Title"] - SolidRC</title>
+  <title>@ViewData["Title"] - Solid-RC</title>
 
   <environment include="Development">
     <link rel="stylesheet" href="~/lib/bootstrap/css/bootstrap.css" />
@@ -32,7 +32,11 @@
 
       <hr />
       <footer>
-          <p>&copy; 2018 - SolidRC</p>
+          <div>&copy; 2018 - Solid-RC
+            | @Html.ActionLink("About", "about", "home")
+            | @Html.ActionLink("Privacy", "privacy", "home")
+            | @Html.ActionLink("Contact", "contact", "home")
+          </div>
       </footer>
   </div>
 
