@@ -43,7 +43,7 @@ class LogbookRepository extends ORDFMapper
   /**
    * Get a list of all logbook entries as simple javascript objects.
    */
-  async getEntries()
+  async getEntries(start, count)
   {    
     // Find the subjects of all logbook entries (from statements having type = 'logentry')
     let entries = this.store.match(null, NS_RDF('type'), NS_SOLIDRC('Logentry'));
@@ -51,7 +51,11 @@ class LogbookRepository extends ORDFMapper
     // Build a list of all logbook entries by fetching the logbook entry data from each entry URL (subject).
     let result = Promise.all(entries.map(e => this.readEntryFromUrl(e.subject).catch(err => console.warn(err))));
 
-    return result; 
+    // Make sure we always get a consistent sort order
+    result = await result;
+    result.sort((a,b) => (a.date < b.date ? -1 : 1));
+
+    return result.slice(start, start+count); 
   }
 
 

@@ -56,7 +56,7 @@ $(async function()
 
       if (this.models.length == 0 || this.locations.length == 0)
         this.canAddEntry = false;
-        
+
       // Touch all vuelidation inputs to trigger validation (and disabling the "Add" button before everything is valid)
       this.$v.$touch();
 
@@ -161,7 +161,7 @@ $(async function()
 
       refresh : async function()
       {
-        let entries = await logRepo.getEntries();
+        let entries = await logRepo.getEntries(0, 3);
         this.logEntries = entries;
       },
 
