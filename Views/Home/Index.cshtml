@@ -45,16 +45,22 @@
         </tbody>
       </table>
 
-      <nav aria-label="Search result pages">
-        <ul class="pagination">
-          <li class="page-item"><a class="page-link" href="#">Previous</a></li>
-          <li class="page-item"><a class="page-link" href="#">1</a></li>
-          <li class="page-item"><a class="page-link" href="#">2</a></li>
-          <li class="page-item"><a class="page-link" href="#">3</a></li>
-          <li class="page-item"><a class="page-link" href="#">Next</a></li>
+      <nav v-if="showLogPager" aria-label="Search result pages">
+        <ul class="pagination pagination-sm">
+          <li :class="{'page-item': true, disabled: !logPagesHasPrev}">
+            <a v-if="logPagesHasPrev" class="page-link" href="#" v-on:click="previousPage()">Previous</a>
+            <span v-if="!logPagesHasPrev" class="page-link">Previous</span>
+          </li>
+          <li v-bind:class="{'page-item': true, active: page.isCurrent }" v-for="page in logPages" v-bind:page="page" v-bind:key="page.index">
+            <a class="page-link" href="#" v-on:click="gotoPage(page.index)">{{page.index}}</a>
+          </li>
+          <li :class="{'page-item': true, disabled: !logPagesHasNext}">
+            <a v-if="logPagesHasNext" class="page-link" href="#" v-on:click="nextPage()">Next</a>
+            <span v-if="!logPagesHasNext" class="page-link">Next</span>
+          </li>
         </ul>
       </nav> 
-    </div>   
+    </div>
   </data-load>
 
   <div class="modal fade" data-show="false" id="entryDialog" tabindex="-1" role="dialog" aria-labelledby="entryDialogLabel" aria-hidden="true">

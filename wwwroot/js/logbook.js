@@ -27,7 +27,13 @@ $(async function()
       selectedLocation: "",
       selectedDuration: "",
       selectedComment: "",
-      logEntries: []
+      showLogPager: false,
+      logEntries: [],
+      logCurrentPageIndex: 0,
+      logPageCount: 0,
+      logPages: null,
+      logPagesHasPrev: false,
+      logPagesHasNext: false
     },
     async mounted() {
       // Get the list of models for the "Models" dropdown box
@@ -161,8 +167,47 @@ $(async function()
 
       refresh : async function()
       {
-        let entries = await logRepo.getEntries(0, 3);
-        this.logEntries = entries;
+        const pageSize = 3;
+        const start = this.logCurrentPageIndex * pageSize;
+        let entries = await logRepo.getEntries(start, pageSize);
+        this.logEntries = entries.entries;
+        this.logPageCount = Math.ceil(entries.total / pageSize);
+        this.logPages = [];
+        this.showLogPager = (this.logPageCount > 1);
+        
+        if (this.logCurrentPageIndex < 0)
+          this.logCurrentPageIndex = 0;
+        else if (this.logCurrentPageIndex >= this.logPageCount)
+          this.logCurrentPageIndex = this.logPageCount-1;
+
+        this.logPagesHasPrev = (this.logCurrentPageIndex > 0);
+        this.logPagesHasNext = (this.logCurrentPageIndex < this.logPageCount-1);
+
+        for (var i=0; i<this.logPageCount; ++i)
+        {
+          this.logPages.push({
+            index: i+1,
+            isCurrent: (i == this.logCurrentPageIndex)
+          });
+        }
+      },
+
+      previousPage : function()
+      {
+        this.logCurrentPageIndex -= 1;
+        this.refresh();
+      },
+
+      nextPage : function()
+      {
+        this.logCurrentPageIndex += 1;
+        this.refresh();
+      },
+
+      gotoPage : function(page)
+      {
+        this.logCurrentPageIndex = page-1;
+        this.refresh();
       },
 
       handleModelChanged : function()
