@@ -101,8 +101,7 @@ class LogbookRepository extends ORDFMapper
     // Make properties strongly typed for RDFLIB and add extra statements
     entry.date = new moment(entry.date, 'YYYY-MM-DD').toDate();
     entry.created = new Date();
-    // FIXME: read from current login
-    entry.creator = 'https://elfisk.solid.community/profile/card#me';
+    location.creator = this.profileService.profile.webId;
 
     this.storeObject(entryUrl, entry);
   }
