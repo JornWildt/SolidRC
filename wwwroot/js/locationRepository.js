@@ -1,6 +1,3 @@
-const LocationStoragePath = "user/rc-data/places/";
-
-
 /** Locations repository with CRUD methods for locations.
  */
 class LocationRepository extends ORDFMapper
@@ -24,9 +21,10 @@ class LocationRepository extends ORDFMapper
     this.addMapping(NS_SCHEMA('name'), 'name', PropertyType.Raw, true);
 
     await this.profileService.initialize();
-
-    this.containerUrl = this.profileService.profile.storage + LocationStoragePath + "*";
-    this.locationUrl = this.profileService.profile.storage + LocationStoragePath;
+    
+    let dataUrl = await this.profileService.getLocationForType(NS_SOLIDRC('data', 'user/rc-data/'));
+    this.containerUrl = dataUrl + "locations/*";
+    this.locationUrl = dataUrl + "locations/";
 
     // Load *all* the locations into the store
     return this.loadAllContainerItems(this.containerUrl);

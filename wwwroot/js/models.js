@@ -99,8 +99,8 @@ $(async function()
           this.currentModel.imageFile = $('#modelImage')[0].files[0];
           this.currentModel.thumbnailFile = (this.currentModel.imageFile ? await imagePreviewer.createPreviewFile("thumbnail.png") : null);
 
-          console.debug(this.currentModel.image);
-          console.debug(this.currentModel.thumbnail);
+          // console.debug(this.currentModel.image);
+          // console.debug(this.currentModel.thumbnail);
 
           await modelRepo.updateModel(this.currentModel);
           await this.refresh();

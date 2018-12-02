@@ -126,7 +126,6 @@ $(async function()
 
       editEntry : function(entry)
       {
-        DebugJson(entry);
         this.currentEntry = entry;
         this.formTitle = "Edit entry";
         this.formState = 'edit';

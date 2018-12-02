@@ -1,7 +1,3 @@
-const ModelStoragePath = "user/rc-data/models/";
-const ModelImageStoragePath = "user/rc-data/photos/";
-
-
 /** Models repository with CRUD methods for models.
  */
 class ModelRepository extends ORDFMapper
@@ -28,9 +24,10 @@ class ModelRepository extends ORDFMapper
 
     await this.profileService.initialize();
 
-    this.containerUrl = this.profileService.profile.storage + ModelStoragePath + "*";
-    this.modelUrl = this.profileService.profile.storage + ModelStoragePath;
-    this.imageUrl = this.profileService.profile.storage + ModelImageStoragePath;
+    let dataUrl = await this.profileService.getLocationForType(NS_SOLIDRC('data', 'user/rc-data/'));
+    this.containerUrl = dataUrl + "models/*";
+    this.modelUrl = dataUrl + "models/";
+    this.imageUrl = dataUrl + "photos/";
 
     this.imageRepo = new ImageRepository(this.imageUrl);
 

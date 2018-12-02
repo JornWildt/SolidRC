@@ -48,7 +48,7 @@ function countCharacter(str, char)
   return count;
 }
 
-function DebugJson(x)
+function debugJson(x)
 {
   console.debug(JSON.stringify(x,null,2));
 }
