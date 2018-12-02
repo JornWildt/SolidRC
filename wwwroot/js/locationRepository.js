@@ -76,8 +76,7 @@ class LocationRepository extends ORDFMapper
 
     // Make properties strongly typed for RDFLIB and add extra statements
     location.created = new Date();
-    // FIXME: read from current login
-    location.creator = 'https://elfisk.solid.community/profile/card#me';
+    location.creator = this.profileService.profile.webId;
 
     this.storeObject(locationUrl, location);
   }
@@ -107,5 +106,3 @@ class LocationRepository extends ORDFMapper
   }
 }
 
-
-LocationRepository.LocationsUrl = 'https://elfisk.solid.community/public/solidrc/locations/*';

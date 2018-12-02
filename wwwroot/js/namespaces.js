@@ -7,4 +7,4 @@ var NS_OWL = $rdf.Namespace('http://www.w3.org/2002/07/owl#');
 var NS_LDP = $rdf.Namespace('http://www.w3.org/ns/ldp#');
 var NS_SCHEMA = $rdf.Namespace('https://schema.org/');
 
-var NS_SOLIDRC = $rdf.Namespace('http://elfisk.dk/ns/solidrc#');
+var NS_SOLIDRC = $rdf.Namespace('http://solid-rc.net/ns/solidrc#');

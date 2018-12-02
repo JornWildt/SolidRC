@@ -82,8 +82,7 @@ class ModelRepository extends ORDFMapper
 
     // Make properties strongly typed for RDFLIB and add extra statements
     model.created = new Date();
-    // FIXME: read from current login
-    model.creator = 'https://elfisk.solid.community/profile/card#me';
+    location.creator = this.profileService.profile.webId;
 
     return this.storeObject(modelUrl, model).catch(err => console.warn(err));
   }
