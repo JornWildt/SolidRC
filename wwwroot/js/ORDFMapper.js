@@ -200,7 +200,7 @@ class ORDFMapper
   async deleteObject(url)
   {
     console.debug("Delete object: " + url);
-    DebugJson(this.store.match(this.store.sym(url), null, null, null));
+    //DebugJson(this.store.match(this.store.sym(url), null, null, null));
     // Catch errors to make sure we continue deleting all items (no transactional guarantees here!)
     await this.fetcher.delete(url).catch(ex => console.debug(ex) );
     console.debug("Done delete object: " + url);
@@ -333,7 +333,7 @@ class ORDFMapper
 
   generateValidUrlName(name)
   {
-    return name.replace(/[^-\w0-9_]/g, 'x');
+    return name.replace(/ /g, '_').replace(/[^-\w0-9_]/g, 'x');
   }
 
 

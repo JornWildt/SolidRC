@@ -96,7 +96,7 @@ class LogbookRepository extends ORDFMapper
     let entryName = this.generateEntryName(entry.date);
 
     // Combine entryName with base URL to get complete URL for new entry
-    let entryUrl = this.store.sym(this.entryUrl + entryName);
+    let entryUrl = this.store.sym(this.entryUrl + entryName + ".ttl");
 
     // Make properties strongly typed for RDFLIB and add extra statements
     entry.date = new moment(entry.date, 'YYYY-MM-DD').toDate();

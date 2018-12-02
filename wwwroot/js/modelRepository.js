@@ -78,7 +78,7 @@ class ModelRepository extends ORDFMapper
     let modelName = this.generateModelName(model.name);
 
     // Combine modelName with base URL to get complete URL for new model
-    let modelUrl = this.store.sym(this.modelUrl + modelName);
+    let modelUrl = this.store.sym(this.modelUrl + modelName + ".ttl");
 
     // Make properties strongly typed for RDFLIB and add extra statements
     model.created = new Date();

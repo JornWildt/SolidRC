@@ -72,7 +72,7 @@ class LocationRepository extends ORDFMapper
     let locationName = this.generateLocationName(location.name);
 
     // Combine locationName with base URL to get complete URL for new location
-    let locationUrl = this.store.sym(this.locationUrl + locationName);
+    let locationUrl = this.store.sym(this.locationUrl + locationName + ".ttl");
 
     // Make properties strongly typed for RDFLIB and add extra statements
     location.created = new Date();
