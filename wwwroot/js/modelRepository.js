@@ -1,5 +1,5 @@
-const ModelStoragePath = "rc-models/";
-const ModelImageStoragePath = "photos/rc-models/";
+const ModelStoragePath = "user/rc-data/models/";
+const ModelImageStoragePath = "user/rc-data/photos/";
 
 
 /** Models repository with CRUD methods for models.

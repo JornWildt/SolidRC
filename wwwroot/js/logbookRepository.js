@@ -1,4 +1,4 @@
-const LogbookStoragePath = "rc-logbook/";
+const LogbookStoragePath = "user/rc-data/logbook/";
 
 /** Logbook repository with CRUD methods for logbook entries.
  */
