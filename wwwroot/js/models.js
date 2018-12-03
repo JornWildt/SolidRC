@@ -3,7 +3,7 @@ Vue.use(vuelidate.default);
 $(async function()
 {
   let modelRepo = new ModelRepository();
-  await modelRepo.initialize();
+  await modelRepo.initialize('all');
 
   let imagePreviewer = new ImagePreviewer('modelImageStore', 'modelImageCanvas');
 

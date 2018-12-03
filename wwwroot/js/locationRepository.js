@@ -9,7 +9,7 @@ class LocationRepository extends ORDFMapper
   }
 
   
-  async initialize()
+  async initialize(mode)
   {
     // Assign RDF type for objects managed by this repository
     this.setObjectType(NS_SOLIDRC('Location'));
@@ -27,7 +27,12 @@ class LocationRepository extends ORDFMapper
     this.locationUrl = dataUrl + "locations/";
 
     // Load *all* the locations into the store
-    return this.loadAllContainerItems(this.containerUrl);
+    if (mode == 'all')
+      return this.loadAllContainerItems(this.containerUrl);
+    else if (mode == 'none')
+      return null;
+    else
+      throw `Unknown initialization mode '${mode}' for location repository.`;
   }
 
 

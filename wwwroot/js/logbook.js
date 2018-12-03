@@ -6,10 +6,11 @@ $(async function()
   let modelRepo = new ModelRepository();
   let logRepo = new LogbookRepository();
 
-  let p1 = locationRepo.initialize();
-  let p2 = modelRepo.initialize();
-  let p3 = logRepo.initialize();
-  await Promise.all([p1,p2,p3]);
+  await Promise.all([
+    locationRepo.initialize('all').catch(err => console.warn(err)),
+    modelRepo.initialize('all').catch(err => console.warn(err)),
+    logRepo.initialize('all').catch(err => console.warn(err))
+  ]);
 
   var logbookApp = new Vue({
     el: '#logbook',

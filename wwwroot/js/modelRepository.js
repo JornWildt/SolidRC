@@ -9,7 +9,7 @@ class ModelRepository extends ORDFMapper
   }
 
   
-  async initialize()
+  async initialize(mode)
   {
     // Assign RDF type for objects managed by this repository
     this.setObjectType(NS_SOLIDRC('Model'));
@@ -32,7 +32,12 @@ class ModelRepository extends ORDFMapper
     this.imageRepo = new ImageRepository(this.imageUrl);
 
     // Load *all* the models into the store
-    return this.loadAllContainerItems(this.containerUrl);
+    if (mode == 'all')
+      return this.loadAllContainerItems(this.containerUrl);
+    else if (mode == 'none')
+      return null;
+    else
+      throw `Unknown initialization mode '${mode}' for model repository.`;
   }
 
 

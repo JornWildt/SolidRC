@@ -11,14 +11,23 @@ $(async function()
       locationStorage: ""
     },
     async mounted() {
-      this.profileService = new ProfileService();
-      await this.profileService.initialize();
+      let profileService = new ProfileService();
+      let locationRepo = new LocationRepository();
+      let modelRepo = new ModelRepository();
+      let logRepo = new LogbookRepository();
+
+      await Promise.all([
+        profileService.initialize('none').catch(err => console.warn(err)),
+        locationRepo.initialize('none').catch(err => console.warn(err)),
+        modelRepo.initialize('none').catch(err => console.warn(err)),
+        logRepo.initialize('none').catch(err => console.warn(err))
+      ]);
     
-      this.webId = this.profileService.profile.webId;
-      this.logbookStorage = this.profileService.profile.storage + LogbookStoragePath;
-      this.modelStorage = this.profileService.profile.storage + ModelStoragePath;
-      this.modelImageStorage = this.profileService.profile.storage + ModelImageStoragePath;
-      this.locationStorage = this.profileService.profile.storage + LocationStoragePath;
+      this.webId = profileService.profile.webId;
+      this.logbookStorage = logRepo.entryUrl;
+      this.modelStorage = modelRepo.modelUrl;
+      this.modelImageStorage = modelRepo.imageUrl;
+      this.locationStorage = locationRepo.locationUrl;
       this.loading = false;
     },
     methods: $.extend({}, ViewModelBase, 

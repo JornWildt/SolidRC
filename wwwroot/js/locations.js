@@ -3,7 +3,7 @@ Vue.use(vuelidate.default);
 $(async function()
 {
   let locationRepo = new LocationRepository();
-  await locationRepo.initialize();
+  await locationRepo.initialize('all');
 
   var locationsApp = new Vue({
     el: '#locationsApp',

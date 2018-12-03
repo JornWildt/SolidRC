@@ -9,7 +9,7 @@ class LogbookRepository extends ORDFMapper
   }
 
   
-  async initialize()
+  async initialize(mode)
   {
     // Assign RDF type(s) for objects managed by this repository
     this.setObjectType(NS_SOLIDRC('Logentry'));
@@ -35,7 +35,12 @@ class LogbookRepository extends ORDFMapper
     this.entryUrl = dataUrl + "logbook/";
 
     // Load *all* the logbook entries into the store
-    return this.fetcher.load(this.containerUrl).catch(err => console.debug(err));
+    if (mode == 'all')
+      return this.fetcher.load(this.containerUrl).catch(err => console.debug(err));
+    else if (mode == 'none')
+      return null;
+    else
+      throw `Unknown initialization mode '${mode}' for logbook repository.`;
   }
 
 
