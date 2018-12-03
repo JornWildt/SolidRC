@@ -21,8 +21,8 @@ class LocationRepository extends ORDFMapper
     this.addMapping(NS_SCHEMA('name'), 'name', PropertyType.Raw, true);
 
     await this.profileService.initialize();
-    
-    let dataUrl = await this.profileService.getLocationForType(NS_SOLIDRC('data', 'user/rc-data/'));
+
+    let dataUrl = await this.profileService.getLocationForType(NS_SOLIDRC('data'), 'user/rc-data/');
     this.containerUrl = dataUrl + "locations/*";
     this.locationUrl = dataUrl + "locations/";
 

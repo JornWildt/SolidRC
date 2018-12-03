@@ -30,7 +30,7 @@ class LogbookRepository extends ORDFMapper
     
     await this.profileService.initialize();
 
-    let dataUrl = await this.profileService.getLocationForType(NS_SOLIDRC('data', 'user/rc-data/'));
+    let dataUrl = await this.profileService.getLocationForType(NS_SOLIDRC('data'), 'user/rc-data/');
     this.containerUrl = dataUrl + "logbook/*";
     this.entryUrl = dataUrl + "logbook/";
 

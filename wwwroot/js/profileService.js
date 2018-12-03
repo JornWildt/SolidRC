@@ -55,7 +55,7 @@ class ProfileService extends ORDFMapper
     await this.loadTypeRegistry();
     let url = ProfileService.typeRegistry[type.value];
     if (!url)
-      url = this.profileService.profile.storage + defaultPath;
+      url = this.profile.storage + defaultPath;
     return url;
   }
 
@@ -86,8 +86,8 @@ class ProfileService extends ORDFMapper
   SELECT ?cl ?loc
   WHERE 
   {
-    ?reg <https://www.w3.org/ns/solid/terms#forClass> ?cl.
-    ?reg <https://www.w3.org/ns/solid/terms#instanceContainer> ?loc.
+    ?reg <http://www.w3.org/ns/solid/terms#forClass> ?cl.
+    ?reg <http://www.w3.org/ns/solid/terms#instanceContainer> ?loc.
   }`
       let query = $rdf.SPARQLToQuery(sparql, false, this.store);
       return new Promise((accept,reject) =>

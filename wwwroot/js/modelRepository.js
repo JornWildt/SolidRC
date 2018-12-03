@@ -24,7 +24,7 @@ class ModelRepository extends ORDFMapper
 
     await this.profileService.initialize();
 
-    let dataUrl = await this.profileService.getLocationForType(NS_SOLIDRC('data', 'user/rc-data/'));
+    let dataUrl = await this.profileService.getLocationForType(NS_SOLIDRC('data'), 'user/rc-data/');
     this.containerUrl = dataUrl + "models/*";
     this.modelUrl = dataUrl + "models/";
     this.imageUrl = dataUrl + "photos/";
