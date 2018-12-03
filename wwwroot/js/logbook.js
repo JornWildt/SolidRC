@@ -2,9 +2,12 @@ Vue.use(vuelidate.default);
 
 $(async function()
 {
+  let profileService = ProfileService.instance;
   let locationRepo = new LocationRepository();
   let modelRepo = new ModelRepository();
   let logRepo = new LogbookRepository();
+
+  await profileService.initialize().catch(err => console.warn(err));
 
   await Promise.all([
     locationRepo.initialize('all').catch(err => console.warn(err)),

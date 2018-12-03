@@ -11,13 +11,14 @@ $(async function()
       locationStorage: ""
     },
     async mounted() {
-      let profileService = new ProfileService();
+      let profileService = ProfileService.instance;
       let locationRepo = new LocationRepository();
       let modelRepo = new ModelRepository();
       let logRepo = new LogbookRepository();
 
+      await profileService.initialize().catch(err => console.warn(err));
+
       await Promise.all([
-        profileService.initialize('none').catch(err => console.warn(err)),
         locationRepo.initialize('none').catch(err => console.warn(err)),
         modelRepo.initialize('none').catch(err => console.warn(err)),
         logRepo.initialize('none').catch(err => console.warn(err))

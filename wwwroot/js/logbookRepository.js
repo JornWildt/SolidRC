@@ -5,7 +5,7 @@ class LogbookRepository extends ORDFMapper
   constructor()
   {
     super();
-    this.profileService = new ProfileService();
+    this.profileService = ProfileService.instance;
   }
 
   
