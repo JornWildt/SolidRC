@@ -21,6 +21,21 @@
         </div>
       </div>
       <div class="form-group">
+        <label for="storageRoot">Data location root</label>
+        <div class="input-group">
+          <input v-model="storageRoot" id="storageRoot" class="form-control" :readonly="!isEditingStorageRoot">
+          <div class="input-group-text" v-if="!isEditingStorageRoot">
+            <a href="#" v-on:click="editStorageRoot"><img src="~/open-iconic/svg/pencil.svg" alt="Change data location" title="Change data location"></a>
+          </div>
+          <div class="input-group-text" v-if="isEditingStorageRoot">
+            <a href="#" v-on:click="editStorageRootSave"><img src="~/open-iconic/svg/circle-check.svg" alt="Change data location" title="Change data location"></a>
+          </div>
+          <div class="input-group-text" v-if="isEditingStorageRoot">
+            <a href="#" v-on:click="editStorageRootCancel"><img src="~/open-iconic/svg/circle-x.svg" alt="Change data location" title="Change data location"></a>
+          </div>
+        </div>
+      </div>
+      <div class="form-group">
         <label for="logbookStorage">Data location for logbook</label>
         <div class="input-group">
           <input v-model="logbookStorage" id="logbookStorage" class="form-control" readonly>

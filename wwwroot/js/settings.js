@@ -5,6 +5,9 @@ $(async function()
     data: {
       loading: true,
       webId: "",
+      storageRoot: "",
+      storageRootCopy: "",
+      isEditingStorageRoot: false,
       logbookStorage: "",
       modelStorage: "",
       modelImageStorage: "",
@@ -24,6 +27,8 @@ $(async function()
         logRepo.initialize('none').catch(err => console.warn(err))
       ]);
     
+      this.storageRoot = await profileService.getLocationForType(NS_SOLIDRC('data'), 'user/rc-data/');
+
       this.webId = profileService.profile.webId;
       this.logbookStorage = logRepo.entryUrl;
       this.modelStorage = modelRepo.modelUrl;
@@ -33,6 +38,22 @@ $(async function()
     },
     methods: $.extend({}, ViewModelBase, 
     {
+      editStorageRoot : function()
+      {
+        this.storageRootCopy = this.storageRoot;
+        this.isEditingStorageRoot = true;
+      },
+
+      editStorageRootSave : function()
+      {
+        this.isEditingStorageRoot = false;
+      },
+
+      editStorageRootCancel : function()
+      {
+        this.storageRoot = this.storageRootCopy;
+        this.isEditingStorageRoot = false;
+      }
     })
   });
 });
