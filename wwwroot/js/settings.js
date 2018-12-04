@@ -14,26 +14,21 @@ $(async function()
       locationStorage: ""
     },
     async mounted() {
-      let profileService = ProfileService.instance;
-      let locationRepo = new LocationRepository();
-      let modelRepo = new ModelRepository();
-      let logRepo = new LogbookRepository();
+      this.profileService = ProfileService.instance;
+      this.locationRepo = new LocationRepository();
+      this.modelRepo = new ModelRepository();
+      this.logRepo = new LogbookRepository();
 
-      await profileService.initialize().catch(err => console.warn(err));
+      await this.profileService.initialize().catch(err => console.warn(err));
 
       await Promise.all([
-        locationRepo.initialize('none').catch(err => console.warn(err)),
-        modelRepo.initialize('none').catch(err => console.warn(err)),
-        logRepo.initialize('none').catch(err => console.warn(err))
+        this.locationRepo.initialize('none').catch(err => console.warn(err)),
+        this.modelRepo.initialize('none').catch(err => console.warn(err)),
+        this.logRepo.initialize('none').catch(err => console.warn(err))
       ]);
-    
-      this.storageRoot = await profileService.getLocationForType(NS_SOLIDRC('data'), 'user/rc-data/');
 
-      this.webId = profileService.profile.webId;
-      this.logbookStorage = logRepo.entryUrl;
-      this.modelStorage = modelRepo.modelUrl;
-      this.modelImageStorage = modelRepo.imageUrl;
-      this.locationStorage = locationRepo.locationUrl;
+      this.refresh();
+
       this.loading = false;
     },
     methods: $.extend({}, ViewModelBase, 
@@ -44,15 +39,30 @@ $(async function()
         this.isEditingStorageRoot = true;
       },
 
-      editStorageRootSave : function()
+      editStorageRootSave : async function()
       {
         this.isEditingStorageRoot = false;
+        if (!this.storageRoot.endsWith('/'))
+          this.storageRoot = this.storageRoot + '/';
+        await this.profileService.updateLocationForType(NS_SOLIDRC('data'), this.storageRoot);
+        window.location.reload();
       },
 
       editStorageRootCancel : function()
       {
         this.storageRoot = this.storageRootCopy;
         this.isEditingStorageRoot = false;
+      },
+
+      refresh : async function()
+      {    
+        this.storageRoot = await this.profileService.getLocationForType(NS_SOLIDRC('data'), 'user/rc-data/');
+
+        this.webId = this.profileService.profile.webId;
+        this.logbookStorage = this.logRepo.entryUrl;
+        this.modelStorage = this.modelRepo.modelUrl;
+        this.modelImageStorage = this.modelRepo.imageUrl;
+        this.locationStorage = this.locationRepo.locationUrl;  
       }
     })
   });

@@ -46,10 +46,53 @@ class ProfileService extends ORDFMapper
   async getLocationForType(type, defaultPath)
   {
     await this.loadTypeRegistry();
-    let url = this.typeRegistry[type.value];
-    if (!url)
-      url = this.profile.storage + defaultPath;
+    let entry = this.typeRegistry[type.value];
+    let url = (entry ? entry.url : this.profile.storage + defaultPath);
     return url;
+  }
+
+
+  async updateLocationForType(type, location)
+  {
+    // Find existing registration
+    let entry = this.typeRegistry[type.value];
+    let deleteStatements = (entry
+      ? this.store.match(entry.subject, null, null, null)
+      :  []);
+
+    // Select type registry - either from existing registration or the private reg.
+    let registryUrl = (deleteStatements.length > 0 
+      ? deleteStatements[0].why 
+      : this.store.sym(this.profile.privateTypeIndex));
+
+      let subject = (entry
+        ? entry.subject
+        : this.store.sym(location + "#" + Math.floor(Date.now()/1000) + 'x' + Math.floor(Math.random()*100)));
+      location = this.store.sym(location);
+
+    // Create relevant statements for the registration
+    let insertStatements = [
+      $rdf.st(subject, NS_SOLID('forClass'), type, registryUrl),
+      $rdf.st(subject, NS_SOLID('instanceContainer'), location, registryUrl)
+    ];
+
+    console.debug("Update type registry: " + registryUrl + `(${deleteStatements.length} deletes, ${insertStatements.length} inserts)`);
+
+    return new Promise((accept,reject) => this.updater.update(deleteStatements, insertStatements, 
+      (uri,ok,message) => 
+      {
+        // let existingStatements2 = this.store.match(this.store.sym(url), null, null, this.store.sym(url));
+        // console.debug("existingStatements after update: " + JSON.stringify(existingStatements2,null,2));
+        if (ok)
+        {
+          // Clear cache - force reload next time
+          this.typeRegistry = undefined;
+          accept();
+        }
+        else
+          reject(message);
+      }));
+
   }
 
 
@@ -76,7 +119,7 @@ class ProfileService extends ORDFMapper
       this.typeRegistry = {};
 
       const sparql = `
-  SELECT ?cl ?loc
+  SELECT ?reg ?cl ?loc
   WHERE 
   {
     ?reg <http://www.w3.org/ns/solid/terms#forClass> ?cl.
@@ -88,7 +131,10 @@ class ProfileService extends ORDFMapper
         {
           if (result["?cl"] && result["?loc"])
           {
-            this.typeRegistry[result["?cl"].value] = result["?loc"].value;
+            this.typeRegistry[result["?cl"].value] = {
+              url: result["?loc"].value,
+              subject: result["?reg"]
+            };
           }
         },
         null,
