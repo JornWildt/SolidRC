@@ -1,3 +1,6 @@
+var ProfileService_Mutex = new Mutex();
+
+
 class ProfileService extends ORDFMapper
 {
   constructor()
@@ -8,31 +11,34 @@ class ProfileService extends ORDFMapper
 
   async initialize()
   {
-    if (!this.isInitialized)
+    await ProfileService_Mutex.runExclusive(async () =>
     {
-      this.isInitialized = true;
+      if (!this.isInitialized)
+      {
+        this.isInitialized = true;
 
-      // Assign RDF type for objects managed by this repository
-      this.setObjectType(NS_FOAF('PersonalProfileDocument'));
+        // Assign RDF type for objects managed by this repository
+        this.setObjectType(NS_FOAF('PersonalProfileDocument'));
 
-      // Map RDF predicate/objects into simple javascript key/values.
-      this.addMapping(NS_PIM('storage'), 'storage', PropertyType.Raw, false);
-      this.addMapping(NS_FOAF('name'), 'name', PropertyType.Raw, false);
-      this.addMapping(NS_PIM('preferencesFile'), 'preferencesFile', PropertyType.Uri, false);
-      this.addMapping(NS_OWL('sameAs'), 'sameAs', PropertyType.Uri, false);
-      this.addMapping(NS_RDFS('seeAlso'), 'seeAlso', PropertyType.Uri, false);
-      this.addMapping(NS_SOLID('publicTypeIndex'), 'publicTypeIndex', PropertyType.Uri, false);
-      this.addMapping(NS_SOLID('privateTypeIndex'), 'privateTypeIndex', PropertyType.Uri, false);
+        // Map RDF predicate/objects into simple javascript key/values.
+        this.addMapping(NS_PIM('storage'), 'storage', PropertyType.Raw, false);
+        this.addMapping(NS_FOAF('name'), 'name', PropertyType.Raw, false);
+        this.addMapping(NS_PIM('preferencesFile'), 'preferencesFile', PropertyType.Uri, false);
+        this.addMapping(NS_OWL('sameAs'), 'sameAs', PropertyType.Uri, false);
+        this.addMapping(NS_RDFS('seeAlso'), 'seeAlso', PropertyType.Uri, false);
+        this.addMapping(NS_SOLID('publicTypeIndex'), 'publicTypeIndex', PropertyType.Uri, false);
+        this.addMapping(NS_SOLID('privateTypeIndex'), 'privateTypeIndex', PropertyType.Uri, false);
 
-      const session = await solid.auth.currentSession();
-      this.profileUrl = session.webId;
+        const session = await solid.auth.currentSession();
+        this.profileUrl = session.webId;
 
-      await this.loadAllContainerItems(this.profileUrl);
-      this.profile = await this.readProfile();
-      this.profile.webId = session.webId;
+        await this.loadAllContainerItems(this.profileUrl);
+        this.profile = await this.readProfile();
+        this.profile.webId = session.webId;
 
-      await this.loadTypeRegistry();
-    }
+        await this.loadTypeRegistry();
+      }
+    });
   }
 
 

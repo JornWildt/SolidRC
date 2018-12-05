@@ -19,9 +19,8 @@ $(async function()
       this.modelRepo = new ModelRepository();
       this.logRepo = new LogbookRepository();
 
-      await this.profileService.initialize().catch(err => console.warn(err));
-
       await Promise.all([
+        this.profileService.initialize().catch(err => console.warn(err)),
         this.locationRepo.initialize('none').catch(err => console.warn(err)),
         this.modelRepo.initialize('none').catch(err => console.warn(err)),
         this.logRepo.initialize('none').catch(err => console.warn(err))
