@@ -36,6 +36,7 @@ $(async function()
       {
         this.storageRootCopy = this.storageRoot;
         this.isEditingStorageRoot = true;
+        this.$nextTick(() => $('#storageRoot').select());
       },
 
       editStorageRootSave : async function()
