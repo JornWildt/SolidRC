@@ -1,17 +1,15 @@
-var ProfileService_Mutex = new Mutex();
-
-
 class ProfileService extends ORDFMapper
 {
   constructor()
   {
     super();
+    this.mutex = new Mutex();
   }
   
 
   async initialize()
   {
-    await ProfileService_Mutex.runExclusive(async () =>
+    return this.mutex.runExclusive(async () =>
     {
       if (!this.isInitialized)
       {
@@ -73,7 +71,7 @@ class ProfileService extends ORDFMapper
 
       let subject = (entry
         ? entry.subject
-        : this.store.sym(location + "#" + Math.floor(Date.now()/1000) + 'x' + Math.floor(Math.random()*100)));
+        : this.store.sym(registryUrl.value + "#" + Math.floor(Date.now()/1000) + 'x' + Math.floor(Math.random()*100)));
       location = this.store.sym(location);
 
     // Create relevant statements for the registration
@@ -87,14 +85,8 @@ class ProfileService extends ORDFMapper
     return new Promise((accept,reject) => this.updater.update(deleteStatements, insertStatements, 
       (uri,ok,message) => 
       {
-        // let existingStatements2 = this.store.match(this.store.sym(url), null, null, this.store.sym(url));
-        // console.debug("existingStatements after update: " + JSON.stringify(existingStatements2,null,2));
         if (ok)
-        {
-          // Clear cache - force reload next time
-          this.typeRegistry = undefined;
           accept();
-        }
         else
           reject(message);
       }));
