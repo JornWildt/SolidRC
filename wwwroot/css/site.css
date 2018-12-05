@@ -53,6 +53,17 @@ img.grid-action
   width: auto;
   height: 16px;
   margin-right: 8px;
+  visibility: hidden;
+}
+
+.grid-row:hover img.grid-action
+{
+  visibility: inherit;
+}
+
+td.grid-action
+{
+  text-align: right;
 }
 
 .missing-item

@@ -23,8 +23,10 @@
     <div v-cloak>
       <table class="table log-entries">
         <tbody>
-          <tr v-for="entry in logEntries" v-bind:entry="entry" v-bind:key="entry.id">
-            <td><linked-image height="60" v-bind:item="entry.modelThumbnail"></td>
+          <tr class="grid-row" v-for="entry in logEntries" v-bind:entry="entry" v-bind:key="entry.id">
+            <td style="width: 80px">
+              <linked-image height="60" v-bind:item="entry.modelThumbnail">
+            </td>
             <td>
               <div>
                 {{entry.date}} - <linked-value v-bind:item="entry.locationName"></linked-value> 
@@ -37,7 +39,7 @@
                 {{entry.comment}}
               </div>
             </td>
-            <td>
+            <td class="grid-action">
               <a href="#" v-on:click="editEntry(entry)"><img src="~/open-iconic/svg/pencil.svg" alt="Edit" class="grid-action"></a>
               <a href="#" v-on:click="deleteEntry(entry)"><img src="~/open-iconic/svg/circle-x.svg" alt="Remove" class="grid-action"></a>
             </td>
